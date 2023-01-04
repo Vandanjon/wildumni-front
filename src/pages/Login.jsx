@@ -1,8 +1,8 @@
-import { Button, TextField, Stack, Snackbar } from "@mui/material";
+import { Button, TextField, Snackbar } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import axios from "axios";
 import { useState, forwardRef } from "react";
-import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const Alert = forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -15,6 +15,8 @@ const Login = () => {
     });
     const [message, setMessage] = useState("");
     const [open, setOpen] = useState(false);
+
+    const navigate = useNavigate();
 
     const handleClose = (event, reason) => {
         if (reason === "clickaway") {
@@ -45,7 +47,7 @@ const Login = () => {
             .then((res) => {
                 console.log(res.data);
                 localStorage.setItem("token", res.data.token);
-                window.location = "/";
+                navigate("/user");
             })
             .catch((err) => {
                 if (err.code === "ERR_BAD_REQUEST") {
@@ -53,8 +55,6 @@ const Login = () => {
                     setOpen(true);
                     return;
                 }
-
-                console.log(err.code);
             });
     };
 
