@@ -9,14 +9,11 @@ const Alert = forwardRef(function Alert(props, ref) {
 });
 
 const Login = () => {
-    const [userName, setUserName] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
     const [open, setOpen] = useState(false);
 
-    const handleClick1 = () => {
-        setOpen(true);
-    };
     const handleClose = (event, reason) => {
         if (reason === "clickaway") {
             return;
@@ -26,31 +23,24 @@ const Login = () => {
     };
 
     const handleClick = () => {
-        if (!userName || !password) {
+        if (!email || !password) {
             setMessage("Veuillez renseigner vos identifiants");
             setOpen(true);
             return;
         }
 
-        console.log("toto");
         axios
             .post(
                 // `${import.meta.env.VITE_BACKEND_URL}login`,
                 "http://localhost:8001/api/login_check",
                 {
-                    username: userName,
+                    username: email,
                     password: password,
                 }
                 // { withCredentials: true }
             )
             .then((res) => {
                 console.log(res.data);
-                // setUser(res.data);
-                // if (res.data.company_group_id === 1) {
-                //     navigate("/commercant/produits");
-                // } else if (res.data.company_group_id === 2) {
-                //     navigate("/fournisseur/produits");
-                // }
             })
             .catch((err) => console.error(err));
     };
@@ -63,27 +53,23 @@ const Login = () => {
 
             <section className="main">
                 <TextField
-                    // id="outlined-basic"
-                    label="Username"
+                    label="Email"
                     variant="outlined"
-                    id="username"
+                    id="email"
                     type="text"
                     name="email"
                     onChange={(event) => {
                         const input = event.target;
-                        setUserName(input.value);
+                        setEmail(input.value);
                     }}
                 />
 
                 <TextField
-                    // id="outlined-basic"
                     label="Password"
                     variant="outlined"
                     type="password"
                     id="password"
-                    // type="password"
                     name="password"
-                    // placeholder=""
                     onChange={(event) => {
                         const input = event.target;
                         setPassword(input.value);
@@ -93,6 +79,7 @@ const Login = () => {
                 <Button variant="contained" onClick={handleClick}>
                     Se Connecter
                 </Button>
+
                 <Stack>
                     <Snackbar
                         open={open}
@@ -106,7 +93,7 @@ const Login = () => {
                 </Stack>
             </section>
 
-            <Divider />
+            {/* <Divider /> */}
 
             <section className="footer">
                 LE site pour trouver vos comparses alumnis de la Wild Code
