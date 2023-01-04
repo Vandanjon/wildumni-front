@@ -1,4 +1,4 @@
-import { Button, Divider, TextField, Stack, Snackbar } from "@mui/material";
+import { Button, TextField, Stack, Snackbar } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import axios from "axios";
 import { useState, forwardRef } from "react";
@@ -9,8 +9,10 @@ const Alert = forwardRef(function Alert(props, ref) {
 });
 
 const Login = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [formDatas, setFormDatas] = useState({
+        username: "",
+        password: "",
+    });
     const [message, setMessage] = useState("");
     const [open, setOpen] = useState(false);
 
@@ -22,27 +24,38 @@ const Login = () => {
         setOpen(false);
     };
 
-    const handleClick = () => {
-        if (!email || !password) {
+    const handleChange = (e) => {
+        setFormDatas({
+            ...formDatas,
+            [e.target.name]: e.target.value,
+        });
+    };
+
+    const handleSubmit = (e) => {
+        if (formDatas.email === "" || formDatas.password === "") {
             setMessage("Veuillez renseigner vos identifiants");
             setOpen(true);
             return;
         }
 
+        e.preventDefault();
+
         axios
-            .post(
-                // `${import.meta.env.VITE_BACKEND_URL}login`,
-                "http://localhost:8001/api/login_check",
-                {
-                    username: email,
-                    password: password,
-                }
-                // { withCredentials: true }
-            )
+            .post("http://localhost:8001/api/login_check", formDatas)
             .then((res) => {
                 console.log(res.data);
+                localStorage.setItem("token", res.data.token);
+                window.location = "/";
             })
-            .catch((err) => console.error(err));
+            .catch((err) => {
+                if (err.code === "ERR_BAD_REQUEST") {
+                    setMessage("Vos identifiants sont incorrects");
+                    setOpen(true);
+                    return;
+                }
+
+                console.log(err.code);
+            });
     };
 
     return (
@@ -52,48 +65,39 @@ const Login = () => {
             </section>
 
             <section className="main">
-                <TextField
-                    label="Email"
-                    variant="outlined"
-                    id="email"
-                    type="text"
-                    name="email"
-                    onChange={(event) => {
-                        const input = event.target;
-                        setEmail(input.value);
-                    }}
-                />
+                <form onSubmit={(e) => e.preventDefault()}>
+                    <TextField
+                        label="Email"
+                        variant="outlined"
+                        id="email"
+                        type="text"
+                        name="username"
+                        value={formDatas.username}
+                        onChange={handleChange}
+                    />
 
-                <TextField
-                    label="Password"
-                    variant="outlined"
-                    type="password"
-                    id="password"
-                    name="password"
-                    onChange={(event) => {
-                        const input = event.target;
-                        setPassword(input.value);
-                    }}
-                />
+                    <TextField
+                        label="Password"
+                        variant="outlined"
+                        type="password"
+                        id="password"
+                        name="password"
+                        value={formDatas.password}
+                        onChange={handleChange}
+                    />
+                    <Button variant="contained" onClick={handleSubmit}>
+                        Se Connecter
+                    </Button>
+                </form>
 
-                <Button variant="contained" onClick={handleClick}>
-                    Se Connecter
-                </Button>
-
-                <Stack>
-                    <Snackbar
-                        open={open}
-                        autoHideDuration={2500}
-                        onClose={handleClose}
-                    >
-                        <Alert onClose={handleClose} severity="success">
-                            {message}
-                        </Alert>
-                    </Snackbar>
-                </Stack>
+                <Snackbar
+                    open={open}
+                    autoHideDuration={2500}
+                    onClose={handleClose}
+                >
+                    <Alert severity="warning">{message}</Alert>
+                </Snackbar>
             </section>
-
-            {/* <Divider /> */}
 
             <section className="footer">
                 LE site pour trouver vos comparses alumnis de la Wild Code
