@@ -1,12 +1,8 @@
 import { Navigate } from "react-router-dom";
-import jwt_decode from "jwt-decode";
-import { UserContext } from "../../assets/contexts/UserContext";
+import { UserContext } from "../../contexts/UserContext";
 import { useContext } from "react";
 
 const PrivateRoute = ({ children }) => {
-    // const token = sessionStorage.getItem("token");
-    // const decoded = jwt_decode(token);
-
     const { user } = useContext(UserContext);
 
     if (!user) {
