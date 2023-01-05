@@ -1,17 +1,21 @@
-import { Button, TextField, Snackbar } from "@mui/material";
+import { Button, Box, TextField, Snackbar } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import axios from "axios";
-import { useState, forwardRef } from "react";
+import { useState, forwardRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import jwt_decode from "jwt-decode";
+import { UserContext } from "../assets/contexts/UserContext";
 
 const Alert = forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 const Login = () => {
+    const { setUser } = useContext(UserContext);
+
     const [formDatas, setFormDatas] = useState({
-        username: "",
-        password: "",
+        username: "oceane61@clerc.fr",
+        password: "password",
     });
     const [message, setMessage] = useState("");
     const [open, setOpen] = useState(false);
@@ -34,19 +38,21 @@ const Login = () => {
     };
 
     const handleSubmit = (e) => {
+        e.preventDefault();
+
         if (formDatas.email === "" || formDatas.password === "") {
             setMessage("Veuillez renseigner vos identifiants");
             setOpen(true);
             return;
         }
 
-        e.preventDefault();
-
         axios
             .post("http://localhost:8001/api/login_check", formDatas)
             .then((res) => {
-                console.log(res.data);
-                localStorage.setItem("token", res.data.token);
+                sessionStorage.setItem("token", res.data.token);
+
+                const decodedJWT = jwt_decode(res.data.token);
+                setUser(decodedJWT.roles);
                 navigate("/user");
             })
             .catch((err) => {
@@ -65,7 +71,14 @@ const Login = () => {
             </section>
 
             <section className="main">
-                <form onSubmit={(e) => e.preventDefault()}>
+                <Box
+                    component="form"
+                    sx={{
+                        "& > :not(style)": { m: 1, width: "25ch" },
+                    }}
+                    noValidate
+                    autoComplete="off"
+                >
                     <TextField
                         label="Email"
                         variant="outlined"
@@ -85,10 +98,11 @@ const Login = () => {
                         value={formDatas.password}
                         onChange={handleChange}
                     />
+
                     <Button variant="contained" onClick={handleSubmit}>
                         Se Connecter
                     </Button>
-                </form>
+                </Box>
 
                 <Snackbar
                     open={open}
