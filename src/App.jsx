@@ -21,7 +21,14 @@ const App = () => {
                     }
                 />
 
-                <Route path="/user" element={<ViewUser />} />
+                <Route
+                    path="/user"
+                    element={
+                        <PrivateRoute>
+                            <ViewUser />
+                        </PrivateRoute>
+                    }
+                />
             </Routes>
         </BrowserRouter>
     );
