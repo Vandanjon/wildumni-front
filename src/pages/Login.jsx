@@ -4,7 +4,7 @@ import axios from "axios";
 import { useState, forwardRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
-import { UserContext } from "../assets/contexts/UserContext";
+import { UserContext } from "../contexts/UserContext";
 
 const Alert = forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
