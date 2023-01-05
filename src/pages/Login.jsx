@@ -47,7 +47,7 @@ const Login = () => {
             .then((res) => {
                 console.log(res.data);
                 sessionStorage.setItem("token", res.data.token);
-                // navigate("/user");
+                navigate("/user");
             })
             .catch((err) => {
                 if (err.code === "ERR_BAD_REQUEST") {
