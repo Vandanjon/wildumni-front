@@ -1,4 +1,4 @@
-import { Button, TextField, Snackbar } from "@mui/material";
+import { Button, Box, TextField, Snackbar } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import axios from "axios";
 import { useState, forwardRef } from "react";
@@ -34,20 +34,20 @@ const Login = () => {
     };
 
     const handleSubmit = (e) => {
+        e.preventDefault();
+
         if (formDatas.email === "" || formDatas.password === "") {
             setMessage("Veuillez renseigner vos identifiants");
             setOpen(true);
             return;
         }
 
-        e.preventDefault();
-
         axios
             .post("http://localhost:8001/api/login_check", formDatas)
             .then((res) => {
                 console.log(res.data);
-                localStorage.setItem("token", res.data.token);
-                navigate("/user");
+                sessionStorage.setItem("token", res.data.token);
+                // navigate("/user");
             })
             .catch((err) => {
                 if (err.code === "ERR_BAD_REQUEST") {
@@ -65,7 +65,14 @@ const Login = () => {
             </section>
 
             <section className="main">
-                <form onSubmit={(e) => e.preventDefault()}>
+                <Box
+                    component="form"
+                    sx={{
+                        "& > :not(style)": { m: 1, width: "25ch" },
+                    }}
+                    noValidate
+                    autoComplete="off"
+                >
                     <TextField
                         label="Email"
                         variant="outlined"
@@ -85,10 +92,11 @@ const Login = () => {
                         value={formDatas.password}
                         onChange={handleChange}
                     />
+
                     <Button variant="contained" onClick={handleSubmit}>
                         Se Connecter
                     </Button>
-                </form>
+                </Box>
 
                 <Snackbar
                     open={open}
