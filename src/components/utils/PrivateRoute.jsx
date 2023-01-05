@@ -5,6 +5,10 @@ const PrivateRoute = ({ children }) => {
     const token = sessionStorage.getItem("token");
     const decoded = jwt_decode(token);
 
+    if (!token) {
+        return <Navigate to="/" replace />;
+    }
+
     if (!decoded.roles.includes("ROLE_ADMIN")) {
         return <Navigate to="/" replace />;
     }
