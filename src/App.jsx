@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import PrivateRoute from "./components/utils/PrivateRoute";
+import AdminRoute from "./components/utils/AdminRoute";
+import UserRoute from "./components/utils/UserRoute";
 
 import Login from "./pages/Login";
 import ViewAdmin from "./pages/ViewAdmin";
@@ -15,18 +16,18 @@ const App = () => {
                 <Route
                     path="/admin"
                     element={
-                        <PrivateRoute>
+                        <AdminRoute>
                             <ViewAdmin />
-                        </PrivateRoute>
+                        </AdminRoute>
                     }
                 />
 
                 <Route
                     path="/user"
                     element={
-                        <PrivateRoute>
+                        <UserRoute>
                             <ViewUser />
-                        </PrivateRoute>
+                        </UserRoute>
                     }
                 />
             </Routes>
