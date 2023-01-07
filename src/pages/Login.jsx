@@ -20,8 +20,6 @@ const Login = () => {
     const [message, setMessage] = useState("");
     const [open, setOpen] = useState(false);
 
-    const navigate = useNavigate();
-
     const handleClose = (event, reason) => {
         if (reason === "clickaway") {
             return;
@@ -47,13 +45,17 @@ const Login = () => {
         }
 
         axios
-            .post("http://localhost:8001/api/login_check", formDatas)
+            .post(
+                `${import.meta.env.VITE_BACKEND_URL}/api/login_check`,
+                formDatas
+            )
             .then((res) => {
                 sessionStorage.setItem("token", res.data.token);
 
                 const decodedJWT = jwt_decode(res.data.token);
                 setUser(decodedJWT.roles);
-                navigate("/user");
+
+                useNavigate("/user");
             })
             .catch((err) => {
                 if (err.code === "ERR_BAD_REQUEST") {
