@@ -13,14 +13,14 @@ const Alert = forwardRef(function Alert(props, ref) {
 const Login = () => {
     const { setUser } = useContext(UserContext);
 
+    const navigate = useNavigate();
+
     const [formDatas, setFormDatas] = useState({
         username: "oceane61@clerc.fr",
         password: "password",
     });
     const [message, setMessage] = useState("");
     const [open, setOpen] = useState(false);
-
-    const navigate = useNavigate();
 
     const handleClose = (event, reason) => {
         if (reason === "clickaway") {
@@ -40,19 +40,23 @@ const Login = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (formDatas.email === "" || formDatas.password === "") {
+        if (formDatas.username === "" || formDatas.password === "") {
             setMessage("Veuillez renseigner vos identifiants");
             setOpen(true);
             return;
         }
 
         axios
-            .post("http://localhost:8001/api/login_check", formDatas)
+            .post(
+                `${import.meta.env.VITE_BACKEND_URL}/api/login_check`,
+                formDatas
+            )
             .then((res) => {
                 sessionStorage.setItem("token", res.data.token);
 
                 const decodedJWT = jwt_decode(res.data.token);
                 setUser(decodedJWT.roles);
+
                 navigate("/user");
             })
             .catch((err) => {
@@ -60,6 +64,8 @@ const Login = () => {
                     setMessage("Vos identifiants sont incorrects");
                     setOpen(true);
                     return;
+                } else {
+                    console.log(err);
                 }
             });
     };
