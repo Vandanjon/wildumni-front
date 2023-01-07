@@ -13,6 +13,8 @@ const Alert = forwardRef(function Alert(props, ref) {
 const Login = () => {
     const { setUser } = useContext(UserContext);
 
+    const navigate = useNavigate();
+
     const [formDatas, setFormDatas] = useState({
         username: "oceane61@clerc.fr",
         password: "password",
@@ -38,7 +40,7 @@ const Login = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (formDatas.email === "" || formDatas.password === "") {
+        if (formDatas.username === "" || formDatas.password === "") {
             setMessage("Veuillez renseigner vos identifiants");
             setOpen(true);
             return;
@@ -55,13 +57,15 @@ const Login = () => {
                 const decodedJWT = jwt_decode(res.data.token);
                 setUser(decodedJWT.roles);
 
-                useNavigate("/user");
+                navigate("/user");
             })
             .catch((err) => {
                 if (err.code === "ERR_BAD_REQUEST") {
                     setMessage("Vos identifiants sont incorrects");
                     setOpen(true);
                     return;
+                } else {
+                    console.log(err);
                 }
             });
     };

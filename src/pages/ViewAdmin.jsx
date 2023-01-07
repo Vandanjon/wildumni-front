@@ -2,13 +2,21 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 const ViewAdmin = () => {
-    const [users, setUsers] = useState();
+    const [users, setUsers] = useState([
+        {
+            firstName: "-",
+            lastName: "-",
+            userName: "-",
+            email: "-",
+            sessionLocation: "-",
+            address: "-",
+        },
+    ]);
 
     useEffect(() => {
         axios
-            .get("http://localhost:8001/users/")
+            .get(`${import.meta.env.VITE_BACKEND_URL}/users`)
             .then((res) => {
-                console.log(res.data);
                 setUsers(res.data);
             })
             .catch((err) => {
@@ -19,25 +27,46 @@ const ViewAdmin = () => {
     }, []);
 
     return (
-        <>
-            <h1>Admin Panel</h1>
+        <div id="AdminPage" className="pageContainer">
+            <section className="header">
+                <h1>Admin Panel</h1>
+            </section>
 
-            {users
-                ? users.map((user) => (
-                      <section>
-                          <article>
-                              <h1>{user.firstName}</h1>
-                              <p>{user.email}</p>
-                              <p>{user.address.country}</p>
-                          </article>
-
-                          <button>EDIT</button>
-
-                          <button>DELETE</button>
-                      </section>
-                  ))
-                : ""}
-        </>
+            <section className="main">
+                <table>
+                    <thead>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Session Location</th>
+                        <th>Address</th>
+                        <th>Actions</th>
+                    </thead>
+                    <tbody>
+                        {users.map((user) => {
+                            return (
+                                <tr>
+                                    <td>{user.firstName}</td>
+                                    <td>{user.lastName}</td>
+                                    <td>{user.email}</td>
+                                    <td>{user.sessionLocation}</td>
+                                    <td>
+                                        {user.address.city}{" "}
+                                        {user.address.country}{" "}
+                                        {user.address.postcode}
+                                    </td>
+                                    <td>
+                                        <button>EDIT</button>
+                                        <button>DELETE</button>
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
+            </section>
+            <section className="footer">Welcome</section>
+        </div>
     );
 };
 
