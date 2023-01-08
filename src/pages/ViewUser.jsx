@@ -1,63 +1,23 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { UserContext } from "../contexts/UserContext";
-import NavBar from "../components/NavBar";
-import PersonalMap from "../components/PersonalMap";
+import { useRef, useState } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
+import NavBar from "../components/NavBar";
 
 const ViewUser = () => {
-    const { user } = useContext(UserContext);
+    const mapRef = useRef(null);
     const [profile, setProfile] = useState([
         {
             firstName: "toto",
             lastName: "tata",
         },
     ]);
+    const center = [50, 0];
+    const zoom = 10;
 
-    const center = [51.505, -0.09];
-    const zoom = 13;
-    const [map, setMap] = useState(null);
-
-    const displayMap = useMemo(
-        () => (
-            <MapContainer center={center} zoom={zoom} ref={setMap}>
-                <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-            </MapContainer>
-        ),
-        []
-    );
-
-    const [position, setPosition] = useState(() =>
-        map ? map.getCenter() : null
-    );
-
-    const onEvent = useCallback(
-        (event) => {
-            if (event === "click") {
-                if (map) {
-                    map.setView(center, zoom);
-                }
-            } else if (event === "move") {
-                if (map) {
-                    setPosition(map.getCenter());
-                }
-            }
-        },
-        [map]
-    );
-
-    useEffect(() => {
-        if (map) {
-            map.on("click", () => onEvent("click"));
-            map.on("move", () => onEvent("move"));
-            return () => {
-                map.off("click", () => onEvent("click"));
-                map.off("move", () => onEvent("move"));
-            };
+    const recenterMap = () => {
+        if (mapRef.current) {
+            mapRef.current.flyTo(center, zoom);
         }
-    }, [map, onEvent]);
+    };
 
     return (
         <div id="UserPage" className="pageContainer">
@@ -65,19 +25,18 @@ const ViewUser = () => {
                 <NavBar />
 
                 <div>
-                    {map ? (
-                        <p>
-                            {/* latitude: {position.lat.toFixed(4)}, longitude:{" "}
-              {position.lng.toFixed(4)}  */}
-                            <button onClick={() => onEvent("click")}>
-                                Recenter on me
-                            </button>
-                        </p>
-                    ) : null}
+                    <button onClick={recenterMap}>Recenter on me</button>
                 </div>
             </header>
 
-            <main>{displayMap}</main>
+            <main>
+                <MapContainer center={center} zoom={zoom} ref={mapRef}>
+                    <TileLayer
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                </MapContainer>
+            </main>
             <footer>
                 <p>{profile[0].firstName}</p>
 
