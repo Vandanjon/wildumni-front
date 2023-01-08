@@ -2,28 +2,40 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto");
 
 * {
-	box-sizing: border-box;
-	font-family: "Roboto";
-	line-height: 1.5;
+    box-sizing: border-box;
+    font-family: "Roboto";
+    line-height: 1.5;
 }
 
 body {
-	margin: 0;
-
-	#root {
-		min-height: 100vh;
-		max-height: 100vh;
-
-		& .header {
-			height: 10vh;
-		}
-
-		& .main {
-			height: 70vh;
-		}
-
-		& .footer {
-			height: 20vh;
-		}
-	}
+    margin: 0;
 }
+
+// TEMPLATE
+.pageContainer {
+    min-height: 100vh;
+    max-height: 100vh;
+    display: grid;
+    grid-template-rows: 2fr 8fr 3fr;
+
+    header,
+    main,
+    footer {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+// header {
+//     height: 10vh;
+// }
+
+// main {
+//     height: 70vh;
+// }
+
+// footer {
+//     height: 20vh;
+// }

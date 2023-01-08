@@ -72,16 +72,17 @@ const Login = () => {
 
     return (
         <div id="Login" className="pageContainer">
-            <section className="header">
+            <header>
                 <h1>Wildumni</h1>
-            </section>
+                <h2>a Wild Code School Alumni finder</h2>
+            </header>
 
-            <section className="main">
+            <main>
                 <Box
                     component="form"
-                    sx={{
-                        "& > :not(style)": { m: 1, width: "25ch" },
-                    }}
+                    // sx={{
+                    //     "& > :not(style)": { m: 1, width: "25ch" },
+                    // }}
                     noValidate
                     autoComplete="off"
                 >
@@ -117,12 +118,12 @@ const Login = () => {
                 >
                     <Alert severity="warning">{message}</Alert>
                 </Snackbar>
-            </section>
+            </main>
 
-            <section className="footer">
+            <footer>
                 LE site pour trouver vos comparses alumnis de la Wild Code
                 School
-            </section>
+            </footer>
         </div>
     );
 };

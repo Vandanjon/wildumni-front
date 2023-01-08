@@ -28,12 +28,12 @@ const ViewAdmin = () => {
 
     return (
         <div id="AdminPage" className="pageContainer">
-            <section className="header">
+            <header>
                 <h1>Admin Panel</h1>
                 <NavBar />
-            </section>
+            </header>
 
-            <section className="main">
+            <main>
                 <table>
                     <thead>
                         <th>First Name</th>
@@ -65,8 +65,8 @@ const ViewAdmin = () => {
                         })}
                     </tbody>
                 </table>
-            </section>
-            <section className="footer">Welcome</section>
+            </main>
+            <footer>Welcome</footer>
         </div>
     );
 };

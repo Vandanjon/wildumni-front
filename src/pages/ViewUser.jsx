@@ -13,16 +13,16 @@ const ViewUser = () => {
 
     return (
         <div id="UserPage" className="pageContainer">
-            <section className="header">
+            <header>
                 <NavBar />
-            </section>
+            </header>
 
-            <section className="main">Welcome</section>
-            <section className="footer">
+            <main>Welcome</main>
+            <footer>
                 <p>{profile[0].firstName}</p>
 
                 <p>{profile[0].lastName}</p>
-            </section>
+            </footer>
         </div>
     );
 };
