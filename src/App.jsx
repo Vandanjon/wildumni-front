@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import AdminRoute from "./components/utils/AdminRoute";
-import UserRoute from "./components/utils/UserRoute";
+import AdminRoute from "./utils/AdminRoute";
+import UserRoute from "./utils/UserRoute";
 
 import Login from "./pages/Login";
 import ViewAdmin from "./pages/ViewAdmin";
