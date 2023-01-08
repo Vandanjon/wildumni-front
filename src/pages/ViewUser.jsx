@@ -4,36 +4,6 @@ import NavBar from "../components/NavBar";
 import PersonalMap from "../components/PersonalMap";
 import { MapContainer, TileLayer } from "react-leaflet";
 
-const center = [51.505, -0.09];
-const zoom = 13;
-
-function DisplayPosition({ map }) {
-    const [position, setPosition] = useState(() => map.getCenter());
-
-    const onClick = useCallback(() => {
-        map.setView(center, zoom);
-    }, [map]);
-
-    const onMove = useCallback(() => {
-        setPosition(map.getCenter());
-    }, [map]);
-
-    useEffect(() => {
-        map.on("move", onMove);
-        return () => {
-            map.off("move", onMove);
-        };
-    }, [map, onMove]);
-
-    return (
-        <p>
-            {/* latitude: {position.lat.toFixed(4)}, longitude:{" "}
-            {position.lng.toFixed(4)}  */}
-            <button onClick={onClick}>locate me</button>
-        </p>
-    );
-}
-
 const ViewUser = () => {
     const { user } = useContext(UserContext);
     const [profile, setProfile] = useState([
@@ -43,6 +13,8 @@ const ViewUser = () => {
         },
     ]);
 
+    const center = [51.505, -0.09];
+    const zoom = 13;
     const [map, setMap] = useState(null);
 
     const displayMap = useMemo(
@@ -57,12 +29,52 @@ const ViewUser = () => {
         []
     );
 
+    const [position, setPosition] = useState(() =>
+        map ? map.getCenter() : null
+    );
+
+    const onEvent = useCallback(
+        (event) => {
+            if (event === "click") {
+                if (map) {
+                    map.setView(center, zoom);
+                }
+            } else if (event === "move") {
+                if (map) {
+                    setPosition(map.getCenter());
+                }
+            }
+        },
+        [map]
+    );
+
+    useEffect(() => {
+        if (map) {
+            map.on("click", () => onEvent("click"));
+            map.on("move", () => onEvent("move"));
+            return () => {
+                map.off("click", () => onEvent("click"));
+                map.off("move", () => onEvent("move"));
+            };
+        }
+    }, [map, onEvent]);
+
     return (
         <div id="UserPage" className="pageContainer">
             <header>
                 <NavBar />
 
-                <div>{map ? <DisplayPosition map={map} /> : null}</div>
+                <div>
+                    {map ? (
+                        <p>
+                            {/* latitude: {position.lat.toFixed(4)}, longitude:{" "}
+              {position.lng.toFixed(4)}  */}
+                            <button onClick={() => onEvent("click")}>
+                                Recenter on me
+                            </button>
+                        </p>
+                    ) : null}
+                </div>
             </header>
 
             <main>{displayMap}</main>
