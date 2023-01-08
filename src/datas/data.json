@@ -1,0 +1,40 @@
+{
+	"persons": [
+		{
+			"id": 1,
+			"firstname": "bob",
+			"lastname": "bobby",
+			"identifier": "bobbynet",
+			"email": "bob@bobby.bobbynet",
+			"password": "bobbob",
+			"coordinates": [48.2, 2.5]
+		},
+		{
+			"id": 2,
+			"firstname": "jeanne",
+			"lastname": "jeannette",
+			"identifier": "bobbynet",
+			"email": "bob@bobby.bobbynet",
+			"password": "bobbob",
+			"coordinates": [45.4, 3.611]
+		},
+		{
+			"id": 3,
+			"firstname": "émilie",
+			"lastname": "rakatchoutchou",
+			"identifier": "bobbynet",
+			"email": "bob@bobby.bobbynet",
+			"password": "bobbob",
+			"coordinates": [48.444, 4.8]
+		},
+		{
+			"id": 4,
+			"firstname": "bob",
+			"lastname": "bobby",
+			"identifier": "bobbynet",
+			"email": "bob@bobby.bobbynet",
+			"password": "bobbob",
+			"coordinates": [43.44, 1.524]
+		}
+	]
+}
