@@ -1,0 +1,19 @@
+#AdminPage {
+    .main {
+        background-color: $color-secondary;
+        width: 80%;
+
+        table {
+            width: 100%;
+
+            thead {
+                text-transform: uppercase;
+                text-align: left;
+            }
+
+            tbody tr td {
+                text-align: left;
+            }
+        }
+    }
+}
