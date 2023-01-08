@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-
+import NavBar from "../components/NavBar";
 const ViewAdmin = () => {
     const [users, setUsers] = useState([
         {
@@ -30,6 +30,7 @@ const ViewAdmin = () => {
         <div id="AdminPage" className="pageContainer">
             <section className="header">
                 <h1>Admin Panel</h1>
+                <NavBar />
             </section>
 
             <section className="main">
