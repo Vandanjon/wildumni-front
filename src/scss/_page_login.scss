@@ -1,40 +1,45 @@
 #Login {
-    .header {
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        background-color: $color-tertiary;
+    header h1 {
+        text-transform: uppercase;
     }
 
-    .main {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        background-color: $color-secondary;
-
-        form {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+    main {
+        label {
+            font-weight: 700;
         }
 
-        .MuiFormControl-root {
-            margin: 10px;
+        input {
+            border-radius: 4px;
+            background-color: white;
         }
 
-        .MuiButtonBase-root {
-            margin: 20px;
+        @media screen and (max-width: 600px) {
+            background: no-repeat center / cover
+                url("https://assets.storage.infomaniak.website/images/background/unsplash/Y1ByvAGQ5iE-small.jpg")
+                center;
+        }
+        @media screen and (max-width: 900px) {
+            background: no-repeat center / cover
+                url("https://assets.storage.infomaniak.website/images/background/unsplash/Y1ByvAGQ5iE-medium.jpg");
+        }
+        @media screen and (min-width: 901px) {
+            background: no-repeat center / cover
+                url("https://assets.storage.infomaniak.website/images/background/unsplash/Y1ByvAGQ5iE-large.jpg");
         }
     }
 
-    .footer {
+    form {
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-        padding: 0 20px;
-        text-align: center;
-        background-color: $color-tertiary;
+    }
+
+    .MuiFormControl-root {
+        margin: 10px;
+    }
+
+    .MuiButtonBase-root {
+        margin: 20px;
     }
 }
