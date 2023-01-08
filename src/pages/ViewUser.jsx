@@ -17,7 +17,7 @@ const ViewUser = () => {
                 <NavBar />
             </section>
 
-            <section className="main">Weclome</section>
+            <section className="main">Welcome</section>
             <section className="footer">
                 <p>{profile[0].firstName}</p>
 
