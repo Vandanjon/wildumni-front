@@ -5,6 +5,7 @@ import { useState, forwardRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import { UserContext } from "../contexts/UserContext";
+import { Link } from "react-router-dom";
 
 const Alert = forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -15,8 +16,11 @@ const Login = () => {
 
     const navigate = useNavigate();
 
+    const [newUser, setNewUser] = useState(false);
+
     const [formDatas, setFormDatas] = useState({
-        username: "anouk.dumont@orange.fr",
+        username: "jojo",
+        email: "anouk.dumont@orange.fr",
         password: "password",
     });
     const [message, setMessage] = useState("");
@@ -78,21 +82,26 @@ const Login = () => {
             </header>
 
             <main>
-                <Box
-                    component="form"
-                    // sx={{
-                    //     "& > :not(style)": { m: 1, width: "25ch" },
-                    // }}
-                    noValidate
-                    autoComplete="off"
-                >
+                <Box component="form" noValidate autoComplete="off">
+                    <h1>{newUser ? "Create Account" : "Login"}</h1>
+
+                    <TextField
+                        label="Username"
+                        variant="outlined"
+                        id="username"
+                        type="text"
+                        name="username"
+                        value={formDatas.username}
+                        onChange={handleChange}
+                    />
+
                     <TextField
                         label="Email"
                         variant="outlined"
                         id="email"
                         type="text"
-                        name="username"
-                        value={formDatas.username}
+                        name="email"
+                        value={formDatas.email}
                         onChange={handleChange}
                     />
 
