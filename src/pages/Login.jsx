@@ -116,9 +116,18 @@ const Login = () => {
                     />
 
                     <Button variant="contained" onClick={handleSubmit}>
-                        Se Connecter
+                        {newUser ? "SIGN UP" : "SIGN IN"}
                     </Button>
                 </Box>
+                <div>
+                    <p onClick={() => setNewUser(!newUser)}>
+                        {newUser
+                            ? "Already have an account?"
+                            : "Want to create an account?"}
+                    </p>
+
+                    <p>Forgot password?</p>
+                </div>
 
                 <Snackbar
                     open={open}
