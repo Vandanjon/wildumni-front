@@ -44,8 +44,24 @@ const Login = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (formDatas.username === "" || formDatas.password === "") {
-            setMessage("Veuillez renseigner vos identifiants");
+        if (
+            (formDatas.username === "" && formDatas.email === "") ||
+            (formDatas.email === "" && formDatas.password === "") ||
+            (formDatas.password === "" && formDatas.username === "")
+        ) {
+            setMessage("Please fill the blank fields");
+            setOpen(true);
+            return;
+        } else if (formDatas.username === "") {
+            setMessage("Please insert your username");
+            setOpen(true);
+            return;
+        } else if (formDatas.email === "") {
+            setMessage("Please insert your email");
+            setOpen(true);
+            return;
+        } else if (formDatas.password === "") {
+            setMessage("Please insert your password");
             setOpen(true);
             return;
         }
