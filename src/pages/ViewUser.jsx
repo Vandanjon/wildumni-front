@@ -14,7 +14,7 @@ const ViewUser = () => {
         },
     ]);
 
-    const [markerId, setMarkerId] = useState(3);
+    const [markerId, setMarkerId] = useState(5);
     const center = [-21.115141, 55.536384];
     const zoom = 10;
 
