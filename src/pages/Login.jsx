@@ -126,7 +126,15 @@ const Login = () => {
                             : "Want to create an account?"}
                     </p>
 
-                    <p>Forgot password?</p>
+                    <p
+                        onClick={() => {
+                            window.open(
+                                "mailto:test@example.com?subject=Forgotten password&body=Hi, may I request a new mail for this user account? Regards"
+                            );
+                        }}
+                    >
+                        Forgot password?
+                    </p>
                 </div>
 
                 <Snackbar
