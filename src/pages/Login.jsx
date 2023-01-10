@@ -12,6 +12,7 @@ const Alert = forwardRef(function Alert(props, ref) {
 });
 
 const Login = () => {
+    const token = sessionStorage.getItem("token");
     const { setUser } = useContext(UserContext);
 
     const navigate = useNavigate();
@@ -20,8 +21,10 @@ const Login = () => {
 
     const [formDatas, setFormDatas] = useState({
         username: "jojo",
-        email: "anouk.dumont@orange.fr",
         password: "password",
+        email: "lelievre.patricia@club-internet.fr",
+        latitude: "-",
+        longitude: "-",
     });
     const [message, setMessage] = useState("");
     const [open, setOpen] = useState(false);
@@ -66,28 +69,64 @@ const Login = () => {
             return;
         }
 
-        axios
-            .post(
-                `${import.meta.env.VITE_BACKEND_URL}/api/login_check`,
-                formDatas
-            )
-            .then((res) => {
-                sessionStorage.setItem("token", res.data.token);
+        if (!newUser) {
+            axios
+                .post(
+                    `${import.meta.env.VITE_BACKEND_URL}/api/login_check`,
+                    formDatas
+                )
+                .then((res) => {
+                    sessionStorage.setItem("token", res.data.token);
 
-                const decodedJWT = jwt_decode(res.data.token);
-                setUser(decodedJWT.roles);
+                    const decodedJWT = jwt_decode(res.data.token);
+                    setUser(decodedJWT.roles);
 
-                navigate("/user");
-            })
-            .catch((err) => {
-                if (err.code === "ERR_BAD_REQUEST") {
-                    setMessage("Vos identifiants sont incorrects");
-                    setOpen(true);
-                    return;
-                } else {
+                    navigate("/user");
+                })
+                .catch((err) => {
+                    if (err.code === "ERR_BAD_REQUEST") {
+                        setMessage("Vos identifiants sont incorrects");
+                        setOpen(true);
+                        return;
+                    } else {
+                        console.log(err);
+                    }
+                });
+        }
+
+        if (newUser) {
+            const sanitizeDatas = {
+                username: formDatas.username,
+                password: formDatas.password,
+                email: formDatas.email,
+                address: {
+                    country: "-",
+                    region: "-",
+                    city: "-",
+                    postcode: "-",
+                    latitude: formDatas.latitude,
+                    longitude: formDatas.longitude,
+                },
+            };
+            axios
+                .post(
+                    `${import.meta.env.VITE_BACKEND_URL}/users`,
+                    sanitizeDatas,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                )
+                .then((res) => {
+                    console.log(res.data);
+                })
+                .catch((err) => {
                     console.log(err);
-                }
-            });
+                });
+        }
+
+        return;
     };
 
     return (
@@ -130,6 +169,31 @@ const Login = () => {
                         value={formDatas.password}
                         onChange={handleChange}
                     />
+                    {newUser ? (
+                        <>
+                            <TextField
+                                label="Address - Latitude"
+                                variant="outlined"
+                                type="text"
+                                id="longitude"
+                                name="latitude"
+                                value={formDatas.latitude}
+                                onChange={handleChange}
+                            />
+
+                            <TextField
+                                label="Address - Longitude"
+                                variant="outlined"
+                                type="text"
+                                id="longitude"
+                                name="longitude"
+                                value={formDatas.longitude}
+                                onChange={handleChange}
+                            />
+                        </>
+                    ) : (
+                        ""
+                    )}
 
                     <Button variant="contained" onClick={handleSubmit}>
                         {newUser ? "SIGN UP" : "SIGN IN"}
@@ -145,7 +209,7 @@ const Login = () => {
                     <p
                         onClick={() => {
                             window.open(
-                                "mailto:test@example.com?subject=Forgotten password&body=Hi, may I request a new mail for this user account? Regards"
+                                "mailto:test@example.com?subject=Forgotten password&body=Hi, may I request a new password for this user account? Regards"
                             );
                         }}
                     >
