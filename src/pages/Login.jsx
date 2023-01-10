@@ -108,6 +108,7 @@ const Login = () => {
                     longitude: formDatas.longitude,
                 },
             };
+
             axios
                 .post(
                     `${import.meta.env.VITE_BACKEND_URL}/users`,
@@ -119,7 +120,38 @@ const Login = () => {
                     }
                 )
                 .then((res) => {
-                    console.log(res.data);
+                    if (res.status === 201) {
+                        axios
+                            .post(
+                                `${
+                                    import.meta.env.VITE_BACKEND_URL
+                                }/api/login_check`,
+                                {
+                                    username: res.data.userName,
+                                    email: res.data.email,
+                                    password: formDatas.password,
+                                }
+                            )
+                            .then((res) => {
+                                sessionStorage.setItem("token", res.data.token);
+
+                                const decodedJWT = jwt_decode(res.data.token);
+                                setUser(decodedJWT.roles);
+
+                                navigate("/user");
+                            })
+                            .catch((err) => {
+                                if (err.code === "ERR_BAD_REQUEST") {
+                                    setMessage(
+                                        "Vos identifiants sont incorrects"
+                                    );
+                                    setOpen(true);
+                                    return;
+                                } else {
+                                    console.log(err);
+                                }
+                            });
+                    }
                 })
                 .catch((err) => {
                     console.log(err);
