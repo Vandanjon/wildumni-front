@@ -7,6 +7,8 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 
 const ViewAdmin = () => {
     const [expanded, setExpanded] = useState(false);
@@ -49,65 +51,56 @@ const ViewAdmin = () => {
             <main>
                 {users ? (
                     users.map((user) => (
-                        <div className="userInfos-container">
-                            <div className="userInfos">
-                                <Accordion
-                                    key={user.id}
-                                    expanded={expanded === `panel${user.id}`}
-                                    onChange={handleChange(`panel${user.id}`)}
+                        <div className="userInfos">
+                            <Accordion
+                                key={user.id}
+                                expanded={expanded === `panel${user.id}`}
+                                onChange={handleChange(`panel${user.id}`)}
+                            >
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls={`panel${user.id}bh-content`}
+                                    id={`panel${user.id}bh-header`}
                                 >
-                                    <AccordionSummary
-                                        expandIcon={<ExpandMoreIcon />}
-                                        aria-controls={`panel${user.id}bh-content`}
-                                        id={`panel${user.id}bh-header`}
-                                    >
-                                        <Typography
-                                            sx={{ width: "33%", flexShrink: 0 }}
-                                        >
-                                            AVATAR
-                                        </Typography>
-                                        <Typography
-                                            sx={{ color: "text.secondary" }}
-                                        >
-                                            {user.userName}
-                                        </Typography>
-                                    </AccordionSummary>
-                                    <AccordionDetails>
-                                        <ul>
-                                            <li>
-                                                Firstname : {user.firstName}
-                                            </li>
-                                            <li>Lastname : {user.lastName}</li>
-                                            <li>Email : {user.email}</li>
+                                    <Typography className="leftSide">
+                                        <EditIcon />
+                                        <DeleteIcon />
+                                    </Typography>
+                                    <Typography className="middle">
+                                        AVATAR
+                                    </Typography>
+                                    <Typography className="rightSide">
+                                        {user.userName}
+                                    </Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <ul>
+                                        <li>Firstname : {user.firstName}</li>
+                                        <li>Lastname : {user.lastName}</li>
+                                        <li>Email : {user.email}</li>
 
-                                            {
-                                                // JSON.stringify(user.address) !== "{}"
-                                                user.address.street !== "" &&
-                                                user.address.postcode !== "" &&
-                                                user.address.city !== "" &&
-                                                user.address.region !== "" &&
-                                                user.address.country !== "" ? (
-                                                    <li>
-                                                        Address :
-                                                        {user.address.street},{" "}
-                                                        {user.address.postcode}{" "}
-                                                        {user.address.city} -
-                                                        {user.address.region}{" "}
-                                                        {user.address.country}
-                                                    </li>
-                                                ) : (
-                                                    ""
-                                                )
-                                            }
-                                        </ul>
-                                    </AccordionDetails>
-                                </Accordion>
-                            </div>
-
-                            <div className="actions-buttons">
-                                <button>EDIT</button>
-                                <button>DELETE</button>
-                            </div>
+                                        {
+                                            // JSON.stringify(user.address) !== "{}"
+                                            user.address.street !== "" &&
+                                            user.address.postcode !== "" &&
+                                            user.address.city !== "" &&
+                                            user.address.region !== "" &&
+                                            user.address.country !== "" ? (
+                                                <li>
+                                                    Address :
+                                                    {user.address.street},{" "}
+                                                    {user.address.postcode}{" "}
+                                                    {user.address.city} -
+                                                    {user.address.region}{" "}
+                                                    {user.address.country}
+                                                </li>
+                                            ) : (
+                                                ""
+                                            )
+                                        }
+                                    </ul>
+                                </AccordionDetails>
+                            </Accordion>
                         </div>
                     ))
                 ) : (

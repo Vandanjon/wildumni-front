@@ -4,18 +4,22 @@
         justify-content: flex-start;
         padding-top: 20px;
 
-        .userInfos-container {
-            width: 100%;
-            display: flex;
-        }
-
         .userInfos {
-            width: 70%;
+            width: 90%;
+            padding-bottom: 10px;
         }
 
-        .actions-buttons {
-            width: 20%;
+        .MuiAccordionSummary-content {
             display: flex;
+            // justify-content: space-between;
+
+            .leftSide {
+                width: 20%;
+            }
+
+            .middle {
+                width: 30%;
+            }
         }
     }
 }
