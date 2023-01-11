@@ -4,8 +4,18 @@
         justify-content: flex-start;
         padding-top: 20px;
 
-        .MuiPaper-root {
-            width: 80%;
+        .userInfos-container {
+            width: 100%;
+            display: flex;
+        }
+
+        .userInfos {
+            width: 70%;
+        }
+
+        .actions-buttons {
+            width: 20%;
+            display: flex;
         }
     }
 }

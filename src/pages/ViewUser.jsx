@@ -25,6 +25,9 @@ const ViewUser = () => {
     ]);
     const [center, setCenter] = useState();
 
+    const { user } = useContext(UserContext);
+    console.log(user);
+
     const userId = useContext(UserContext)?.user?.id;
 
     const mapRef = useRef(null);

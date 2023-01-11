@@ -49,52 +49,66 @@ const ViewAdmin = () => {
             <main>
                 {users ? (
                     users.map((user) => (
-                        <Accordion
-                            key={user.id}
-                            expanded={expanded === `panel${user.id}`}
-                            onChange={handleChange(`panel${user.id}`)}
-                        >
-                            <AccordionSummary
-                                expandIcon={<ExpandMoreIcon />}
-                                aria-controls={`panel${user.id}bh-content`}
-                                id={`panel${user.id}bh-header`}
-                            >
-                                <Typography
-                                    sx={{ width: "33%", flexShrink: 0 }}
+                        <div className="userInfos-container">
+                            <div className="userInfos">
+                                <Accordion
+                                    key={user.id}
+                                    expanded={expanded === `panel${user.id}`}
+                                    onChange={handleChange(`panel${user.id}`)}
                                 >
-                                    AVATAR
-                                </Typography>
-                                <Typography sx={{ color: "text.secondary" }}>
-                                    {user.userName}
-                                </Typography>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                                <ul>
-                                    <li>Firstname : {user.firstName}</li>
-                                    <li>Lastname : {user.lastName}</li>
-                                    <li>Email : {user.email}</li>
-
-                                    {
-                                        // JSON.stringify(user.address) !== "{}"
-                                        user.address.street !== "" &&
-                                        user.address.postcode !== "" &&
-                                        user.address.city !== "" &&
-                                        user.address.region !== "" &&
-                                        user.address.country !== "" ? (
+                                    <AccordionSummary
+                                        expandIcon={<ExpandMoreIcon />}
+                                        aria-controls={`panel${user.id}bh-content`}
+                                        id={`panel${user.id}bh-header`}
+                                    >
+                                        <Typography
+                                            sx={{ width: "33%", flexShrink: 0 }}
+                                        >
+                                            AVATAR
+                                        </Typography>
+                                        <Typography
+                                            sx={{ color: "text.secondary" }}
+                                        >
+                                            {user.userName}
+                                        </Typography>
+                                    </AccordionSummary>
+                                    <AccordionDetails>
+                                        <ul>
                                             <li>
-                                                Address :{user.address.street},{" "}
-                                                {user.address.postcode}{" "}
-                                                {user.address.city} -
-                                                {user.address.region}{" "}
-                                                {user.address.country}
+                                                Firstname : {user.firstName}
                                             </li>
-                                        ) : (
-                                            ""
-                                        )
-                                    }
-                                </ul>
-                            </AccordionDetails>
-                        </Accordion>
+                                            <li>Lastname : {user.lastName}</li>
+                                            <li>Email : {user.email}</li>
+
+                                            {
+                                                // JSON.stringify(user.address) !== "{}"
+                                                user.address.street !== "" &&
+                                                user.address.postcode !== "" &&
+                                                user.address.city !== "" &&
+                                                user.address.region !== "" &&
+                                                user.address.country !== "" ? (
+                                                    <li>
+                                                        Address :
+                                                        {user.address.street},{" "}
+                                                        {user.address.postcode}{" "}
+                                                        {user.address.city} -
+                                                        {user.address.region}{" "}
+                                                        {user.address.country}
+                                                    </li>
+                                                ) : (
+                                                    ""
+                                                )
+                                            }
+                                        </ul>
+                                    </AccordionDetails>
+                                </Accordion>
+                            </div>
+
+                            <div className="actions-buttons">
+                                <button>EDIT</button>
+                                <button>DELETE</button>
+                            </div>
+                        </div>
                     ))
                 ) : (
                     <>
@@ -102,38 +116,6 @@ const ViewAdmin = () => {
                         <p>please wait a bit</p>
                     </>
                 )}
-
-                {/* <table>
-                    <thead>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Email</th>
-                        <th>Session Location</th>
-                        <th>Address</th>
-                        <th>Actions</th>
-                    </thead>
-                    <tbody>
-                        {users.map((user) => {
-                            return (
-                                <tr>
-                                    <td>{user.firstName}</td>
-                                    <td>{user.lastName}</td>
-                                    <td>{user.email}</td>
-                                    <td>{user.sessionLocation}</td>
-                                    <td>
-                                        {user.address.city}{" "}
-                                        {user.address.country}{" "}
-                                        {user.address.postcode}
-                                    </td>
-                                    <td>
-                                        <button>EDIT</button>
-                                        <button>DELETE</button>
-                                    </td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table> */}
             </main>
             <footer>Welcome</footer>
         </div>
