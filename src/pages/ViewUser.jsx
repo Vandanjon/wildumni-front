@@ -18,13 +18,9 @@ const ViewUser = () => {
 
     const redIcon = new L.Icon({
         iconUrl:
-            "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png",
+            "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
         shadowUrl:
             "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41],
     });
 
     // const {
@@ -33,8 +29,17 @@ const ViewUser = () => {
 
     //check before if user.id exists
     const userId = useContext(UserContext)?.user?.id;
-
+    const [loggedUser, setLoggedUser] = useState(0);
     console.log(userId);
+
+    useEffect(() => {
+        axios
+            .get(`${import.meta.env.VITE_BACKEND_URL}/users/${userId}`)
+            .then((res) => setLoggedUser(res.data))
+            .catch((err) => console.log(err));
+    }, []);
+
+    console.log(loggedUser);
 
     const center = [-21.115141, 55.536384];
     const zoom = 10;
@@ -79,7 +84,7 @@ const ViewUser = () => {
             </header>
 
             <main>
-                {users ? (
+                {users && loggedUser ? (
                     <MapContainer center={center} zoom={zoom} ref={mapRef}>
                         <TileLayer
                             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -104,7 +109,10 @@ const ViewUser = () => {
                         ))}
 
                         <Marker
-                            position={[20, 30]}
+                            position={[
+                                loggedUser.address.latitude,
+                                loggedUser.address.longitude,
+                            ]}
                             onClick={() => setProfile()}
                             icon={redIcon}
                         />
