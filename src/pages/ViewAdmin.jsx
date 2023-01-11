@@ -22,7 +22,7 @@ const ViewAdmin = () => {
             userName: "-",
             email: "-",
             sessionLocation: "-",
-            address: "-",
+            address: {},
         },
     ]);
 
@@ -50,6 +50,7 @@ const ViewAdmin = () => {
                 {users ? (
                     users.map((user) => (
                         <Accordion
+                            key={user.id}
                             expanded={expanded === `panel${user.id}`}
                             onChange={handleChange(`panel${user.id}`)}
                         >
@@ -64,15 +65,34 @@ const ViewAdmin = () => {
                                     AVATAR
                                 </Typography>
                                 <Typography sx={{ color: "text.secondary" }}>
-                                    I am an accordion
+                                    {user.userName}
                                 </Typography>
                             </AccordionSummary>
                             <AccordionDetails>
-                                <Typography>
-                                    Nulla facilisi. Phasellus sollicitudin nulla
-                                    et quam mattis feugiat. Aliquam eget maximus
-                                    est, id dignissim quam.
-                                </Typography>
+                                <ul>
+                                    <li>Firstname : {user.firstName}</li>
+                                    <li>Lastname : {user.lastName}</li>
+                                    <li>Email : {user.email}</li>
+
+                                    {
+                                        // JSON.stringify(user.address) !== "{}"
+                                        user.address.street !== "" &&
+                                        user.address.postcode !== "" &&
+                                        user.address.city !== "" &&
+                                        user.address.region !== "" &&
+                                        user.address.country !== "" ? (
+                                            <li>
+                                                Address :{user.address.street},{" "}
+                                                {user.address.postcode}{" "}
+                                                {user.address.city} -
+                                                {user.address.region}{" "}
+                                                {user.address.country}
+                                            </li>
+                                        ) : (
+                                            ""
+                                        )
+                                    }
+                                </ul>
                             </AccordionDetails>
                         </Accordion>
                     ))
