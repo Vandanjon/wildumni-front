@@ -1,8 +1,9 @@
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useContext } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import NavBar from "../components/NavBar";
 import datas from "../datas/data.json";
+import { UserContext } from "../contexts/UserContext";
 
 const ViewUser = () => {
     const mapRef = useRef(null);
@@ -13,6 +14,8 @@ const ViewUser = () => {
             lastName: "tata",
         },
     ]);
+
+    const { user } = useContext(UserContext);
 
     const [userId, setuserId] = useState(10);
     const center = [-21.115141, 55.536384];
@@ -46,6 +49,8 @@ const ViewUser = () => {
                 console.log(err);
             });
     }, []);
+
+    console.log(user);
 
     return (
         <div id="UserPage" className="pageContainer">

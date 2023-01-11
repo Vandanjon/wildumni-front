@@ -77,7 +77,7 @@ const Login = () => {
                     sessionStorage.setItem("token", res.data.token);
 
                     const decodedJWT = jwt_decode(res.data.token);
-                    setUser(decodedJWT.roles);
+                    setUser(decodedJWT);
 
                     navigate("/user");
                 })

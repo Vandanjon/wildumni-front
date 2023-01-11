@@ -9,7 +9,7 @@ const NavBar = () => {
         <nav>
             <Link to="/">Home</Link>
 
-            {user && user.includes("ROLE_ADMIN") ? (
+            {user && user.roles.includes("ROLE_ADMIN") ? (
                 <Link to="/admin">Admin</Link>
             ) : (
                 ""

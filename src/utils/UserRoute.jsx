@@ -7,7 +7,7 @@ const UserRoute = ({ children }) => {
 
     if (!user) {
         return <Navigate to="/" replace />;
-    } else if (user.includes("ROLE_USER")) {
+    } else if (user.roles.includes("ROLE_USER")) {
         return children;
     }
 };
