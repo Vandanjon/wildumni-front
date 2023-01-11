@@ -10,6 +10,13 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+
 const ViewAdmin = () => {
     const [expanded, setExpanded] = useState(false);
 
@@ -41,6 +48,26 @@ const ViewAdmin = () => {
             });
     }, []);
 
+    const [modalMessage, setModalMessage] = useState("");
+
+    const edit = (user) => {
+        // axios
+        //     .put(`${import.meta.env.VITE_BACKEND_URL}/users/${userId}`)
+        //     .then((res) => {
+        //         console.log(res.data);
+        //     })
+        //     .catch((err) => console.log(err));
+        console.log(user);
+        setModalMessage(`Edit User #${user}`);
+        setOpen(true);
+    };
+
+    const [open, setOpen] = useState(false);
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
     return (
         <div id="AdminPage" className="pageContainer">
             <header>
@@ -51,9 +78,8 @@ const ViewAdmin = () => {
             <main>
                 {users ? (
                     users.map((user) => (
-                        <div className="userInfos">
+                        <div className="userInfos" key={user.id}>
                             <Accordion
-                                key={user.id}
                                 expanded={expanded === `panel${user.id}`}
                                 onChange={handleChange(`panel${user.id}`)}
                             >
@@ -63,7 +89,9 @@ const ViewAdmin = () => {
                                     id={`panel${user.id}bh-header`}
                                 >
                                     <Typography className="leftSide">
-                                        <EditIcon />
+                                        <EditIcon
+                                            onClick={() => edit(user.id)}
+                                        />
                                         <DeleteIcon />
                                     </Typography>
                                     <Typography className="middle">
@@ -111,6 +139,32 @@ const ViewAdmin = () => {
                 )}
             </main>
             <footer>Welcome</footer>
+
+            <div>
+                <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">
+                        {modalMessage}
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Let Google help apps determine location. This means
+                            sending anonymous location data to Google, even when
+                            no apps are running.
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose}>Disagree</Button>
+                        <Button onClick={handleClose} autoFocus>
+                            Agree
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
         </div>
     );
 };
