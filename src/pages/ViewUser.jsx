@@ -14,15 +14,16 @@ const ViewUser = () => {
         },
     ]);
 
-    const [markerId, setMarkerId] = useState(5);
+    const [userId, setuserId] = useState(10);
     const center = [-21.115141, 55.536384];
     const zoom = 10;
 
     useEffect(() => {
         axios
-            .get(`${import.meta.env.VITE_BACKEND_URL}/users/${markerId}`)
+            .get(`${import.meta.env.VITE_BACKEND_URL}/users`)
             .then((res) => {
-                setProfile(res.data);
+                setUsers(res.data);
+                console.log(res.data);
             })
             .catch((err) => console.log(err));
     }, []);
@@ -56,30 +57,38 @@ const ViewUser = () => {
                 </div>
             </header>
 
+            {console.log(users)}
             <main>
-                <MapContainer center={center} zoom={zoom} ref={mapRef}>
-                    <TileLayer
-                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    />
+                {users ? (
+                    <MapContainer center={center} zoom={zoom} ref={mapRef}>
+                        <TileLayer
+                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        />
 
-                    {datas.persons.map((mark) => (
-                        <Marker
-                            key={mark.id}
-                            position={[
-                                mark.coordinates[0],
-                                mark.coordinates[1],
-                            ]}
-                            onClick={() => setProfile()}
-                        >
-                            <Popup>
-                                {mark.firstname}
-                                <br />
-                                {mark.lastname}
-                            </Popup>
-                        </Marker>
-                    ))}
-                </MapContainer>
+                        {users.map((mark) => (
+                            <Marker
+                                key={mark.id}
+                                position={[
+                                    mark.address.latitude,
+                                    mark.address.longitude,
+                                ]}
+                                onClick={() => setProfile()}
+                            >
+                                <Popup>
+                                    {mark.firstname}
+                                    <br />
+                                    {mark.lastname}
+                                </Popup>
+                            </Marker>
+                        ))}
+                    </MapContainer>
+                ) : (
+                    <>
+                        <p>Datas loading</p>
+                        <p>please wait a bit</p>
+                    </>
+                )}
             </main>
             <footer>
                 {profile ? (

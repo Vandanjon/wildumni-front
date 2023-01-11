@@ -22,9 +22,7 @@ const Login = () => {
     const [formDatas, setFormDatas] = useState({
         username: "jojo",
         password: "password",
-        email: "lelievre.patricia@club-internet.fr",
-        latitude: "-",
-        longitude: "-",
+        email: "potier.lucy@noos.fr",
     });
     const [message, setMessage] = useState("");
     const [open, setOpen] = useState(false);
