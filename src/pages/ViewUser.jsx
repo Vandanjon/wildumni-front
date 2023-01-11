@@ -4,6 +4,7 @@ import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import NavBar from "../components/NavBar";
 import datas from "../datas/data.json";
 import { UserContext } from "../contexts/UserContext";
+import * as L from "leaflet";
 
 const ViewUser = () => {
     const mapRef = useRef(null);
@@ -15,9 +16,26 @@ const ViewUser = () => {
         },
     ]);
 
-    const { user } = useContext(UserContext);
+    const redIcon = new L.Icon({
+        iconUrl:
+            "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png",
+        shadowUrl:
+            "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41],
+    });
 
-    const [userId, setuserId] = useState(10);
+    // const {
+    //     user: { id: userId },
+    // } = useContext(UserContext);
+
+    //check before if user.id exists
+    const userId = useContext(UserContext)?.user?.id;
+
+    console.log(userId);
+
     const center = [-21.115141, 55.536384];
     const zoom = 10;
 
@@ -31,7 +49,7 @@ const ViewUser = () => {
             .catch((err) => console.log(err));
     }, []);
 
-    // console.log(userProfile);
+    console.log(users);
 
     const recenterMap = () => {
         if (mapRef.current) {
@@ -50,8 +68,6 @@ const ViewUser = () => {
             });
     }, []);
 
-    console.log(user);
-
     return (
         <div id="UserPage" className="pageContainer">
             <header>
@@ -62,7 +78,6 @@ const ViewUser = () => {
                 </div>
             </header>
 
-            {console.log(users)}
             <main>
                 {users ? (
                     <MapContainer center={center} zoom={zoom} ref={mapRef}>
@@ -87,6 +102,12 @@ const ViewUser = () => {
                                 </Popup>
                             </Marker>
                         ))}
+
+                        <Marker
+                            position={[20, 30]}
+                            onClick={() => setProfile()}
+                            icon={redIcon}
+                        />
                     </MapContainer>
                 ) : (
                     <>
