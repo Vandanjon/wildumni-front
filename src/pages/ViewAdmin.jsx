@@ -17,6 +17,8 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
+import { TextField } from "@mui/material";
+
 const ViewAdmin = () => {
     const [expanded, setExpanded] = useState(false);
 
@@ -48,7 +50,19 @@ const ViewAdmin = () => {
             });
     }, []);
 
-    const [modalMessage, setModalMessage] = useState("");
+    const [modalTitle, setModalTitle] = useState("");
+    const [modalFormDatas, setModalFormDatas] = useState({
+        firstName: "",
+        lastName: "",
+        userName: "",
+        email: "",
+    });
+    const handleChangeFormDatas = (e) => {
+        setModalFormDatas({
+            ...modalFormDatas,
+            [e.target.name]: e.target.value,
+        });
+    };
 
     const edit = (user) => {
         // axios
@@ -58,7 +72,13 @@ const ViewAdmin = () => {
         //     })
         //     .catch((err) => console.log(err));
         console.log(user);
-        setModalMessage(`Edit User #${user}`);
+        setModalTitle(`Edit User #${user.id}`);
+        setModalFormDatas({
+            firstName: user.firstName,
+            lastName: user.lastName,
+            userName: user.userName,
+            email: user.email,
+        });
         setOpen(true);
     };
 
@@ -67,7 +87,7 @@ const ViewAdmin = () => {
     const handleClose = () => {
         setOpen(false);
     };
-
+    console.log(modalFormDatas);
     return (
         <div id="AdminPage" className="pageContainer">
             <header>
@@ -89,9 +109,7 @@ const ViewAdmin = () => {
                                     id={`panel${user.id}bh-header`}
                                 >
                                     <Typography className="leftSide">
-                                        <EditIcon
-                                            onClick={() => edit(user.id)}
-                                        />
+                                        <EditIcon onClick={() => edit(user)} />
                                         <DeleteIcon />
                                     </Typography>
                                     <Typography className="middle">
@@ -148,20 +166,51 @@ const ViewAdmin = () => {
                     aria-describedby="alert-dialog-description"
                 >
                     <DialogTitle id="alert-dialog-title">
-                        {modalMessage}
+                        {modalTitle}
                     </DialogTitle>
                     <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                            Let Google help apps determine location. This means
-                            sending anonymous location data to Google, even when
-                            no apps are running.
-                        </DialogContentText>
+                        <TextField
+                            label="Firstname"
+                            variant="outlined"
+                            id="firstName"
+                            type="text"
+                            name="firstName"
+                            value={modalFormDatas.firstName}
+                            onChange={handleChangeFormDatas}
+                        />
+                        <TextField
+                            label="Lastname"
+                            variant="outlined"
+                            id="lastName"
+                            type="text"
+                            name="lastName"
+                            value={modalFormDatas.lastName}
+                            onChange={handleChangeFormDatas}
+                        />
+                        <TextField
+                            label="Username"
+                            variant="outlined"
+                            id="userName"
+                            type="text"
+                            name="userName"
+                            value={modalFormDatas.userName}
+                            onChange={handleChangeFormDatas}
+                        />
+                        <TextField
+                            label="Email"
+                            variant="outlined"
+                            id="email"
+                            type="text"
+                            name="email"
+                            value={modalFormDatas.email}
+                            onChange={handleChangeFormDatas}
+                        />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose}>Disagree</Button>
                         <Button onClick={handleClose} autoFocus>
-                            Agree
+                            Cancel
                         </Button>
+                        <Button onClick={handleClose}>Validate</Button>
                     </DialogActions>
                 </Dialog>
             </div>
