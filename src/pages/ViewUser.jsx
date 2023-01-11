@@ -1,12 +1,12 @@
-import axios from "axios";
 import { useEffect, useRef, useState, useContext } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import * as L from "leaflet";
+import axios from "axios";
+
 import NavBar from "../components/NavBar";
 import { UserContext } from "../contexts/UserContext";
-import * as L from "leaflet";
 
 const ViewUser = () => {
-    const mapRef = useRef(null);
     const [users, setUsers] = useState();
     const [profile, setProfile] = useState([
         {
@@ -14,6 +14,22 @@ const ViewUser = () => {
             lastName: "tata",
         },
     ]);
+    const [loggedUser, setLoggedUser] = useState([
+        {
+            id: 0,
+            address: {
+                latitude: "0",
+                longitude: "0",
+            },
+        },
+    ]);
+    const [center, setCenter] = useState();
+
+    const userId = useContext(UserContext)?.user?.id;
+
+    const mapRef = useRef(null);
+
+    const zoom = 10;
 
     const redIcon = new L.Icon({
         iconUrl:
@@ -21,26 +37,6 @@ const ViewUser = () => {
         shadowUrl:
             "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
     });
-
-    const userId = useContext(UserContext)?.user?.id;
-    const [loggedUser, setLoggedUser] = useState(0);
-
-    useEffect(() => {
-        axios
-            .get(`${import.meta.env.VITE_BACKEND_URL}/users/${userId}`)
-            .then((res) => setLoggedUser(res.data))
-            .catch((err) => console.log(err));
-    }, []);
-    const zoom = 10;
-
-    useEffect(() => {
-        axios
-            .get(`${import.meta.env.VITE_BACKEND_URL}/users`)
-            .then((res) => {
-                setUsers(res.data);
-            })
-            .catch((err) => console.log(err));
-    }, []);
 
     const recenterMap = () => {
         if (mapRef.current) {
@@ -50,13 +46,24 @@ const ViewUser = () => {
 
     useEffect(() => {
         axios
+            .get(`${import.meta.env.VITE_BACKEND_URL}/users/${userId}`)
+            .then((res) => {
+                setLoggedUser(res.data);
+                setCenter([
+                    res.data.address.latitude,
+                    res.data.address.longitude,
+                ]);
+            })
+            .catch((err) => console.log(err));
+    }, []);
+
+    useEffect(() => {
+        axios
             .get(`${import.meta.env.VITE_BACKEND_URL}/users`)
             .then((res) => {
                 setUsers(res.data);
             })
-            .catch((err) => {
-                console.log(err);
-            });
+            .catch((err) => console.log(err));
     }, []);
 
     return (
@@ -70,15 +77,8 @@ const ViewUser = () => {
             </header>
 
             <main>
-                {users && loggedUser ? (
-                    <MapContainer
-                        center={[
-                            loggedUser.address.latitude,
-                            loggedUser.address.longitude,
-                        ]}
-                        zoom={zoom}
-                        ref={mapRef}
-                    >
+                {users && loggedUser && center ? (
+                    <MapContainer center={center} zoom={zoom} ref={mapRef}>
                         <TileLayer
                             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
