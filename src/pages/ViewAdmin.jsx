@@ -56,21 +56,39 @@ const ViewAdmin = () => {
         lastName: "",
         userName: "",
         email: "",
+        address: {
+            latitude: "",
+            longitude: "",
+        },
     });
     const handleChangeFormDatas = (e) => {
         setModalFormDatas({
             ...modalFormDatas,
             [e.target.name]: e.target.value,
+            address: {
+                ...modalFormDatas.address,
+                [e.target.name]: e.target.value,
+            },
         });
     };
 
-    const edit = (user) => {
+    const submitForm = (modalFormDatas, user) => {
+        console.log(modalFormDatas);
+        console.log(user);
         // axios
-        //     .put(`${import.meta.env.VITE_BACKEND_URL}/users/${userId}`)
+        //     .put(
+        //         `${import.meta.env.VITE_BACKEND_URL}/users/${user}`,
+        //         modalFormDatas
+        //     )
         //     .then((res) => {
         //         console.log(res.data);
         //     })
         //     .catch((err) => console.log(err));
+
+        handleClose();
+    };
+
+    const edit = (user) => {
         console.log(user);
         setModalTitle(`Edit User #${user.id}`);
         setModalFormDatas({
@@ -78,6 +96,23 @@ const ViewAdmin = () => {
             lastName: user.lastName,
             userName: user.userName,
             email: user.email,
+            password: "",
+            session: {
+                location: "",
+                startDate: "",
+                endDate: "",
+            },
+            language: [""],
+            contactLink: [""],
+            address: {
+                country: "",
+                region: "",
+                city: "",
+                postcode: "",
+                street: "",
+                latitude: "1",
+                longitude: "1",
+            },
         });
         setOpen(true);
     };
@@ -147,6 +182,166 @@ const ViewAdmin = () => {
                                     </ul>
                                 </AccordionDetails>
                             </Accordion>
+
+                            <div>
+                                <Dialog
+                                    open={open}
+                                    onClose={handleClose}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogTitle id="alert-dialog-title">
+                                        {modalTitle}
+                                    </DialogTitle>
+                                    <DialogContent>
+                                        <TextField
+                                            label="Firstname"
+                                            variant="outlined"
+                                            id="firstName"
+                                            type="text"
+                                            name="firstName"
+                                            value={modalFormDatas.firstName}
+                                            onChange={handleChangeFormDatas}
+                                        />
+                                        <TextField
+                                            label="Lastname"
+                                            variant="outlined"
+                                            id="lastName"
+                                            type="text"
+                                            name="lastName"
+                                            value={modalFormDatas.lastName}
+                                            onChange={handleChangeFormDatas}
+                                        />
+                                        <TextField
+                                            label="Username"
+                                            variant="outlined"
+                                            id="userName"
+                                            type="text"
+                                            name="userName"
+                                            value={modalFormDatas.userName}
+                                            onChange={handleChangeFormDatas}
+                                        />
+                                        <TextField
+                                            label="Email"
+                                            variant="outlined"
+                                            id="email"
+                                            type="text"
+                                            name="email"
+                                            value={modalFormDatas.email}
+                                            onChange={handleChangeFormDatas}
+                                        />
+
+                                        <TextField
+                                            label="Password"
+                                            variant="outlined"
+                                            id="password"
+                                            type="text"
+                                            name="password"
+                                            value={modalFormDatas.password}
+                                            onChange={handleChangeFormDatas}
+                                        />
+
+                                        <TextField
+                                            label="
+                            Address - Country"
+                                            variant="outlined"
+                                            id="country"
+                                            type="text"
+                                            name="country"
+                                            value={
+                                                modalFormDatas.address?.country
+                                            }
+                                            onChange={handleChangeFormDatas}
+                                        />
+                                        <TextField
+                                            label="
+                            Address - Region"
+                                            variant="outlined"
+                                            id="region"
+                                            type="text"
+                                            name="region"
+                                            value={
+                                                modalFormDatas.address?.region
+                                            }
+                                            onChange={handleChangeFormDatas}
+                                        />
+                                        <TextField
+                                            label="
+                            Address - City"
+                                            variant="outlined"
+                                            id="city"
+                                            type="text"
+                                            name="city"
+                                            value={modalFormDatas.address?.city}
+                                            onChange={handleChangeFormDatas}
+                                        />
+                                        <TextField
+                                            label="
+                            Address - Postcode"
+                                            variant="outlined"
+                                            id="postcode"
+                                            type="text"
+                                            name="postcode"
+                                            value={
+                                                modalFormDatas.address?.postcode
+                                            }
+                                            onChange={handleChangeFormDatas}
+                                        />
+                                        <TextField
+                                            label="
+                            Address - Street"
+                                            variant="outlined"
+                                            id="street"
+                                            type="text"
+                                            name="street"
+                                            value={
+                                                modalFormDatas.address?.street
+                                            }
+                                            onChange={handleChangeFormDatas}
+                                        />
+                                        <TextField
+                                            label="
+                            Address - Latitude"
+                                            variant="outlined"
+                                            id="latitude"
+                                            type="text"
+                                            name="latitude"
+                                            value={
+                                                modalFormDatas.address?.latitude
+                                            }
+                                            onChange={handleChangeFormDatas}
+                                        />
+                                        <TextField
+                                            label="
+                            Address - Longitude"
+                                            variant="outlined"
+                                            id="longitude"
+                                            type="text"
+                                            name="longitude"
+                                            value={
+                                                modalFormDatas.address
+                                                    ?.longitude
+                                            }
+                                            onChange={handleChangeFormDatas}
+                                        />
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={handleClose} autoFocus>
+                                            Cancel
+                                        </Button>
+                                        <Button
+                                            onClick={() =>
+                                                submitForm(
+                                                    modalFormDatas,
+                                                    user.id
+                                                )
+                                            }
+                                        >
+                                            Validate
+                                        </Button>
+                                    </DialogActions>
+                                </Dialog>
+                            </div>
                         </div>
                     ))
                 ) : (
@@ -157,63 +352,6 @@ const ViewAdmin = () => {
                 )}
             </main>
             <footer>Welcome</footer>
-
-            <div>
-                <Dialog
-                    open={open}
-                    onClose={handleClose}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                >
-                    <DialogTitle id="alert-dialog-title">
-                        {modalTitle}
-                    </DialogTitle>
-                    <DialogContent>
-                        <TextField
-                            label="Firstname"
-                            variant="outlined"
-                            id="firstName"
-                            type="text"
-                            name="firstName"
-                            value={modalFormDatas.firstName}
-                            onChange={handleChangeFormDatas}
-                        />
-                        <TextField
-                            label="Lastname"
-                            variant="outlined"
-                            id="lastName"
-                            type="text"
-                            name="lastName"
-                            value={modalFormDatas.lastName}
-                            onChange={handleChangeFormDatas}
-                        />
-                        <TextField
-                            label="Username"
-                            variant="outlined"
-                            id="userName"
-                            type="text"
-                            name="userName"
-                            value={modalFormDatas.userName}
-                            onChange={handleChangeFormDatas}
-                        />
-                        <TextField
-                            label="Email"
-                            variant="outlined"
-                            id="email"
-                            type="text"
-                            name="email"
-                            value={modalFormDatas.email}
-                            onChange={handleChangeFormDatas}
-                        />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose} autoFocus>
-                            Cancel
-                        </Button>
-                        <Button onClick={handleClose}>Validate</Button>
-                    </DialogActions>
-                </Dialog>
-            </div>
         </div>
     );
 };

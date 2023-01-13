@@ -22,7 +22,7 @@ const Login = () => {
     const [formDatas, setFormDatas] = useState({
         username: "jojo",
         password: "password",
-        email: "potier.lucy@noos.fr",
+        email: "jfernandes@laposte.net",
     });
     const [message, setMessage] = useState("");
     const [open, setOpen] = useState(false);
