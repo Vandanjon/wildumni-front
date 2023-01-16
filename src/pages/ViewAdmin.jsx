@@ -89,7 +89,7 @@ const ViewAdmin = () => {
     };
 
     const edit = (user) => {
-        console.log(user);
+        // console.log(user);
         setModalTitle(`Edit User #${user.id}`);
         setModalFormDatas({
             firstName: user.firstName,
@@ -116,6 +116,35 @@ const ViewAdmin = () => {
         });
         setOpen(true);
     };
+
+    const deleteUser = (user) => {
+        axios
+            .delete(`${import.meta.env.VITE_BACKEND_URL}/users/${user.id}`)
+            .then((res) => {
+                console.log(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+        const updatedUsers = users.filter(
+            (deletedUser) => deletedUser.id !== user.id
+        );
+        setUsers(updatedUsers);
+    };
+
+    // const deleteUser = (userId) => {
+    //     axios
+    //         .delete(`${import.meta.env.VITE_BACKEND_URL}/users/${userId}`)
+    //         .then((res) => {
+    //             console.log(res.data);
+    //             const updatedUsers = users.filter((user) => user.id !== userId);
+    //             setUsers(updatedUsers);
+    //         })
+    //         .catch((err) => {
+    //             console.log(err);
+    //         });
+    // };
 
     const [open, setOpen] = useState(false);
 
@@ -145,7 +174,9 @@ const ViewAdmin = () => {
                                 >
                                     <Typography className="leftSide">
                                         <EditIcon onClick={() => edit(user)} />
-                                        <DeleteIcon />
+                                        <DeleteIcon
+                                            onClick={() => deleteUser(user)}
+                                        />
                                     </Typography>
                                     <Typography className="middle">
                                         AVATAR

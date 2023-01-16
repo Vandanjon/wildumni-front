@@ -69,6 +69,8 @@ const ViewUser = () => {
             .catch((err) => console.log(err));
     }, []);
 
+    console.log(users);
+
     return (
         <div id="UserPage" className="pageContainer">
             <header>
@@ -97,9 +99,9 @@ const ViewUser = () => {
                                 onClick={() => setProfile()}
                             >
                                 <Popup>
-                                    {mark.firstname}
+                                    {mark.firstName}
                                     <br />
-                                    {mark.lastname}
+                                    {mark.email}
                                 </Popup>
                             </Marker>
                         ))}
@@ -111,7 +113,13 @@ const ViewUser = () => {
                             ]}
                             onClick={() => setProfile()}
                             icon={redIcon}
-                        />
+                        >
+                            <Popup>
+                                {loggedUser.firstName}
+                                <br />
+                                {loggedUser.email}
+                            </Popup>
+                        </Marker>
                     </MapContainer>
                 ) : (
                     <>
