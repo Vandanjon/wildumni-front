@@ -7,11 +7,14 @@ import Login from "./pages/Login";
 import ViewAdmin from "./pages/ViewAdmin";
 import ViewUser from "./pages/ViewUser";
 
+import UserCreate from "./pages/UserCreate";
+
 const App = () => {
     return (
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Login />} />
+                <Route path="/userCreate" element={<UserCreate />} />
 
                 <Route
                     path="/admin"
