@@ -69,13 +69,13 @@ const ViewAdmin = () => {
     const [open, setOpen] = useState(false);
     const handleClose = () => setOpen(false);
 
-    const editUser = (user) => {
-        console.log("edit User");
-    };
-
     const handleOpen = (user) => {
         setSelectedUser(user);
         setOpen(true);
+    };
+
+    const editUser = (user) => {
+        console.log("edit User");
     };
 
     const deleteUser = (user) => {
@@ -130,31 +130,39 @@ const ViewAdmin = () => {
                                         button
                                         key={user.id}
                                     >
-                                        {user.roles.includes("ROLE_ADMIN") ? (
-                                            <Avatar
-                                                className="avatar"
-                                                sx={{
-                                                    bgcolor: green[500],
-                                                }}
-                                            />
-                                        ) : (
-                                            <Avatar
-                                                className="avatar"
-                                                sx={{
-                                                    bgcolor: blue[500],
-                                                }}
-                                            />
-                                        )}
+                                        <Link to={`/users/${user.id}`}>
+                                            <span className="userAvatarName">
+                                                {user.roles.includes(
+                                                    "ROLE_ADMIN"
+                                                ) ? (
+                                                    <Avatar
+                                                        className="avatar"
+                                                        sx={{
+                                                            bgcolor: green[500],
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    <Avatar
+                                                        className="avatar"
+                                                        sx={{
+                                                            bgcolor: blue[500],
+                                                        }}
+                                                    />
+                                                )}
 
-                                        <ListItemText
-                                            className="userInfos"
-                                            primary={user.firstName}
-                                        />
+                                                <ListItemText
+                                                    className="userInfos"
+                                                    primary={user.firstName}
+                                                />
+                                            </span>
+                                        </Link>
+
                                         <span className="actionButtons">
                                             <EditIcon
                                                 onClick={() => editUser(user)}
                                                 color="primary"
                                             />
+
                                             <DeleteIcon
                                                 onClick={() => handleOpen(user)}
                                                 color="primary"

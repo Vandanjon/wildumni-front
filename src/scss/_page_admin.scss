@@ -10,8 +10,18 @@
         }
 
         .userLine {
+            display: flex;
+            justify-content: space-between;
+
+            .userAvatarName {
+                display: flex;
+                align-items: center;
+                width: 80%;
+            }
+
             .userInfos {
                 margin-left: 4vw;
+                width: 20%;
             }
         }
     }
