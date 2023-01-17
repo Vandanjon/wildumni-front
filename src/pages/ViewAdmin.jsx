@@ -5,7 +5,14 @@ import AdminUsersAccordion from "../components/AdminUsersAccordion";
 import NavBar from "../components/NavBar";
 import { UserContext } from "../contexts/UserContext";
 import ModalDeleteUser from "../components/ModalDeleteUser";
-import { Divider, Fab, List, ListItem, ListItemText } from "@mui/material";
+import {
+    Avatar,
+    Divider,
+    Fab,
+    List,
+    ListItem,
+    ListItemText,
+} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { Link } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -70,25 +77,32 @@ const ViewAdmin = () => {
 
                         <List
                             sx={{
-                                width: "100%",
-                                maxWidth: 360,
                                 bgcolor: "background.paper",
                             }}
+                            id="usersList"
                             component="nav"
                             aria-label="users names"
                         >
                             {users.map((user) => (
                                 <>
-                                    <ListItem button key={user.id}>
+                                    <ListItem
+                                        className="userLine"
+                                        button
+                                        key={user.id}
+                                    >
+                                        <Avatar className="avatar" />
+
                                         <ListItemText
                                             primary={user.firstName}
                                         />
-                                        <EditIcon
-                                            onClick={() => editUser(user)}
-                                        />
-                                        <DeleteIcon
-                                            onClick={() => deleteUser(user)}
-                                        />
+                                        <span className="actionButtons">
+                                            <EditIcon
+                                                onClick={() => editUser(user)}
+                                            />
+                                            <DeleteIcon
+                                                onClick={() => deleteUser(user)}
+                                            />
+                                        </span>
                                     </ListItem>
 
                                     <Divider />

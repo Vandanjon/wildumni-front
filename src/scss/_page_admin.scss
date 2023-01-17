@@ -4,21 +4,14 @@
         justify-content: flex-start;
         padding-top: 20px;
 
-        .userInfos {
-            width: 90%;
-            padding-bottom: 10px;
+        #usersList {
+            width: 100%;
+            max-width: 360px;
         }
 
-        .MuiAccordionSummary-content {
-            display: flex;
-            // justify-content: space-between;
-
-            .leftSide {
-                width: 20%;
-            }
-
-            .middle {
-                width: 30%;
+        .userLine {
+            .avatar {
+                margin-right: 4vw;
             }
         }
     }
