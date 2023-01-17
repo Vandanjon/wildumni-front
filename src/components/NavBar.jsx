@@ -7,7 +7,7 @@ const NavBar = () => {
 
     return (
         <nav>
-            <Link to="/">Home</Link>
+            <Link to="/">LOGOUT</Link>
 
             {user && user.roles.includes("ROLE_ADMIN") ? (
                 <Link to="/admin">Admin</Link>

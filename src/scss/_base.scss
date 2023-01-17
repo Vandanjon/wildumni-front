@@ -11,6 +11,12 @@ body {
     margin: 0;
 }
 
+a:visited {
+    text-decoration: none;
+    text-transform: none;
+    color: black;
+}
+
 // TEMPLATE
 .pageContainer {
     min-height: 100vh;
