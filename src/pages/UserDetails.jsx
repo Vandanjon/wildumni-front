@@ -4,7 +4,46 @@ import { useParams } from "react-router-dom";
 
 const UserDetails = () => {
     const { id } = useParams();
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState({
+        email: "",
+        roles: [""],
+        firstName: "",
+        lastName: "",
+        userName: "",
+        session: [
+            {
+                location: "",
+                startDate: "",
+                endDate: "",
+            },
+        ],
+        language: [
+            {
+                name: "",
+            },
+            {
+                name: "",
+            },
+        ],
+        contactLink: [
+            {
+                url: "",
+                social: {
+                    name: "",
+                },
+            },
+        ],
+        address: {
+            country: "",
+            region: "",
+            city: "",
+            postcode: 0,
+            street: "",
+            latitude: "",
+            longitude: "",
+            streetNumber: 0,
+        },
+    });
 
     useEffect(() => {
         axios
@@ -14,6 +53,7 @@ const UserDetails = () => {
             })
             .catch((err) => console.log(err));
     }, []);
+
     console.log(user);
 
     return (
