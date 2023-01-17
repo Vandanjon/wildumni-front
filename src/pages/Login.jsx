@@ -1,4 +1,4 @@
-import { Button, Box, TextField, Snackbar } from "@mui/material";
+import { Button, Box, TextField, Snackbar, Divider, Chip } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import axios from "axios";
 import { useState, forwardRef, useContext } from "react";
@@ -6,21 +6,24 @@ import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import { UserContext } from "../contexts/UserContext";
 import { Link } from "react-router-dom";
+import LoginForm from "../components/LoginForm";
+import Logo from "../assets/logo.png";
 
 const Alert = forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 const Login = () => {
+    const [formDatas, setFormDatas] = useState({
+        password: "password",
+        email: "gilbert.bourgeois@laposte.net",
+    });
+
     const token = sessionStorage.getItem("token");
     const { setUser } = useContext(UserContext);
 
     const navigate = useNavigate();
 
-    const [formDatas, setFormDatas] = useState({
-        password: "password",
-        email: "gilbert.bourgeois@laposte.net",
-    });
     const [message, setMessage] = useState("");
     const [open, setOpen] = useState(false);
 
@@ -42,12 +45,8 @@ const Login = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (formDatas.email === "" || formDatas.password === "") {
+        if (formDatas.email === "" && formDatas.password === "") {
             setMessage("Please fill the blank fields");
-            setOpen(true);
-            return;
-        } else if (formDatas.username === "") {
-            setMessage("Please insert your username");
             setOpen(true);
             return;
         } else if (formDatas.email === "") {
@@ -90,52 +89,17 @@ const Login = () => {
         <div id="Login" className="pageContainer">
             <header>
                 <h1>Wildumni</h1>
-                <h2>a Wild Code School Alumni finder</h2>
+
+                <img src={Logo} alt="the letter W in a map marker" />
             </header>
 
             <main>
-                <Box component="form" noValidate autoComplete="off">
-                    <h1>Login</h1>
-
-                    <TextField
-                        label="Email"
-                        variant="outlined"
-                        id="email"
-                        type="text"
-                        name="email"
-                        value={formDatas.email}
-                        onChange={handleChange}
-                    />
-
-                    <TextField
-                        label="Password"
-                        variant="outlined"
-                        type="password"
-                        id="password"
-                        name="password"
-                        value={formDatas.password}
-                        onChange={handleChange}
-                    />
-
-                    <Button variant="contained" onClick={handleSubmit}>
-                        SIGN IN
-                    </Button>
-                </Box>
-                <div>
-                    <p>
-                        <Link to="/userCreate">Want to create an account?</Link>
-                    </p>
-
-                    <p
-                        onClick={() => {
-                            window.open(
-                                "mailto:test@example.com?subject=Forgotten password&body=Hi, may I request a new password for this user account? Regards"
-                            );
-                        }}
-                    >
-                        Forgot password?
-                    </p>
-                </div>
+                <LoginForm
+                    formDatas={formDatas}
+                    handleChange={handleChange}
+                    handleSubmit={handleSubmit}
+                    open={open}
+                />
 
                 <Snackbar
                     open={open}
@@ -147,8 +111,7 @@ const Login = () => {
             </main>
 
             <footer>
-                LE site pour trouver vos comparses alumnis de la Wild Code
-                School
+                <h2>A Wild Code School Alumni Finder</h2>
             </footer>
         </div>
     );
