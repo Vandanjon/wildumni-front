@@ -8,31 +8,16 @@ import { UserContext } from "../contexts/UserContext";
 
 const ViewUser = () => {
     const [users, setUsers] = useState();
-    const [profile, setProfile] = useState([
-        {
-            firstName: "toto",
-            lastName: "tata",
-        },
-    ]);
-    const [loggedUser, setLoggedUser] = useState([
-        {
-            id: 0,
-            address: {
-                latitude: "0",
-                longitude: "0",
-            },
-        },
-    ]);
+    const [profile, setProfile] = useState([]);
+    const [loggedUser, setLoggedUser] = useState([]);
     const [center, setCenter] = useState();
 
     const { user } = useContext(UserContext);
-    console.log(user);
-
     const userId = useContext(UserContext)?.user?.id;
 
     const mapRef = useRef(null);
 
-    const zoom = 10;
+    const zoom = 6;
 
     const redIcon = new L.Icon({
         iconUrl:
@@ -68,8 +53,6 @@ const ViewUser = () => {
             })
             .catch((err) => console.log(err));
     }, []);
-
-    console.log(users);
 
     return (
         <div id="UserPage" className="pageContainer">
