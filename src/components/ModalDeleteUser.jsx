@@ -1,46 +1,37 @@
-import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-} from "@mui/material";
+import { Box, Modal, Typography } from "@mui/material";
 
-const ModalDeleteUser = (open, handleClose, user) => {
-    const deleteUser = (user) => {
-        axios
-            .delete(`${import.meta.env.VITE_BACKEND_URL}/users/${user.id}`)
-            .then((res) => {
-                console.log(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+};
 
-        const updatedUsers = users.filter(
-            (deletedUser) => deletedUser.id !== user.id
-        );
-        setUsers(updatedUsers);
-    };
+const ModalDeleteUser = ({ user, open, handleClose, deleteUser }) => {
+    console.log(user);
 
     return (
-        <Dialog
+        <Modal
             open={open}
             onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
         >
-            <DialogTitle id="alert-dialog-title">{modalTitle}</DialogTitle>
-            <DialogContent>"toto"</DialogContent>
-            <DialogActions>
-                <Button onClick={handleClose} autoFocus>
-                    Cancel
-                </Button>
-                <Button onClick={() => submitForm(modalFormDatas, user.id)}>
-                    Validate
-                </Button>
-            </DialogActions>
-        </Dialog>
+            <Box className="DeleteUserModal" sx={style}>
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                    {/* {user.firstName} */} tt
+                </Typography>
+                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                    Duis mollis, est non commodo luctus, nisi erat porttitor
+                    ligula.
+                </Typography>
+            </Box>
+        </Modal>
     );
 };
 
