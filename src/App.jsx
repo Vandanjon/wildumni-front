@@ -7,11 +7,18 @@ import Login from "./pages/Login";
 import ViewAdmin from "./pages/ViewAdmin";
 import ViewUser from "./pages/ViewUser";
 
+import UserCreate from "./pages/UserCreate";
+import UserUpdate from "./pages/UserUpdate";
+import UserDetails from "./pages/UserDetails";
+
 const App = () => {
     return (
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Login />} />
+                <Route path="/userCreate" element={<UserCreate />} />
+                <Route path="/users/:id" element={<UserDetails />} />
+                <Route path="/userUpdate/:id" element={<UserUpdate />} />
 
                 <Route
                     path="/admin"

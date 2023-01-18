@@ -8,28 +8,16 @@ import { UserContext } from "../contexts/UserContext";
 
 const ViewUser = () => {
     const [users, setUsers] = useState();
-    const [profile, setProfile] = useState([
-        {
-            firstName: "toto",
-            lastName: "tata",
-        },
-    ]);
-    const [loggedUser, setLoggedUser] = useState([
-        {
-            id: 0,
-            address: {
-                latitude: "0",
-                longitude: "0",
-            },
-        },
-    ]);
+    const [profile, setProfile] = useState([]);
+    const [loggedUser, setLoggedUser] = useState([]);
     const [center, setCenter] = useState();
 
+    const { user } = useContext(UserContext);
     const userId = useContext(UserContext)?.user?.id;
 
     const mapRef = useRef(null);
 
-    const zoom = 10;
+    const zoom = 6;
 
     const redIcon = new L.Icon({
         iconUrl:
@@ -94,9 +82,9 @@ const ViewUser = () => {
                                 onClick={() => setProfile()}
                             >
                                 <Popup>
-                                    {mark.firstname}
+                                    {mark.firstName}
                                     <br />
-                                    {mark.lastname}
+                                    {mark.email}
                                 </Popup>
                             </Marker>
                         ))}
@@ -108,7 +96,13 @@ const ViewUser = () => {
                             ]}
                             onClick={() => setProfile()}
                             icon={redIcon}
-                        />
+                        >
+                            <Popup>
+                                {loggedUser.firstName}
+                                <br />
+                                {loggedUser.email}
+                            </Popup>
+                        </Marker>
                     </MapContainer>
                 ) : (
                     <>

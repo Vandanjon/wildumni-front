@@ -1,19 +1,39 @@
 #AdminPage {
-    .main {
+    main {
         background-color: $color-secondary;
-        width: 80%;
+        justify-content: flex-start;
+        padding-top: 20px;
 
-        table {
+        #usersList {
             width: 100%;
+            max-width: 360px;
+        }
 
-            thead {
-                text-transform: uppercase;
-                text-align: left;
+        .userLine {
+            display: flex;
+            justify-content: space-between;
+
+            .userAvatarName {
+                display: flex;
+                align-items: center;
+                width: 80%;
             }
 
-            tbody tr td {
-                text-align: left;
+            .userInfos {
+                margin-left: 4vw;
+                width: 20%;
             }
         }
+    }
+
+    .DeleteUserModal {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50% -50%);
+        width: 400px;
+        border: 2px solid #000;
+        box-shadow: 24px;
+        padding: 4px;
     }
 }
