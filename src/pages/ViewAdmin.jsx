@@ -158,10 +158,9 @@ const ViewAdmin = () => {
                                         </Link>
 
                                         <span className="actionButtons">
-                                            <EditIcon
-                                                onClick={() => editUser(user)}
-                                                color="primary"
-                                            />
+                                            <Link to={`/userUpdate/${user.id}`}>
+                                                <EditIcon color="primary" />
+                                            </Link>
 
                                             <DeleteIcon
                                                 onClick={() => handleOpen(user)}
