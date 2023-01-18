@@ -7,7 +7,7 @@ import jwt_decode from "jwt-decode";
 import { UserContext } from "../contexts/UserContext";
 import { Link } from "react-router-dom";
 import LoginForm from "../components/LoginForm";
-import Logo from "../assets/logo.png";
+import Logo from "../assets/logo_white.png";
 
 const Alert = forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;

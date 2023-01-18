@@ -1,45 +1,59 @@
 #Login {
-    @media screen and (max-width: 600px) {
+    @media screen and (orientation: landscape) and (min-width: 601px) {
         background: no-repeat center / cover
-            url("https://assets.storage.infomaniak.website/images/background/unsplash/Y1ByvAGQ5iE-small.jpg")
-            center;
+            url("./assets/background_login_medium_landscape.webp");
     }
-    @media screen and (max-width: 900px) {
+
+    @media screen and (orientation: landscape) and (max-width: 600px) {
         background: no-repeat center / cover
-            url("https://assets.storage.infomaniak.website/images/background/unsplash/Y1ByvAGQ5iE-medium.jpg");
+            url("./assets/background_login_small_landscape.webp");
     }
-    @media screen and (min-width: 901px) {
+
+    @media screen and (orientation: portrait) and (min-width: 801px) {
         background: no-repeat center / cover
-            url("https://assets.storage.infomaniak.website/images/background/unsplash/Y1ByvAGQ5iE-large.jpg");
+            url("./assets/background_login_large.webp");
+    }
+
+    @media screen and (orientation: portrait) and (min-width: 481px) and (max-width: 800px) {
+        background: no-repeat center / cover
+            url("./assets/background_login_medium.webp");
+    }
+
+    @media screen and (orientation: portrait) and (max-width: 480px) {
+        background: no-repeat top / contain
+            url("./assets/background_login_small.webp");
     }
 
     img {
-        width: 20vw;
+        width: 25vw;
         height: auto;
+        max-width: 10vh;
     }
 
     header h1 {
         text-transform: uppercase;
+        font-family: "M PLUS Rounded 1c", "Shadows Into Light", cursive;
+        font-size: 3rem;
+        font-weight: 600;
+        color: $color-secondary;
+        text-shadow: white 1px 1px, white -1px 1px, white -1px -1px,
+            white 1px -1px;
+        letter-spacing: 2px;
+    }
+
+    button {
+        background-color: $color-secondary;
     }
 
     main {
-        p,
-        a {
-            color: white;
-        }
-
         a,
         a:visited {
             text-decoration: none;
         }
-        // label {
-        //     font-weight: 700;
-        // }
 
         input {
-            border-radius: 4px;
-            background-color: rgba($color: #ffffff, $alpha: 0.6);
-            // color: white;
+            // border-radius: 4px;
+            // background-color: rgba($color: #ffffff, $alpha: 0.6);
         }
 
         p {
