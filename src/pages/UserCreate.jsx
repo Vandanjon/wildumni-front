@@ -73,9 +73,6 @@ const UserCreate = () => {
     };
 
     const handleChangeAddress = (e) => {
-        //this gives an array
-        // const { name, value } = e.target;
-        // setAddress((prevState) => ({ ...prevState, [name]: [value] }));
         setAddress({ ...address, [e.target.name]: e.target.value });
     };
 
@@ -329,7 +326,6 @@ const UserCreate = () => {
                     </Button>
                 </Box>
             </main>
-            <footer></footer>
         </div>
     );
 };
