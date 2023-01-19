@@ -291,7 +291,6 @@ const UserCreate = () => {
                             <TextField
                                 select
                                 variant="outlined"
-                                color="secondary"
                                 label="Session"
                                 type="text"
                                 id="location"
@@ -305,14 +304,21 @@ const UserCreate = () => {
                             </TextField>
 
                             <TextField
-                                label="Language"
+                                select
                                 variant="outlined"
-                                id="languageName"
+                                label="Language"
                                 type="text"
+                                id="languageName"
                                 name="languageName"
                                 value={language.languageName}
                                 onChange={handleChangeLanguage}
-                            />
+                            >
+                                <MenuItem value="PHP">PHP</MenuItem>
+                                <MenuItem value="JavaScript">
+                                    JavaScript
+                                </MenuItem>
+                                <MenuItem value="Python">Python</MenuItem>
+                            </TextField>
 
                             <TextField
                                 label="GitHub Account"
