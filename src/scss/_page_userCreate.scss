@@ -5,12 +5,33 @@
         justify-content: center;
         align-items: center;
 
-        .MuiFormControl-root {
-            margin: 10px;
+        .MuiFormControl-root,
+        .MuiAccordion-root {
+            margin: 5px;
+            width: 100%;
+            max-width: 95vw;
         }
 
-        .MuiButtonBase-root {
-            margin: 20px;
+        fieldset:nth-of-type(2) {
+            margin-bottom: 6vh;
+        }
+    }
+
+    #location {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        & > * {
+            width: 33%;
+            text-align: center;
+        }
+
+        #latlong {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
         }
     }
 }

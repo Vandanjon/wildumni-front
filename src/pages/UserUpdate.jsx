@@ -150,6 +150,7 @@ const UserUpdate = () => {
                         onChange={handleChange}
                     />
                     <TextField
+                        InputLabelProps={{ shrink: true }}
                         label="Lastname"
                         variant="outlined"
                         id="lastName"
@@ -168,6 +169,7 @@ const UserUpdate = () => {
                         onChange={handleChange}
                     />
                     <TextField
+                        InputLabelProps={{ shrink: true }}
                         label="Email"
                         variant="outlined"
                         id="email"
@@ -178,6 +180,7 @@ const UserUpdate = () => {
                     />
 
                     <TextField
+                        InputLabelProps={{ shrink: true }}
                         label="Password"
                         variant="outlined"
                         id="password"
