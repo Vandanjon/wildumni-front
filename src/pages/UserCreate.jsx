@@ -21,7 +21,7 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import axios from "axios";
 import { UserContext } from "../contexts/UserContext";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Menu, Visibility, VisibilityOff } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
 const UserCreate = () => {
@@ -289,15 +289,20 @@ const UserCreate = () => {
                             />
 
                             <TextField
-                                required
+                                select
                                 variant="outlined"
                                 color="secondary"
                                 label="Session"
                                 type="text"
+                                id="location"
                                 name="location"
                                 value={session.location}
                                 onChange={handleChangeSession}
-                            />
+                            >
+                                <MenuItem value="RemoteFR">RemoteFR</MenuItem>
+                                <MenuItem value="RemoteEN">RemoteEN</MenuItem>
+                                <MenuItem value="Biarritz">Biarritz</MenuItem>
+                            </TextField>
 
                             <TextField
                                 label="Language"
