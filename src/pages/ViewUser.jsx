@@ -17,7 +17,7 @@ const ViewUser = () => {
 
     const mapRef = useRef(null);
 
-    const zoom = 6;
+    const zoom = 10;
 
     const redIcon = new L.Icon({
         iconUrl:
@@ -60,9 +60,6 @@ const ViewUser = () => {
             })
             .catch((err) => console.log(err));
     }, []);
-
-    console.log(loggedUser);
-    console.log(users);
 
     return (
         <div id="UserPage" className="pageContainer">
