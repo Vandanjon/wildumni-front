@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
     Box,
     TextField,
@@ -24,133 +24,96 @@ import { UserContext } from "../contexts/UserContext";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
-const token =
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImN0eSI6IkpXVCJ9.eyJpYXQiOjE2NzM2MzA0NjgsImV4cCI6MTY3MzYzNDA2OCwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6Impvam8iLCJpZCI6Mn0.MR4kYf0-YmPdtIO4lv1EoRg5tG08UK_Yq30rKrhcZ5Jt1bT6Ik3x4_Z_5DrXdGrHx17ZkRn4501PGGbokkbsv7i0gpZesScG7i13D3H2sJoVpYIdzxgr0BfyGASIF7g5n7rihRKVNBDXPZhe11JF9JtxdqKOjaXkS4NK5rzZI65MTlJTP4ZDLJosnyyUznkf9ku0PeOpLrMuqD0oGJbnQi01msIR5paO72CWwPmJ_kHe11tqmw0ripcUuyhhUSJ1yYvBF4Zb4TWXWOK0MkWUgzFL9m2bbYvYaVpwMZu9mzvRRK5Ebj6Yb8A9rFnRqyDGJbSjvEJmWNjO29PzuLU1Ug";
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 250,
-        },
-    },
-};
-
-const sessions = [
-    "RemoteFR - 03/2022 - 07/2022",
-    "RemoteEN - 03/2022 - 07/2022",
-    "Biarritz - 03/2022 - 07/2022",
-];
-
-function getStyles(session, personName, theme) {
-    return {
-        fontWeight:
-            personName.indexOf(session) === -1
-                ? theme.typography.fontWeightRegular
-                : theme.typography.fontWeightMedium,
-    };
-}
-
 const UserCreate = () => {
     const { user } = useContext(UserContext);
 
-    const [showPassword, setShowPassword] = useState(false);
-
-    const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
-
-    console.log(user);
-
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [emailError, setEmailError] = useState(false);
-    const [passwordError, setPasswordError] = useState(false);
-
-    const [formDatas, setFormDatas] = useState({
+    const [account, setAccount] = useState({
         email: "",
         password: "",
         firstName: "",
         lastName: "",
         userName: "",
-        address: {
-            latitude: "",
-            longitude: "",
-            country: "",
-            region: "",
-            postcode: "",
-            city: "",
-            street: "",
-            streetNumber: "",
-        },
-        session: {
-            location: "",
-            startDate: "",
-            endDate: "",
-        },
-        language: {
-            languageName: "",
-        },
-        contactLink: {
-            contactLinkName: "",
-            contactLinkUrl: "",
-        },
     });
 
-    const handleChange = (e) => {
+    const [address, setAddress] = useState({
+        latitude: "",
+        longitude: "",
+        streetNumber: "",
+        street: "",
+        city: "",
+        postcode: "",
+        region: "",
+        country: "",
+    });
+
+    const [session, setSession] = useState({
+        location: "",
+    });
+
+    const [language, setLanguage] = useState({
+        languageName: "",
+    });
+
+    const [contactLink, setContactLink] = useState({
+        github: "",
+    });
+
+    const handleChangeAccount = (e) => {
+        setAccount({ ...account, [e.target.name]: e.target.value });
+    };
+
+    const handleChangeAddress = (e) => {
+        //this gives an array
+        // const { name, value } = e.target;
+        // setAddress((prevState) => ({ ...prevState, [name]: [value] }));
+        setAddress({ ...address, [e.target.name]: e.target.value });
+    };
+
+    const handleChangeSession = (e) => {
+        setSession({ ...session, [e.target.name]: e.target.value });
+    };
+
+    const handleChangeLanguage = (e) => {
+        setLanguage({ ...language, [e.target.name]: e.target.value });
+    };
+
+    const handleChangeContactLink = (e) => {
+        setContactLink({ ...contactLink, [e.target.name]: e.target.value });
+    };
+
+    const [formDatas, setFormDatas] = useState();
+
+    useEffect(() => {
         setFormDatas({
-            ...formDatas,
-            [e.target.name]: e.target.value,
+            email: account.email,
+            password: account.password,
+            firstName: account.firstName,
+            lastName: account.lastName,
+            userName: account.userName,
             address: {
-                ...formDatas.address,
-                [e.target.name]: e.target.value,
+                latitude: parseInt(address.latitude),
+                longitude: parseInt(address.longitude),
+                streetNumber: parseInt(address.streetNumber),
+                street: address.street,
+                city: address.city,
+                postcode: parseInt(address.postcode),
+                region: address.region,
+                country: address.country,
             },
             session: {
-                ...formDatas.session,
-                [e.target.name]: e.target.value,
+                location: session.location,
             },
             language: {
-                ...formDatas.language,
-                [e.target.name]: e.target.value,
+                languageName: language.languageName,
             },
-            contactLink: {
-                ...formDatas.contactLink,
-                [e.target.name]: e.target.value,
-            },
+            contactLink: { github: contactLink.github },
         });
-    };
+    }, [account, address, session, language, contactLink]);
 
-    const handleSubmit = (event) => {
+    const submitTest = (event) => {
         event.preventDefault();
 
-        setEmailError(false);
-        setPasswordError(false);
-
-        if (email == "") {
-            setEmailError(true);
-        }
-        if (password == "") {
-            setPasswordError(true);
-        }
-
         console.log(formDatas);
-    };
-
-    const theme = useTheme();
-    const [personName, setPersonName] = useState([]);
-
-    const handleChange2 = (event) => {
-        const {
-            target: { value },
-        } = event;
-        setPersonName(
-            // On autofill we get a stringified value.
-            typeof value === "string" ? value.split(",") : value
-        );
     };
 
     return (
@@ -160,321 +123,175 @@ const UserCreate = () => {
             </header>
 
             <main>
-                <form autoComplete="off" onSubmit={handleSubmit}>
+                <Box component="form" onSubmit={submitTest} noValidate>
                     <TextField
                         required
                         variant="outlined"
                         color="secondary"
-                        type="email"
                         label="Email"
+                        type="email"
                         name="email"
-                        value={formDatas.email}
-                        onChange={handleChange}
-                        error={emailError}
+                        value={account.email}
+                        onChange={handleChangeAccount}
                     />
 
-                    <FormControl
+                    <TextField
                         required
                         variant="outlined"
                         color="secondary"
-                        type={showPassword ? "text" : "password"}
                         label="Password"
+                        type="password"
                         name="password"
-                        value={formDatas.password}
-                        onChange={handleChange}
-                        error={passwordError}
-                    >
-                        <InputLabel htmlFor="standard-adornment-password">
-                            Password
-                        </InputLabel>
-                        <OutlinedInput
-                            id="standard-adornment-password"
-                            type={showPassword ? "text" : "password"}
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        aria-label="toggle password visibility"
-                                        onClick={handleClickShowPassword}
-                                        onMouseDown={handleMouseDownPassword}
-                                        edge="end"
-                                    >
-                                        {showPassword ? (
-                                            <VisibilityOff />
-                                        ) : (
-                                            <Visibility />
-                                        )}
-                                    </IconButton>
-                                </InputAdornment>
-                            }
-                            label="Password"
-                        />
-                    </FormControl>
+                        value={account.password}
+                        onChange={handleChangeAccount}
+                    />
 
                     <TextField
-                        required
+                        fullWidth
+                        label="Firstname"
+                        variant="outlined"
+                        id="firstname"
+                        type="text"
+                        name="firstName"
+                        value={account.firstName}
+                        onChange={handleChangeAccount}
+                    />
+
+                    <TextField
+                        label="Lastname"
+                        variant="outlined"
+                        id="lastname"
+                        type="text"
+                        name="lastName"
+                        value={account.lastName}
+                        onChange={handleChangeAccount}
+                    />
+
+                    <TextField
+                        label="Username"
+                        variant="outlined"
+                        id="username"
+                        type="text"
+                        name="userName"
+                        value={account.userName}
+                        onChange={handleChangeAccount}
+                    />
+
+                    <TextField
                         label="Latitude"
                         variant="outlined"
                         id="latitude"
-                        type="number"
+                        type="text"
                         name="latitude"
-                        value={formDatas.address.latitude}
-                        onChange={handleChange}
+                        value={address.latitude}
+                        onChange={handleChangeAddress}
+                    />
+
+                    <TextField
+                        label="Longitude"
+                        variant="outlined"
+                        id="longitude"
+                        type="text"
+                        name="longitude"
+                        value={address.longitude}
+                        onChange={handleChangeAddress}
+                    />
+
+                    <TextField
+                        label="StreetNumber"
+                        variant="outlined"
+                        id="streetNumber"
+                        type="number"
+                        name="streetNumber"
+                        value={address.streetNumber}
+                        onChange={handleChangeAddress}
+                    />
+
+                    <TextField
+                        label="Street"
+                        variant="outlined"
+                        id="street"
+                        type="text"
+                        name="street"
+                        value={address.street}
+                        onChange={handleChangeAddress}
+                    />
+
+                    <TextField
+                        label="City"
+                        variant="outlined"
+                        id="city"
+                        type="text"
+                        name="city"
+                        value={address.city}
+                        onChange={handleChangeAddress}
+                    />
+
+                    <TextField
+                        label="Postcode"
+                        variant="outlined"
+                        id="postcode"
+                        type="number"
+                        name="postcode"
+                        value={address.postcode}
+                        onChange={handleChangeAddress}
+                    />
+
+                    <TextField
+                        label="Region"
+                        variant="outlined"
+                        id="region"
+                        type="text"
+                        name="region"
+                        value={address.region}
+                        onChange={handleChangeAddress}
+                    />
+
+                    <TextField
+                        label="Country"
+                        variant="outlined"
+                        id="country"
+                        type="text"
+                        name="country"
+                        value={address.country}
+                        onChange={handleChangeAddress}
                     />
 
                     <TextField
                         required
-                        label="Longitude"
                         variant="outlined"
-                        id="longitude"
-                        type="number"
-                        name="longitude"
-                        value={formDatas.address.longitude}
-                        onChange={handleChange}
+                        color="secondary"
+                        label="Session"
+                        type="text"
+                        name="location"
+                        value={session.location}
+                        onChange={handleChangeSession}
                     />
 
-                    <Accordion TransitionProps={{ unmountOnExit: true }}>
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="courtesies-content"
-                            id="courtesies-header"
-                        >
-                            <Typography>Courtesies</Typography>
-                        </AccordionSummary>
+                    <TextField
+                        label="Language"
+                        variant="outlined"
+                        id="languageName"
+                        type="text"
+                        name="languageName"
+                        value={language.languageName}
+                        onChange={handleChangeLanguage}
+                    />
 
-                        <AccordionDetails>
-                            <TextField
-                                label="Firstname"
-                                variant="outlined"
-                                id="firstname"
-                                type="text"
-                                name="firstName"
-                                value={formDatas.firstName}
-                                onChange={handleChange}
-                            />
-
-                            <TextField
-                                label="Lastname"
-                                variant="outlined"
-                                id="lastname"
-                                type="text"
-                                name="lastName"
-                                value={formDatas.lastName}
-                                onChange={handleChange}
-                            />
-
-                            <TextField
-                                label="Username"
-                                variant="outlined"
-                                id="username"
-                                type="text"
-                                name="userName"
-                                value={formDatas.userName}
-                                onChange={handleChange}
-                            />
-                        </AccordionDetails>
-                    </Accordion>
-
-                    <Accordion TransitionProps={{ unmountOnExit: true }}>
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="address-content"
-                            id="address-header"
-                        >
-                            <Typography>Address</Typography>
-                        </AccordionSummary>
-
-                        <AccordionDetails>
-                            <TextField
-                                label="StreetNumber"
-                                variant="outlined"
-                                id="streetNumber"
-                                type="number"
-                                name="streetNumber"
-                                value={formDatas.address.streetNumber}
-                                onChange={handleChange}
-                            />
-
-                            <TextField
-                                label="Street"
-                                variant="outlined"
-                                id="street"
-                                type="text"
-                                name="street"
-                                value={formDatas.address.street}
-                                onChange={handleChange}
-                            />
-
-                            <TextField
-                                label="City"
-                                variant="outlined"
-                                id="city"
-                                type="text"
-                                name="city"
-                                value={formDatas.address.city}
-                                onChange={handleChange}
-                            />
-
-                            <TextField
-                                label="Postcode"
-                                variant="outlined"
-                                id="postcode"
-                                type="number"
-                                name="postcode"
-                                value={formDatas.address.postcode}
-                                onChange={handleChange}
-                            />
-
-                            <TextField
-                                label="Region"
-                                variant="outlined"
-                                id="region"
-                                type="text"
-                                name="region"
-                                value={formDatas.address.region}
-                                onChange={handleChange}
-                            />
-
-                            <TextField
-                                label="Country"
-                                variant="outlined"
-                                id="country"
-                                type="text"
-                                name="country"
-                                value={formDatas.address.country}
-                                onChange={handleChange}
-                            />
-                        </AccordionDetails>
-                    </Accordion>
-
-                    <Accordion TransitionProps={{ unmountOnExit: true }}>
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="session-content"
-                            id="session-header"
-                        >
-                            <Typography>Session</Typography>
-                        </AccordionSummary>
-
-                        <AccordionDetails>
-                            <FormControl sx={{ m: 1, width: 300 }}>
-                                <InputLabel id="demo-multiple-name-label">
-                                    Session
-                                </InputLabel>
-                                <Select
-                                    labelId="demo-multiple-name-label"
-                                    id="demo-multiple-name"
-                                    multiple
-                                    value={personName}
-                                    onChange={handleChange2}
-                                    input={<OutlinedInput label="Name" />}
-                                    MenuProps={MenuProps}
-                                >
-                                    {sessions.map((session) => (
-                                        <MenuItem
-                                            key={session}
-                                            value={session}
-                                            style={getStyles(
-                                                session,
-                                                personName,
-                                                theme
-                                            )}
-                                        >
-                                            {session}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-
-                            <TextField
-                                label="Location"
-                                variant="outlined"
-                                id="location"
-                                type="text"
-                                name="location"
-                                value={formDatas.session.location}
-                                onChange={handleChange}
-                            />
-
-                            <TextField
-                                label="Start Date"
-                                variant="outlined"
-                                id="startDate"
-                                type="month"
-                                name="startDate"
-                                value={formDatas.session.startDate}
-                                onChange={handleChange}
-                            />
-
-                            <TextField
-                                label="End Date"
-                                variant="outlined"
-                                id="endDate"
-                                type="month"
-                                name="endDate"
-                                value={formDatas.session.endDate}
-                                onChange={handleChange}
-                            />
-                        </AccordionDetails>
-                    </Accordion>
-
-                    <Accordion TransitionProps={{ unmountOnExit: true }}>
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="language-content"
-                            id="language-header"
-                        >
-                            <Typography>Language(s)</Typography>
-                        </AccordionSummary>
-
-                        <AccordionDetails>
-                            <TextField
-                                label="Language"
-                                variant="outlined"
-                                id="languageName"
-                                type="text"
-                                name="languageName"
-                                value={formDatas.language.languageName}
-                                onChange={handleChange}
-                            />
-                        </AccordionDetails>
-                    </Accordion>
-
-                    <Accordion TransitionProps={{ unmountOnExit: true }}>
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="contact-content"
-                            id="contact-header"
-                        >
-                            <Typography>Contact Link(s)</Typography>
-                        </AccordionSummary>
-
-                        <AccordionDetails>
-                            <TextField
-                                label="Contact Link Url"
-                                variant="outlined"
-                                id="contactLinkUrl"
-                                type="text"
-                                name="contactLinkUrl"
-                                value={formDatas.contactLink.contactLinkUrl}
-                                onChange={handleChange}
-                            />
-
-                            <TextField
-                                label="Contact Link Category"
-                                variant="outlined"
-                                id="contactLinkName"
-                                type="text"
-                                name="contactLinkName"
-                                value={formDatas.contactLink.contactLinkName}
-                                onChange={handleChange}
-                            />
-                        </AccordionDetails>
-                    </Accordion>
+                    <TextField
+                        label="GitHub Account"
+                        variant="outlined"
+                        id="github"
+                        type="text"
+                        name="github"
+                        value={contactLink.github}
+                        onChange={handleChangeContactLink}
+                    />
 
                     <Button variant="contained" type="submit">
                         Create account
                     </Button>
-                </form>
+                </Box>
             </main>
             <footer></footer>
         </div>
