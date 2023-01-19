@@ -27,17 +27,14 @@ import { useTheme } from "@mui/material/styles";
 const UserCreate = () => {
     const { user } = useContext(UserContext);
 
-    const [currentPosition, setCurrentPosition] = useState([]);
-
     const locateUser = () => {
         navigator.geolocation.getCurrentPosition((position) => {
-            setCurrentPosition([
-                position.coords.latitude,
-                position.coords.longitude,
-            ]);
+            setAddress({
+                ...address,
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+            });
         });
-
-        console.log(currentPosition);
     };
 
     const [account, setAccount] = useState({
@@ -137,7 +134,7 @@ const UserCreate = () => {
 
             <main>
                 <Box component="form" onSubmit={handleSubmit} noValidate>
-                    <textfield id="credentials">
+                    <fieldset id="credentials">
                         Credentials
                         <TextField
                             required
@@ -157,9 +154,9 @@ const UserCreate = () => {
                             value={account.password}
                             onChange={handleChangeAccount}
                         />
-                    </textfield>
+                    </fieldset>
 
-                    <textfield id="location">
+                    <fieldset id="location">
                         <Button
                             variant="outlined"
                             onClick={() => {
@@ -192,7 +189,7 @@ const UserCreate = () => {
                                 onChange={handleChangeAddress}
                             />
                         </section>
-                    </textfield>
+                    </fieldset>
 
                     <Accordion TransitionProps={{ unmountOnExit: true }}>
                         <AccordionSummary
