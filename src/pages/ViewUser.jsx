@@ -26,6 +26,13 @@ const ViewUser = () => {
             "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
     });
 
+    const blueIcon = new L.Icon({
+        iconUrl:
+            "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png",
+        shadowUrl:
+            "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+    });
+
     const recenterMap = () => {
         if (mapRef.current) {
             mapRef.current.flyTo(center, zoom);
@@ -54,6 +61,9 @@ const ViewUser = () => {
             .catch((err) => console.log(err));
     }, []);
 
+    console.log(loggedUser);
+    console.log(users);
+
     return (
         <div id="UserPage" className="pageContainer">
             <header>
@@ -72,37 +82,30 @@ const ViewUser = () => {
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         />
 
-                        {users.map((mark) => (
-                            <Marker
-                                key={mark.id}
-                                position={[
-                                    mark.address.latitude,
-                                    mark.address.longitude,
-                                ]}
-                                onClick={() => setProfile()}
-                            >
-                                <Popup>
-                                    {mark.firstName}
-                                    <br />
-                                    {mark.email}
-                                </Popup>
-                            </Marker>
-                        ))}
+                        {users.map((user) => {
+                            let icon = blueIcon;
+                            if (loggedUser.id === user.id) {
+                                icon = redIcon;
+                            }
 
-                        <Marker
-                            position={[
-                                loggedUser.address.latitude,
-                                loggedUser.address.longitude,
-                            ]}
-                            onClick={() => setProfile()}
-                            icon={redIcon}
-                        >
-                            <Popup>
-                                {loggedUser.firstName}
-                                <br />
-                                {loggedUser.email}
-                            </Popup>
-                        </Marker>
+                            return (
+                                <Marker
+                                    key={user.id}
+                                    position={[
+                                        parseFloat(user.address.latitude),
+                                        parseFloat(user.address.longitude),
+                                    ]}
+                                    icon={icon}
+                                    onClick={() => setProfile()}
+                                >
+                                    <Popup>
+                                        {user.firstName}
+                                        <br />
+                                        {user.email}
+                                    </Popup>
+                                </Marker>
+                            );
+                        })}
                     </MapContainer>
                 ) : (
                     <>

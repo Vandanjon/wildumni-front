@@ -46,12 +46,12 @@ const UserCreate = () => {
     });
 
     const [address, setAddress] = useState({
-        latitude: "",
-        longitude: "",
-        streetNumber: "",
+        latitude: 0,
+        longitude: 0,
+        streetNumber: 0,
         street: "",
         city: "",
-        postcode: "",
+        postcode: 0,
         region: "",
         country: "",
     });
@@ -98,8 +98,8 @@ const UserCreate = () => {
             lastName: account.lastName,
             userName: account.userName,
             address: {
-                latitude: parseInt(address.latitude),
-                longitude: parseInt(address.longitude),
+                latitude: parseFloat(address.latitude),
+                longitude: parseFloat(address.longitude),
                 streetNumber: parseInt(address.streetNumber),
                 street: address.street,
                 city: address.city,
@@ -120,7 +120,18 @@ const UserCreate = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        console.log(formDatas);
+        axios
+            .post(`${import.meta.env.VITE_BACKEND_URL}/users`, formDatas)
+            .then((res) => {
+                console.log("success");
+                console.log(res.data);
+            })
+            .catch((err) => {
+                console.log(err.message);
+                console.log(err.response);
+            });
+
+        // console.log(formDatas);
     };
 
     return (
