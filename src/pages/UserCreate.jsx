@@ -27,6 +27,19 @@ import { useTheme } from "@mui/material/styles";
 const UserCreate = () => {
     const { user } = useContext(UserContext);
 
+    const [currentPosition, setCurrentPosition] = useState([]);
+
+    const locateUser = () => {
+        navigator.geolocation.getCurrentPosition((position) => {
+            setCurrentPosition([
+                position.coords.latitude,
+                position.coords.longitude,
+            ]);
+        });
+
+        console.log(currentPosition);
+    };
+
     const [account, setAccount] = useState({
         email: "",
         password: "",
@@ -110,7 +123,7 @@ const UserCreate = () => {
         });
     }, [account, address, session, language, contactLink]);
 
-    const submitTest = (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault();
 
         console.log(formDatas);
@@ -123,170 +136,196 @@ const UserCreate = () => {
             </header>
 
             <main>
-                <Box component="form" onSubmit={submitTest} noValidate>
-                    <TextField
-                        required
-                        variant="outlined"
-                        color="secondary"
-                        label="Email"
-                        type="email"
-                        name="email"
-                        value={account.email}
-                        onChange={handleChangeAccount}
-                    />
+                <Box component="form" onSubmit={handleSubmit} noValidate>
+                    <textfield id="credentials">
+                        Credentials
+                        <TextField
+                            required
+                            variant="outlined"
+                            label="Email"
+                            type="email"
+                            name="email"
+                            value={account.email}
+                            onChange={handleChangeAccount}
+                        />
+                        <TextField
+                            required
+                            variant="outlined"
+                            label="Password"
+                            type="password"
+                            name="password"
+                            value={account.password}
+                            onChange={handleChangeAccount}
+                        />
+                    </textfield>
 
-                    <TextField
-                        required
-                        variant="outlined"
-                        color="secondary"
-                        label="Password"
-                        type="password"
-                        name="password"
-                        value={account.password}
-                        onChange={handleChangeAccount}
-                    />
+                    <textfield id="location">
+                        <Button
+                            variant="outlined"
+                            onClick={() => {
+                                locateUser();
+                            }}
+                        >
+                            Locate Me
+                        </Button>
 
-                    <TextField
-                        fullWidth
-                        label="Firstname"
-                        variant="outlined"
-                        id="firstname"
-                        type="text"
-                        name="firstName"
-                        value={account.firstName}
-                        onChange={handleChangeAccount}
-                    />
+                        <p>OR</p>
 
-                    <TextField
-                        label="Lastname"
-                        variant="outlined"
-                        id="lastname"
-                        type="text"
-                        name="lastName"
-                        value={account.lastName}
-                        onChange={handleChangeAccount}
-                    />
+                        <section id="latlong">
+                            <TextField
+                                required
+                                variant="outlined"
+                                label="Latitude"
+                                type="text"
+                                name="latitude"
+                                value={address.latitude}
+                                onChange={handleChangeAddress}
+                            />
 
-                    <TextField
-                        label="Username"
-                        variant="outlined"
-                        id="username"
-                        type="text"
-                        name="userName"
-                        value={account.userName}
-                        onChange={handleChangeAccount}
-                    />
+                            <TextField
+                                required
+                                variant="outlined"
+                                label="Longitude"
+                                type="text"
+                                name="longitude"
+                                value={address.longitude}
+                                onChange={handleChangeAddress}
+                            />
+                        </section>
+                    </textfield>
 
-                    <TextField
-                        label="Latitude"
-                        variant="outlined"
-                        id="latitude"
-                        type="text"
-                        name="latitude"
-                        value={address.latitude}
-                        onChange={handleChangeAddress}
-                    />
+                    <Accordion TransitionProps={{ unmountOnExit: true }}>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="optional-content"
+                            id="optional-header"
+                        >
+                            <Typography>Optional Informations</Typography>
+                        </AccordionSummary>
 
-                    <TextField
-                        label="Longitude"
-                        variant="outlined"
-                        id="longitude"
-                        type="text"
-                        name="longitude"
-                        value={address.longitude}
-                        onChange={handleChangeAddress}
-                    />
+                        <AccordionDetails>
+                            <TextField
+                                label="Firstname"
+                                variant="outlined"
+                                id="firstname"
+                                type="text"
+                                name="firstName"
+                                value={account.firstName}
+                                onChange={handleChangeAccount}
+                            />
 
-                    <TextField
-                        label="StreetNumber"
-                        variant="outlined"
-                        id="streetNumber"
-                        type="number"
-                        name="streetNumber"
-                        value={address.streetNumber}
-                        onChange={handleChangeAddress}
-                    />
+                            <TextField
+                                label="Lastname"
+                                variant="outlined"
+                                id="lastname"
+                                type="text"
+                                name="lastName"
+                                value={account.lastName}
+                                onChange={handleChangeAccount}
+                            />
 
-                    <TextField
-                        label="Street"
-                        variant="outlined"
-                        id="street"
-                        type="text"
-                        name="street"
-                        value={address.street}
-                        onChange={handleChangeAddress}
-                    />
+                            <TextField
+                                label="Username"
+                                variant="outlined"
+                                id="username"
+                                type="text"
+                                name="userName"
+                                value={account.userName}
+                                onChange={handleChangeAccount}
+                            />
 
-                    <TextField
-                        label="City"
-                        variant="outlined"
-                        id="city"
-                        type="text"
-                        name="city"
-                        value={address.city}
-                        onChange={handleChangeAddress}
-                    />
+                            <TextField
+                                label="StreetNumber"
+                                variant="outlined"
+                                id="streetNumber"
+                                type="number"
+                                name="streetNumber"
+                                value={address.streetNumber}
+                                onChange={handleChangeAddress}
+                            />
 
-                    <TextField
-                        label="Postcode"
-                        variant="outlined"
-                        id="postcode"
-                        type="number"
-                        name="postcode"
-                        value={address.postcode}
-                        onChange={handleChangeAddress}
-                    />
+                            <TextField
+                                label="Street"
+                                variant="outlined"
+                                id="street"
+                                type="text"
+                                name="street"
+                                value={address.street}
+                                onChange={handleChangeAddress}
+                            />
 
-                    <TextField
-                        label="Region"
-                        variant="outlined"
-                        id="region"
-                        type="text"
-                        name="region"
-                        value={address.region}
-                        onChange={handleChangeAddress}
-                    />
+                            <TextField
+                                label="City"
+                                variant="outlined"
+                                id="city"
+                                type="text"
+                                name="city"
+                                value={address.city}
+                                onChange={handleChangeAddress}
+                            />
 
-                    <TextField
-                        label="Country"
-                        variant="outlined"
-                        id="country"
-                        type="text"
-                        name="country"
-                        value={address.country}
-                        onChange={handleChangeAddress}
-                    />
+                            <TextField
+                                label="Postcode"
+                                variant="outlined"
+                                id="postcode"
+                                type="number"
+                                name="postcode"
+                                value={address.postcode}
+                                onChange={handleChangeAddress}
+                            />
 
-                    <TextField
-                        required
-                        variant="outlined"
-                        color="secondary"
-                        label="Session"
-                        type="text"
-                        name="location"
-                        value={session.location}
-                        onChange={handleChangeSession}
-                    />
+                            <TextField
+                                label="Region"
+                                variant="outlined"
+                                id="region"
+                                type="text"
+                                name="region"
+                                value={address.region}
+                                onChange={handleChangeAddress}
+                            />
 
-                    <TextField
-                        label="Language"
-                        variant="outlined"
-                        id="languageName"
-                        type="text"
-                        name="languageName"
-                        value={language.languageName}
-                        onChange={handleChangeLanguage}
-                    />
+                            <TextField
+                                label="Country"
+                                variant="outlined"
+                                id="country"
+                                type="text"
+                                name="country"
+                                value={address.country}
+                                onChange={handleChangeAddress}
+                            />
 
-                    <TextField
-                        label="GitHub Account"
-                        variant="outlined"
-                        id="github"
-                        type="text"
-                        name="github"
-                        value={contactLink.github}
-                        onChange={handleChangeContactLink}
-                    />
+                            <TextField
+                                required
+                                variant="outlined"
+                                color="secondary"
+                                label="Session"
+                                type="text"
+                                name="location"
+                                value={session.location}
+                                onChange={handleChangeSession}
+                            />
+
+                            <TextField
+                                label="Language"
+                                variant="outlined"
+                                id="languageName"
+                                type="text"
+                                name="languageName"
+                                value={language.languageName}
+                                onChange={handleChangeLanguage}
+                            />
+
+                            <TextField
+                                label="GitHub Account"
+                                variant="outlined"
+                                id="github"
+                                type="text"
+                                name="github"
+                                value={contactLink.github}
+                                onChange={handleChangeContactLink}
+                            />
+                        </AccordionDetails>
+                    </Accordion>
 
                     <Button variant="contained" type="submit">
                         Create account

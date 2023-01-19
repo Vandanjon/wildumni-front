@@ -11,5 +11,31 @@
             width: 100%;
             max-width: 95vw;
         }
+
+        textfield:nth-of-type(2) {
+            margin-bottom: 6vh;
+        }
+    }
+
+    #location {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        & > * {
+            width: 33%;
+            text-align: center;
+        }
+
+        #latlong {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+
+            & > div {
+                // width: 40%;
+            }
+        }
     }
 }
