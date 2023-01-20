@@ -340,6 +340,46 @@ const UserCreate = () => {
                                 value={contactLink.github}
                                 onChange={handleChangeContactLink}
                             />
+
+                            <TextField
+                                label="GitLab Account"
+                                variant="outlined"
+                                id="gitlab"
+                                type="text"
+                                name="gitlab"
+                                value={contactLink.gitlab}
+                                onChange={handleChangeContactLink}
+                            />
+
+                            <TextField
+                                label="BitBucket Account"
+                                variant="outlined"
+                                id="bitbucket"
+                                type="text"
+                                name="bitbucket"
+                                value={contactLink.bitbucket}
+                                onChange={handleChangeContactLink}
+                            />
+
+                            <TextField
+                                label="Twitter Account"
+                                variant="outlined"
+                                id="twitter"
+                                type="text"
+                                name="twitter"
+                                value={contactLink.twitter}
+                                onChange={handleChangeContactLink}
+                            />
+
+                            <TextField
+                                label="LinkedIn Account"
+                                variant="outlined"
+                                id="linkedin"
+                                type="text"
+                                name="linkedin"
+                                value={contactLink.linkedin}
+                                onChange={handleChangeContactLink}
+                            />
                         </AccordionDetails>
                     </Accordion>
 

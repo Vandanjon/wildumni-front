@@ -27,10 +27,11 @@ const UserDetails = () => {
         ],
         contactLink: [
             {
-                url: "",
-                social: {
-                    name: "",
-                },
+                github: "",
+                gitlab: "",
+                bitbucket: "",
+                twitter: "",
+                linkedin: "",
             },
         ],
         address: {
@@ -121,21 +122,17 @@ const UserDetails = () => {
                 <section className="socialInfos">
                     <h2>Social Infos</h2>
 
-                    {user.contactLink[0]?.github ? (
-                        <p>GitHub : {user.contactLink[0].github}</p>
-                    ) : (
-                        ""
-                    )}
-                    {user.contactLink[0]?.gitlab ? (
-                        <p>GitLab : {user.contactLink[0].gitlab}</p>
-                    ) : (
-                        ""
-                    )}
-                    {user.contactLink[0]?.linkedin ? (
-                        <p>LinkedIn : {user.contactLink[0].linkedin}</p>
-                    ) : (
-                        ""
-                    )}
+                    {user?.contactLink.map((link) => {
+                        const linkName = Object.keys(link);
+                        return linkName.map((socialName, id) => (
+                            <p key={id}>
+                                {socialName} :{" "}
+                                {link[socialName]
+                                    ? link[socialName]
+                                    : "none defined"}
+                            </p>
+                        ));
+                    })}
                 </section>
 
                 <section className="addressInfos">
