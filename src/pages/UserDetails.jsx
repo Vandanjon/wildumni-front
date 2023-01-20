@@ -6,7 +6,7 @@ const UserDetails = () => {
     const { id } = useParams();
     const [user, setUser] = useState({
         email: "",
-        roles: [""],
+        roles: [],
         firstName: "",
         lastName: "",
         userName: "",
@@ -87,12 +87,22 @@ const UserDetails = () => {
                         ""
                     )}
                     {user.session[0]?.startDate ? (
-                        <p>Start Date : {user.session[0].startDate}</p>
+                        <p>
+                            Start Date :{" "}
+                            {new Date(
+                                user.session[0].startDate
+                            ).toLocaleDateString("fr-FR")}
+                        </p>
                     ) : (
                         ""
                     )}
                     {user.session[0]?.endDate ? (
-                        <p>End Date : {user.session[0].endDate}</p>
+                        <p>
+                            End Date :{" "}
+                            {new Date(
+                                user.session[0].endDate
+                            ).toLocaleDateString("fr-FR")}
+                        </p>
                     ) : (
                         ""
                     )}
