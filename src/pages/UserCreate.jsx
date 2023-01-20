@@ -13,6 +13,8 @@ import {
     Input,
     Select,
     MenuItem,
+    Checkbox,
+    ListItemText,
 } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -23,6 +25,9 @@ import axios from "axios";
 import { UserContext } from "../contexts/UserContext";
 import { Menu, Visibility, VisibilityOff } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
+
+const sessions = ["RemoteFR", "RemoteEN", "Biarritz"];
+const languages = ["PHP", "JavaScript", "Python"];
 
 const UserCreate = () => {
     const { user } = useContext(UserContext);
@@ -36,6 +41,20 @@ const UserCreate = () => {
             });
         });
     };
+
+    const [languages1, setLanguages1] = useState();
+    const [sessions1, setSessions1] = useState();
+
+    useEffect(() => {
+        axios
+            .get(`${import.meta.env.VITE_BACKEND_URL / languages}`)
+            .then((res) => {
+                setLanguages1(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
 
     const [account, setAccount] = useState({
         email: "",
@@ -56,16 +75,16 @@ const UserCreate = () => {
         country: "",
     });
 
-    const [session, setSession] = useState({
-        location: "",
-    });
+    const [session, setSession] = useState([]);
 
-    const [language, setLanguage] = useState({
-        languageName: "",
-    });
+    const [language, setLanguage] = useState([]);
 
     const [contactLink, setContactLink] = useState({
         github: "",
+        gitlab: "",
+        bitbucket: "",
+        twitter: "",
+        linkedin: "",
     });
 
     const handleChangeAccount = (e) => {
@@ -77,11 +96,25 @@ const UserCreate = () => {
     };
 
     const handleChangeSession = (e) => {
-        setSession({ ...session, [e.target.name]: e.target.value });
+        // setSession({ ...session, [e.target.name]: e.target.value });
+        const {
+            target: { value },
+        } = e;
+        setSession(
+            // On autofill we get a stringified value.
+            typeof value === "string" ? value.split(",") : value
+        );
     };
 
     const handleChangeLanguage = (e) => {
-        setLanguage({ ...language, [e.target.name]: e.target.value });
+        // setLanguage({ ...language, [e.target.name]: e.target.value });
+        const {
+            target: { value },
+        } = e;
+        setLanguage(
+            // On autofill we get a stringified value.
+            typeof value === "string" ? value.split(",") : value
+        );
     };
 
     const handleChangeContactLink = (e) => {
@@ -92,28 +125,17 @@ const UserCreate = () => {
 
     useEffect(() => {
         setFormDatas({
-            email: account.email,
-            password: account.password,
-            firstName: account.firstName,
-            lastName: account.lastName,
-            userName: account.userName,
+            ...account,
             address: {
+                ...address,
                 latitude: parseFloat(address.latitude),
                 longitude: parseFloat(address.longitude),
                 streetNumber: parseInt(address.streetNumber),
-                street: address.street,
-                city: address.city,
                 postcode: parseInt(address.postcode),
-                region: address.region,
-                country: address.country,
             },
-            session: {
-                location: session.location,
-            },
-            language: {
-                languageName: language.languageName,
-            },
-            contactLink: { github: contactLink.github },
+            session: [session],
+            language: [language],
+            contactLink: [contactLink],
         });
     }, [account, address, session, language, contactLink]);
 
@@ -299,37 +321,61 @@ const UserCreate = () => {
                                 onChange={handleChangeAddress}
                             />
 
-                            <TextField
-                                select
-                                variant="outlined"
-                                label="Session"
-                                type="text"
-                                id="location"
-                                name="location"
-                                value={session.location}
-                                onChange={handleChangeSession}
-                            >
-                                <MenuItem value="RemoteFR">RemoteFR</MenuItem>
-                                <MenuItem value="RemoteEN">RemoteEN</MenuItem>
-                                <MenuItem value="Biarritz">Biarritz</MenuItem>
-                            </TextField>
+                            <FormControl>
+                                <InputLabel id="session-label">
+                                    Session
+                                </InputLabel>
+                                <Select
+                                    labelId="session-label"
+                                    id="session"
+                                    multiple
+                                    value={session}
+                                    onChange={handleChangeSession}
+                                    input={<OutlinedInput label="Tag" />}
+                                    renderValue={(selected) =>
+                                        selected.join(", ")
+                                    }
+                                >
+                                    {sessions.map((name) => (
+                                        <MenuItem key={name} value={name}>
+                                            <Checkbox
+                                                checked={
+                                                    session.indexOf(name) > -1
+                                                }
+                                            />
+                                            <ListItemText primary={name} />
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
 
-                            <TextField
-                                select
-                                variant="outlined"
-                                label="Language"
-                                type="text"
-                                id="languageName"
-                                name="languageName"
-                                value={language.languageName}
-                                onChange={handleChangeLanguage}
-                            >
-                                <MenuItem value="PHP">PHP</MenuItem>
-                                <MenuItem value="JavaScript">
-                                    JavaScript
-                                </MenuItem>
-                                <MenuItem value="Python">Python</MenuItem>
-                            </TextField>
+                            <FormControl>
+                                <InputLabel id="language-label">
+                                    Language
+                                </InputLabel>
+                                <Select
+                                    labelId="language-label"
+                                    id="language"
+                                    multiple
+                                    value={language}
+                                    onChange={handleChangeLanguage}
+                                    input={<OutlinedInput label="Tag" />}
+                                    renderValue={(selected) =>
+                                        selected.join(", ")
+                                    }
+                                >
+                                    {languages.map((name) => (
+                                        <MenuItem key={name} value={name}>
+                                            <Checkbox
+                                                checked={
+                                                    language.indexOf(name) > -1
+                                                }
+                                            />
+                                            <ListItemText primary={name} />
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
 
                             <TextField
                                 label="GitHub Account"
