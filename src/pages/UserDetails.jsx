@@ -121,15 +121,18 @@ const UserDetails = () => {
                 <section className="socialInfos">
                     <h2>Social Infos</h2>
 
-                    {user.contactLink[0]?.url ? (
-                        <p>Contact(s) : {user.contactLink[0].url}</p>
+                    {user.contactLink[0]?.github ? (
+                        <p>GitHub : {user.contactLink[0].github}</p>
                     ) : (
                         ""
                     )}
-                    {user.contactLink[0]?.social?.name ? (
-                        <p>
-                            Contact Category : {user.contactLink[0].social.name}
-                        </p>
+                    {user.contactLink[0]?.gitlab ? (
+                        <p>GitLab : {user.contactLink[0].gitlab}</p>
+                    ) : (
+                        ""
+                    )}
+                    {user.contactLink[0]?.linkedin ? (
+                        <p>LinkedIn : {user.contactLink[0].linkedin}</p>
                     ) : (
                         ""
                     )}
