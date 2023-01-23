@@ -42,19 +42,19 @@ const UserCreate = () => {
         });
     };
 
-    const [languages1, setLanguages1] = useState();
-    const [sessions1, setSessions1] = useState();
+    // const [languages, setLanguages] = useState([]);
+    // const [sessions, setSessions] = useState([]);
 
-    useEffect(() => {
-        axios
-            .get(`${import.meta.env.VITE_BACKEND_URL / languages}`)
-            .then((res) => {
-                setLanguages1(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }, []);
+    // useEffect(() => {
+    //     axios
+    //         .get(`${import.meta.env.VITE_BACKEND_URL}/language`)
+    //         .then((res) => {
+    //             setLanguages(res.data);
+    //         })
+    //         .catch((err) => {
+    //             console.log(err);
+    //         });
+    // }, []);
 
     const [account, setAccount] = useState({
         email: "",
@@ -128,32 +128,36 @@ const UserCreate = () => {
             ...account,
             address: {
                 ...address,
-                latitude: parseFloat(address.latitude),
-                longitude: parseFloat(address.longitude),
                 streetNumber: parseInt(address.streetNumber),
                 postcode: parseInt(address.postcode),
             },
-            session: [session],
-            language: [language],
-            contactLink: [contactLink],
+            session: session.map((loc) => {
+                return { location: loc };
+            }),
+            language: language.map((lang) => {
+                return { language: lang };
+            }),
+            contactLink: {
+                ...contactLink,
+            },
         });
     }, [account, address, session, language, contactLink]);
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        axios
-            .post(`${import.meta.env.VITE_BACKEND_URL}/users`, formDatas)
-            .then((res) => {
-                console.log("success");
-                console.log(res.data);
-            })
-            .catch((err) => {
-                console.log(err.message);
-                console.log(err.response);
-            });
+        // axios
+        //     .post(`${import.meta.env.VITE_BACKEND_URL}/users`, formDatas)
+        //     .then((res) => {
+        //         console.log("success");
+        //         console.log(res.data);
+        //     })
+        //     .catch((err) => {
+        //         console.log(err.message);
+        //         console.log(err.response);
+        //     });
 
-        // console.log(formDatas);
+        console.log(formDatas);
     };
 
     return (
