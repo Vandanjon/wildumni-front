@@ -124,53 +124,49 @@ const ViewAdmin = () => {
                             aria-label="users names"
                         >
                             {users.map((user) => (
-                                <>
-                                    <ListItem
-                                        className="userLine"
-                                        button
-                                        key={user.id}
-                                    >
-                                        <Link to={`/users/${user.id}`}>
-                                            <span className="userAvatarName">
-                                                {user.roles.includes(
-                                                    "ROLE_ADMIN"
-                                                ) ? (
-                                                    <Avatar
-                                                        className="avatar"
-                                                        sx={{
-                                                            bgcolor: green[500],
-                                                        }}
-                                                    />
-                                                ) : (
-                                                    <Avatar
-                                                        className="avatar"
-                                                        sx={{
-                                                            bgcolor: blue[500],
-                                                        }}
-                                                    />
-                                                )}
-
-                                                <ListItemText
-                                                    className="userInfos"
-                                                    primary={user.firstName}
+                                <ListItem
+                                    className="userLine"
+                                    button
+                                    key={user.id}
+                                >
+                                    <Link to={`/users/${user.id}`}>
+                                        <span className="userAvatarName">
+                                            {user.roles.includes(
+                                                "ROLE_ADMIN"
+                                            ) ? (
+                                                <Avatar
+                                                    className="avatar"
+                                                    sx={{
+                                                        bgcolor: green[500],
+                                                    }}
                                                 />
-                                            </span>
-                                        </Link>
+                                            ) : (
+                                                <Avatar
+                                                    className="avatar"
+                                                    sx={{
+                                                        bgcolor: blue[500],
+                                                    }}
+                                                />
+                                            )}
 
-                                        <span className="actionButtons">
-                                            <Link to={`/userUpdate/${user.id}`}>
-                                                <EditIcon color="primary" />
-                                            </Link>
-
-                                            <DeleteIcon
-                                                onClick={() => handleOpen(user)}
-                                                color="primary"
+                                            <ListItemText
+                                                className="userInfos"
+                                                primary={user.firstName}
                                             />
                                         </span>
-                                    </ListItem>
+                                    </Link>
 
-                                    <Divider />
-                                </>
+                                    <span className="actionButtons">
+                                        <Link to={`/userUpdate/${user.id}`}>
+                                            <EditIcon color="primary" />
+                                        </Link>
+
+                                        <DeleteIcon
+                                            onClick={() => handleOpen(user)}
+                                            color="primary"
+                                        />
+                                    </span>
+                                </ListItem>
                             ))}
                         </List>
 

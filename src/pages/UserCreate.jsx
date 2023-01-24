@@ -13,6 +13,8 @@ import {
     Input,
     Select,
     MenuItem,
+    Checkbox,
+    ListItemText,
 } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -23,6 +25,9 @@ import axios from "axios";
 import { UserContext } from "../contexts/UserContext";
 import { Menu, Visibility, VisibilityOff } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
+
+// const sessions = ["RemoteFR", "RemoteEN", "Biarritz"];
+// const languages = ["PHP", "JavaScript", "Python"];
 
 const UserCreate = () => {
     const { user } = useContext(UserContext);
@@ -37,35 +42,71 @@ const UserCreate = () => {
         });
     };
 
+    // const sessions = ["RemoteFR", "RemoteEN", "Biarritz"];
+    // const languages = ["PHP", "JavaScript", "Python"];
+
+    const [languagesList, setLanguagesList] = useState([]);
+    const [sessionsList, setSessionsList] = useState([]);
+
+    useEffect(() => {
+        axios
+            .get(`${import.meta.env.VITE_BACKEND_URL}/languages`)
+            .then((res) => {
+                setLanguagesList(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
+
+    console.log(languagesList);
+
+    useEffect(() => {
+        axios
+            .get(`${import.meta.env.VITE_BACKEND_URL}/sessions`)
+            .then((res) => {
+                setSessionsList(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
+
     const [account, setAccount] = useState({
         email: "",
         password: "",
-        firstName: "",
-        lastName: "",
-        userName: "",
+        firstName: "-",
+        lastName: "-",
+        userName: "-",
     });
 
     const [address, setAddress] = useState({
-        latitude: 0,
-        longitude: 0,
+        latitude: "",
+        longitude: "",
         streetNumber: 0,
-        street: "",
-        city: "",
+        street: "-",
+        city: "-",
         postcode: 0,
-        region: "",
-        country: "",
+        region: "-",
+        country: "-",
     });
 
-    const [session, setSession] = useState({
-        location: "",
-    });
+    const [session, setSession] = useState([
+        {
+            location: "-",
+            startDate: "-",
+            endDate: "-",
+        },
+    ]);
 
-    const [language, setLanguage] = useState({
-        languageName: "",
-    });
+    const [language, setLanguage] = useState([{ name: "-" }]);
 
     const [contactLink, setContactLink] = useState({
-        github: "",
+        github: "-",
+        gitlab: "-",
+        bitbucket: "-",
+        twitter: "-",
+        linkedin: "-",
     });
 
     const handleChangeAccount = (e) => {
@@ -77,11 +118,25 @@ const UserCreate = () => {
     };
 
     const handleChangeSession = (e) => {
-        setSession({ ...session, [e.target.name]: e.target.value });
+        // setSession({ ...session, [e.target.name]: e.target.value });
+        const {
+            target: { value },
+        } = e;
+        setSession(
+            // On autofill we get a stringified value.
+            typeof value === "string" ? value.split(",") : value
+        );
     };
 
     const handleChangeLanguage = (e) => {
-        setLanguage({ ...language, [e.target.name]: e.target.value });
+        // setLanguage({ ...language, [e.target.name]: e.target.value });
+        const {
+            target: { value },
+        } = e;
+        setLanguage(
+            // On autofill we get a stringified value.
+            typeof value === "string" ? value.split(",") : value
+        );
     };
 
     const handleChangeContactLink = (e) => {
@@ -92,28 +147,19 @@ const UserCreate = () => {
 
     useEffect(() => {
         setFormDatas({
-            email: account.email,
-            password: account.password,
-            firstName: account.firstName,
-            lastName: account.lastName,
-            userName: account.userName,
+            ...account,
             address: {
-                latitude: parseFloat(address.latitude),
-                longitude: parseFloat(address.longitude),
+                ...address,
                 streetNumber: parseInt(address.streetNumber),
-                street: address.street,
-                city: address.city,
                 postcode: parseInt(address.postcode),
-                region: address.region,
-                country: address.country,
             },
-            session: {
-                location: session.location,
-            },
-            language: {
-                languageName: language.languageName,
-            },
-            contactLink: { github: contactLink.github },
+            session: session.map((loc) => {
+                return { location: loc };
+            }),
+            language: language.map((lang) => {
+                return { name: lang };
+            }),
+            contactLink: [{ ...contactLink }],
         });
     }, [account, address, session, language, contactLink]);
 
@@ -127,6 +173,7 @@ const UserCreate = () => {
                 console.log(res.data);
             })
             .catch((err) => {
+                console.log(res.data);
                 console.log(err.message);
                 console.log(err.response);
             });
@@ -299,37 +346,61 @@ const UserCreate = () => {
                                 onChange={handleChangeAddress}
                             />
 
-                            <TextField
-                                select
-                                variant="outlined"
-                                label="Session"
-                                type="text"
-                                id="location"
-                                name="location"
-                                value={session.location}
-                                onChange={handleChangeSession}
-                            >
-                                <MenuItem value="RemoteFR">RemoteFR</MenuItem>
-                                <MenuItem value="RemoteEN">RemoteEN</MenuItem>
-                                <MenuItem value="Biarritz">Biarritz</MenuItem>
-                            </TextField>
+                            <FormControl>
+                                <InputLabel id="session-label">
+                                    Session
+                                </InputLabel>
+                                <Select
+                                    labelId="session-label"
+                                    id="session"
+                                    multiple
+                                    value={session}
+                                    onChange={handleChangeSession}
+                                    input={<OutlinedInput label="Tag" />}
+                                    renderValue={(selected) =>
+                                        selected.join(", ")
+                                    }
+                                >
+                                    {sessionsList.map((name) => (
+                                        <MenuItem key={name} value={name}>
+                                            <Checkbox
+                                                checked={
+                                                    session.indexOf(name) > -1
+                                                }
+                                            />
+                                            <ListItemText primary={name} />
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
 
-                            <TextField
-                                select
-                                variant="outlined"
-                                label="Language"
-                                type="text"
-                                id="languageName"
-                                name="languageName"
-                                value={language.languageName}
-                                onChange={handleChangeLanguage}
-                            >
-                                <MenuItem value="PHP">PHP</MenuItem>
-                                <MenuItem value="JavaScript">
-                                    JavaScript
-                                </MenuItem>
-                                <MenuItem value="Python">Python</MenuItem>
-                            </TextField>
+                            <FormControl>
+                                <InputLabel id="language-label">
+                                    Language
+                                </InputLabel>
+                                <Select
+                                    labelId="language-label"
+                                    id="language"
+                                    multiple
+                                    value={language}
+                                    onChange={handleChangeLanguage}
+                                    input={<OutlinedInput label="Tag" />}
+                                    renderValue={(selected) =>
+                                        selected.join(", ")
+                                    }
+                                >
+                                    {languagesList.map((name) => (
+                                        <MenuItem key={name} value={name}>
+                                            <Checkbox
+                                                checked={
+                                                    language.indexOf(name) > -1
+                                                }
+                                            />
+                                            <ListItemText primary={name} />
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
 
                             <TextField
                                 label="GitHub Account"
@@ -338,6 +409,46 @@ const UserCreate = () => {
                                 type="text"
                                 name="github"
                                 value={contactLink.github}
+                                onChange={handleChangeContactLink}
+                            />
+
+                            <TextField
+                                label="GitLab Account"
+                                variant="outlined"
+                                id="gitlab"
+                                type="text"
+                                name="gitlab"
+                                value={contactLink.gitlab}
+                                onChange={handleChangeContactLink}
+                            />
+
+                            <TextField
+                                label="BitBucket Account"
+                                variant="outlined"
+                                id="bitbucket"
+                                type="text"
+                                name="bitbucket"
+                                value={contactLink.bitbucket}
+                                onChange={handleChangeContactLink}
+                            />
+
+                            <TextField
+                                label="Twitter Account"
+                                variant="outlined"
+                                id="twitter"
+                                type="text"
+                                name="twitter"
+                                value={contactLink.twitter}
+                                onChange={handleChangeContactLink}
+                            />
+
+                            <TextField
+                                label="LinkedIn Account"
+                                variant="outlined"
+                                id="linkedin"
+                                type="text"
+                                name="linkedin"
+                                value={contactLink.linkedin}
                                 onChange={handleChangeContactLink}
                             />
                         </AccordionDetails>

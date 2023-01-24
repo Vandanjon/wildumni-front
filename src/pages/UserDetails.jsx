@@ -6,7 +6,7 @@ const UserDetails = () => {
     const { id } = useParams();
     const [user, setUser] = useState({
         email: "",
-        roles: [""],
+        roles: [],
         firstName: "",
         lastName: "",
         userName: "",
@@ -27,10 +27,11 @@ const UserDetails = () => {
         ],
         contactLink: [
             {
-                url: "",
-                social: {
-                    name: "",
-                },
+                github: "",
+                gitlab: "",
+                bitbucket: "",
+                twitter: "",
+                linkedin: "",
             },
         ],
         address: {
@@ -87,12 +88,22 @@ const UserDetails = () => {
                         ""
                     )}
                     {user.session[0]?.startDate ? (
-                        <p>Start Date : {user.session[0].startDate}</p>
+                        <p>
+                            Start Date :{" "}
+                            {new Date(
+                                user.session[0].startDate
+                            ).toLocaleDateString("fr-FR")}
+                        </p>
                     ) : (
                         ""
                     )}
                     {user.session[0]?.endDate ? (
-                        <p>End Date : {user.session[0].endDate}</p>
+                        <p>
+                            End Date :{" "}
+                            {new Date(
+                                user.session[0].endDate
+                            ).toLocaleDateString("fr-FR")}
+                        </p>
                     ) : (
                         ""
                     )}
@@ -111,18 +122,17 @@ const UserDetails = () => {
                 <section className="socialInfos">
                     <h2>Social Infos</h2>
 
-                    {user.contactLink[0]?.url ? (
-                        <p>Contact(s) : {user.contactLink[0].url}</p>
-                    ) : (
-                        ""
-                    )}
-                    {user.contactLink[0]?.social?.name ? (
-                        <p>
-                            Contact Category : {user.contactLink[0].social.name}
-                        </p>
-                    ) : (
-                        ""
-                    )}
+                    {user?.contactLink.map((link) => {
+                        const linkName = Object.keys(link);
+                        return linkName.map((socialName, id) => (
+                            <p key={id}>
+                                {socialName} :{" "}
+                                {link[socialName]
+                                    ? link[socialName]
+                                    : "none defined"}
+                            </p>
+                        ));
+                    })}
                 </section>
 
                 <section className="addressInfos">

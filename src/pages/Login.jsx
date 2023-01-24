@@ -16,7 +16,7 @@ const Alert = forwardRef(function Alert(props, ref) {
 const Login = () => {
     const [formDatas, setFormDatas] = useState({
         password: "password",
-        email: "duval.jeanne@neveu.com",
+        email: "toto@tata.com",
     });
 
     const token = sessionStorage.getItem("token");
@@ -60,10 +60,7 @@ const Login = () => {
         }
 
         axios
-            .post(
-                `${import.meta.env.VITE_BACKEND_URL}/api/login_check`,
-                formDatas
-            )
+            .post(`${import.meta.env.VITE_BACKEND_URL}/login`, formDatas)
             .then((res) => {
                 sessionStorage.setItem("token", res.data.token);
 

@@ -34,15 +34,9 @@ const LoginForm = ({ formDatas, handleChange, handleSubmit }) => {
                     <Link to="/userCreate">Want to create an account?</Link>
                 </p>
 
-                <p
-                    onClick={() => {
-                        window.open(
-                            "mailto:test@example.com?subject=Forgotten password&body=Hi, may I request a new password for this user account? Regards"
-                        );
-                    }}
-                >
+                <a href="mailto:test@example.com?subject=Forgotten password&body=Hi, may I request a new password for this user account? Regards">
                     Forgot password?
-                </p>
+                </a>
             </div>
         </>
     );
