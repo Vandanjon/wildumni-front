@@ -26,8 +26,8 @@ import { UserContext } from "../contexts/UserContext";
 import { Menu, Visibility, VisibilityOff } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
-const sessions = ["RemoteFR", "RemoteEN", "Biarritz"];
-const languages = ["PHP", "JavaScript", "Python"];
+// const sessions = ["RemoteFR", "RemoteEN", "Biarritz"];
+// const languages = ["PHP", "JavaScript", "Python"];
 
 const UserCreate = () => {
     const { user } = useContext(UserContext);
@@ -42,49 +42,71 @@ const UserCreate = () => {
         });
     };
 
-    // const [languages, setLanguages] = useState([]);
-    // const [sessions, setSessions] = useState([]);
+    // const sessions = ["RemoteFR", "RemoteEN", "Biarritz"];
+    // const languages = ["PHP", "JavaScript", "Python"];
 
-    // useEffect(() => {
-    //     axios
-    //         .get(`${import.meta.env.VITE_BACKEND_URL}/language`)
-    //         .then((res) => {
-    //             setLanguages(res.data);
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //         });
-    // }, []);
+    const [languagesList, setLanguagesList] = useState([]);
+    const [sessionsList, setSessionsList] = useState([]);
+
+    useEffect(() => {
+        axios
+            .get(`${import.meta.env.VITE_BACKEND_URL}/languages`)
+            .then((res) => {
+                setLanguagesList(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
+
+    console.log(languagesList);
+
+    useEffect(() => {
+        axios
+            .get(`${import.meta.env.VITE_BACKEND_URL}/sessions`)
+            .then((res) => {
+                setSessionsList(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
 
     const [account, setAccount] = useState({
         email: "",
         password: "",
-        firstName: "",
-        lastName: "",
-        userName: "",
+        firstName: "-",
+        lastName: "-",
+        userName: "-",
     });
 
     const [address, setAddress] = useState({
-        latitude: 0,
-        longitude: 0,
+        latitude: "",
+        longitude: "",
         streetNumber: 0,
-        street: "",
-        city: "",
+        street: "-",
+        city: "-",
         postcode: 0,
-        region: "",
-        country: "",
+        region: "-",
+        country: "-",
     });
 
-    const [session, setSession] = useState([]);
+    const [session, setSession] = useState([
+        {
+            location: "-",
+            startDate: "-",
+            endDate: "-",
+        },
+    ]);
 
-    const [language, setLanguage] = useState([]);
+    const [language, setLanguage] = useState([{ name: "-" }]);
 
     const [contactLink, setContactLink] = useState({
-        github: "",
-        gitlab: "",
-        bitbucket: "",
-        twitter: "",
-        linkedin: "",
+        github: "-",
+        gitlab: "-",
+        bitbucket: "-",
+        twitter: "-",
+        linkedin: "-",
     });
 
     const handleChangeAccount = (e) => {
@@ -135,29 +157,28 @@ const UserCreate = () => {
                 return { location: loc };
             }),
             language: language.map((lang) => {
-                return { language: lang };
+                return { name: lang };
             }),
-            contactLink: {
-                ...contactLink,
-            },
+            contactLink: [{ ...contactLink }],
         });
     }, [account, address, session, language, contactLink]);
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        // axios
-        //     .post(`${import.meta.env.VITE_BACKEND_URL}/users`, formDatas)
-        //     .then((res) => {
-        //         console.log("success");
-        //         console.log(res.data);
-        //     })
-        //     .catch((err) => {
-        //         console.log(err.message);
-        //         console.log(err.response);
-        //     });
+        axios
+            .post(`${import.meta.env.VITE_BACKEND_URL}/users`, formDatas)
+            .then((res) => {
+                console.log("success");
+                console.log(res.data);
+            })
+            .catch((err) => {
+                console.log(res.data);
+                console.log(err.message);
+                console.log(err.response);
+            });
 
-        console.log(formDatas);
+        // console.log(formDatas);
     };
 
     return (
@@ -340,7 +361,7 @@ const UserCreate = () => {
                                         selected.join(", ")
                                     }
                                 >
-                                    {sessions.map((name) => (
+                                    {sessionsList.map((name) => (
                                         <MenuItem key={name} value={name}>
                                             <Checkbox
                                                 checked={
@@ -368,7 +389,7 @@ const UserCreate = () => {
                                         selected.join(", ")
                                     }
                                 >
-                                    {languages.map((name) => (
+                                    {languagesList.map((name) => (
                                         <MenuItem key={name} value={name}>
                                             <Checkbox
                                                 checked={

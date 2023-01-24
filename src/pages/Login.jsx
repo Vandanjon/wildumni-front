@@ -16,7 +16,7 @@ const Alert = forwardRef(function Alert(props, ref) {
 const Login = () => {
     const [formDatas, setFormDatas] = useState({
         password: "password",
-        email: "antoine.muller@besson.com",
+        email: "toto@tata.com",
     });
 
     const token = sessionStorage.getItem("token");
