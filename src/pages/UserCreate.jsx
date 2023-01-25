@@ -46,26 +46,41 @@ const UserCreate = () => {
     // const languages = ["PHP", "JavaScript", "Python"];
 
     const [languagesList, setLanguagesList] = useState([]);
+
     const [sessionsList, setSessionsList] = useState([]);
 
     useEffect(() => {
         axios
             .get(`${import.meta.env.VITE_BACKEND_URL}/languages`)
             .then((res) => {
-                setLanguagesList(res.data);
+                setLanguagesList(res.data.map((el) => el.name));
             })
             .catch((err) => {
                 console.log(err);
             });
     }, []);
 
-    console.log(languagesList);
-
     useEffect(() => {
         axios
             .get(`${import.meta.env.VITE_BACKEND_URL}/sessions`)
             .then((res) => {
-                setSessionsList(res.data);
+                setSessionsList(
+                    // res.data.map((el) => {
+                    //     const stringified = (
+                    //         el.location +
+                    //         new Date(el.startDate)
+                    //             .toString()
+                    //             .slice(7, 16)
+                    //             .reverseString()
+                    //     ).toString();
+                    //     // new Date(el.endDate)
+                    //     //     .toString()
+                    //     //     .slice(7, 16)
+                    //     //     .reverseString();
+                    //     return stringified;
+                    // })
+                    res.data
+                );
             })
             .catch((err) => {
                 console.log(err);
@@ -91,15 +106,9 @@ const UserCreate = () => {
         country: "-",
     });
 
-    const [session, setSession] = useState([
-        {
-            location: "-",
-            startDate: "-",
-            endDate: "-",
-        },
-    ]);
+    const [session, setSession] = useState([]);
 
-    const [language, setLanguage] = useState([{ name: "-" }]);
+    const [language, setLanguage] = useState([]);
 
     const [contactLink, setContactLink] = useState({
         github: "-",
@@ -145,7 +154,27 @@ const UserCreate = () => {
 
     const [formDatas, setFormDatas] = useState();
 
-    useEffect(() => {
+    // useEffect(() => {
+    //     setFormDatas({
+    //         ...account,
+    //         address: {
+    //             ...address,
+    //             streetNumber: parseInt(address.streetNumber),
+    //             postcode: parseInt(address.postcode),
+    //         },
+    //         session: session.map((loc) => {
+    //             return { location: loc };
+    //         }),
+    //         language: language.map((lang) => {
+    //             return { name: lang };
+    //         }),
+    //         contactLink: [{ ...contactLink }],
+    //     });
+    // }, [account, address, session, language, contactLink]);
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+
         setFormDatas({
             ...account,
             address: {
@@ -161,25 +190,23 @@ const UserCreate = () => {
             }),
             contactLink: [{ ...contactLink }],
         });
-    }, [account, address, session, language, contactLink]);
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-
-        axios
-            .post(`${import.meta.env.VITE_BACKEND_URL}/users`, formDatas)
-            .then((res) => {
-                console.log("success");
-                console.log(res.data);
-            })
-            .catch((err) => {
-                console.log(res.data);
-                console.log(err.message);
-                console.log(err.response);
-            });
-
-        // console.log(formDatas);
+        // axios
+        //     .post(`${import.meta.env.VITE_BACKEND_URL}/users`, formDatas)
+        //     .then((res) => {
+        //         console.log("success");
+        //         console.log(res.data);
+        //     })
+        //     .catch((err) => {
+        //         console.log(res.data);
+        //         console.log(err.message);
+        //         console.log(err.response);
+        //     });
     };
+
+    console.log(formDatas);
+    console.log(sessionsList);
+    console.log(languagesList);
 
     return (
         <div id="UserCreatePage" className="pageContainer">
@@ -361,14 +388,33 @@ const UserCreate = () => {
                                         selected.join(", ")
                                     }
                                 >
-                                    {sessionsList.map((name) => (
-                                        <MenuItem key={name} value={name}>
+                                    {sessionsList.map((sessionItem) => (
+                                        <MenuItem
+                                            key={sessionItem.id}
+                                            value={sessionItem.location}
+                                        >
                                             <Checkbox
                                                 checked={
-                                                    session.indexOf(name) > -1
+                                                    session.indexOf(
+                                                        sessionItem.id
+                                                    ) > -1
                                                 }
                                             />
-                                            <ListItemText primary={name} />
+                                            <ListItemText
+                                                primary={`${
+                                                    sessionItem.location
+                                                } ${new Date(
+                                                    sessionItem.startDate
+                                                ).toLocaleDateString("fr-FR", {
+                                                    month: "numeric",
+                                                    year: "numeric",
+                                                })} - ${new Date(
+                                                    sessionItem.endDate
+                                                ).toLocaleDateString("fr-FR", {
+                                                    month: "numeric",
+                                                    year: "numeric",
+                                                })}`}
+                                            />
                                         </MenuItem>
                                     ))}
                                 </Select>
@@ -389,8 +435,8 @@ const UserCreate = () => {
                                         selected.join(", ")
                                     }
                                 >
-                                    {languagesList.map((name) => (
-                                        <MenuItem key={name} value={name}>
+                                    {languagesList.map((name, index) => (
+                                        <MenuItem key={index} value={name}>
                                             <Checkbox
                                                 checked={
                                                     language.indexOf(name) > -1
