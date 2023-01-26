@@ -8,8 +8,8 @@ import { UserContext } from "../contexts/UserContext";
 
 const ViewUser = () => {
     const [users, setUsers] = useState();
-    const [profile, setProfile] = useState([]);
-    const [loggedUser, setLoggedUser] = useState([]);
+    const [selectedUser, setSelectedUser] = useState([]);
+    const [loggedUser, setLoggedUser] = useState();
     const [center, setCenter] = useState();
 
     const { user } = useContext(UserContext);
