@@ -8,8 +8,8 @@ import { UserContext } from "../contexts/UserContext";
 
 const ViewUser = () => {
     const [users, setUsers] = useState();
-    const [profile, setProfile] = useState([]);
-    const [loggedUser, setLoggedUser] = useState([]);
+    const [selectedUser, setSelectedUser] = useState([]);
+    const [loggedUser, setLoggedUser] = useState();
     const [center, setCenter] = useState();
 
     const { user } = useContext(UserContext);
@@ -60,6 +60,8 @@ const ViewUser = () => {
             })
             .catch((err) => console.log(err));
     }, []);
+
+    console.log(loggedUser);
 
     return (
         <div id="UserPage" className="pageContainer">
@@ -112,11 +114,26 @@ const ViewUser = () => {
                 )}
             </main>
             <footer>
-                {profile ? (
+                {loggedUser ? (
                     <>
-                        <p>{profile.firstName}</p>
+                        <p>
+                            {loggedUser.firstName} {loggedUser.lastName}
+                        </p>
 
-                        <p>{profile.lastName}</p>
+                        <p>{loggedUser.userName}</p>
+                        <p>{loggedUser.session[0].location}</p>
+                        <p>{loggedUser.language[0].name}</p>
+                        <p>
+                            {loggedUser.address.streetNumber}{" "}
+                            {loggedUser.address.street}
+                            {", "}
+                            {loggedUser.address.city}{" "}
+                            {loggedUser.address.postcode}
+                            {", "}
+                            {loggedUser.address.region}
+                            {", "}
+                            {loggedUser.address.country}{" "}
+                        </p>
                     </>
                 ) : (
                     ""
