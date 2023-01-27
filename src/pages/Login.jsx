@@ -15,12 +15,11 @@ const Alert = forwardRef(function Alert(props, ref) {
 
 const Login = () => {
     const [formDatas, setFormDatas] = useState({
-        password: "password",
         email: "toto@tata.com",
+        password: "password",
     });
 
-    const token = sessionStorage.getItem("token");
-    const { setUser } = useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
 
     const navigate = useNavigate();
 
@@ -36,13 +35,10 @@ const Login = () => {
     };
 
     const handleChange = (e) => {
-        setFormDatas({
-            ...formDatas,
-            [e.target.name]: e.target.value,
-        });
+        setFormDatas({ ...formDatas, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (formDatas.email === "" && formDatas.password === "") {
@@ -59,27 +55,31 @@ const Login = () => {
             return;
         }
 
-        axios
-            .post(`${import.meta.env.VITE_BACKEND_URL}/login`, formDatas)
-            .then((res) => {
-                sessionStorage.setItem("token", res.data.token);
+        try {
+            const res = await axios.post(
+                `${import.meta.env.VITE_BACKEND_URL}/login`,
+                formDatas
+            );
+            sessionStorage.setItem("token", res.data.token);
 
-                const decodedJWT = jwt_decode(res.data.token);
-                setUser(decodedJWT);
+            const decodedJWT = jwt_decode(res.data.token);
 
-                navigate("/user");
-            })
-            .catch((err) => {
-                if (err.code === "ERR_BAD_REQUEST") {
-                    setMessage("Vos identifiants sont incorrects");
-                    setOpen(true);
-                    return;
-                } else {
-                    console.log(err);
-                }
-            });
+            const userData = await axios.get(
+                `${import.meta.env.VITE_BACKEND_URL}/users/${decodedJWT.id}`
+            );
 
-        return;
+            setUser(userData.data);
+
+            navigate("/user");
+        } catch (err) {
+            if (err.code === "ERR_BAD_REQUEST") {
+                setMessage("Vos identifiants sont incorrects");
+                setOpen(true);
+                return;
+            } else {
+                console.log(err);
+            }
+        }
     };
 
     return (

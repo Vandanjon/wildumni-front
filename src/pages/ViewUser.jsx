@@ -7,12 +7,12 @@ import NavBar from "../components/NavBar";
 import { UserContext } from "../contexts/UserContext";
 
 const ViewUser = () => {
+    // const [loggedUser, setLoggedUser] = useState();
     const [users, setUsers] = useState();
     const [selectedUser, setSelectedUser] = useState([]);
-    const [loggedUser, setLoggedUser] = useState();
     const [center, setCenter] = useState();
 
-    const { user } = useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
     const userId = useContext(UserContext)?.user?.id;
 
     const mapRef = useRef(null);
@@ -41,9 +41,22 @@ const ViewUser = () => {
 
     useEffect(() => {
         axios
+            .get(`${import.meta.env.VITE_BACKEND_URL}/users/${user.id}`)
+            .then((res) => {
+                setUser(res.data);
+            })
+            .catch((err) => {
+                if (err) {
+                    console.log(err);
+                }
+            });
+    }, []);
+
+    useEffect(() => {
+        axios
             .get(`${import.meta.env.VITE_BACKEND_URL}/users/${userId}`)
             .then((res) => {
-                setLoggedUser(res.data);
+                // setLoggedUser(res.data);
                 setCenter([
                     res.data.address.latitude,
                     res.data.address.longitude,
@@ -61,7 +74,7 @@ const ViewUser = () => {
             .catch((err) => console.log(err));
     }, []);
 
-    console.log(loggedUser);
+    console.log(user);
 
     return (
         <div id="UserPage" className="pageContainer">
@@ -74,33 +87,33 @@ const ViewUser = () => {
             </header>
 
             <main>
-                {users && loggedUser && center ? (
+                {users && center ? (
                     <MapContainer center={center} zoom={zoom} ref={mapRef}>
                         <TileLayer
                             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         />
 
-                        {users.map((user) => {
+                        {users.map((userM) => {
                             let icon = blueIcon;
-                            if (loggedUser.id === user.id) {
+                            if (user.id === userM.id) {
                                 icon = redIcon;
                             }
 
                             return (
                                 <Marker
-                                    key={user.id}
+                                    key={userM.id}
                                     position={[
-                                        parseFloat(user.address.latitude),
-                                        parseFloat(user.address.longitude),
+                                        parseFloat(userM.address.latitude),
+                                        parseFloat(userM.address.longitude),
                                     ]}
                                     icon={icon}
                                     onClick={() => setProfile()}
                                 >
                                     <Popup>
-                                        {user.firstName}
+                                        {userM.firstName}
                                         <br />
-                                        {user.email}
+                                        {userM.email}
                                     </Popup>
                                 </Marker>
                             );
@@ -114,25 +127,23 @@ const ViewUser = () => {
                 )}
             </main>
             <footer>
-                {loggedUser ? (
+                {user ? (
                     <>
                         <p>
-                            {loggedUser.firstName} {loggedUser.lastName}
+                            {user.firstName} {user.lastName}
                         </p>
 
-                        <p>{loggedUser.userName}</p>
-                        <p>{loggedUser.session[0].location}</p>
-                        <p>{loggedUser.language[0].name}</p>
+                        <p>{user.userName}</p>
+                        <p>{user.session[0].location}</p>
+                        <p>{user.language[0].name}</p>
                         <p>
-                            {loggedUser.address.streetNumber}{" "}
-                            {loggedUser.address.street}
+                            {user.address.streetNumber} {user.address.street}
                             {", "}
-                            {loggedUser.address.city}{" "}
-                            {loggedUser.address.postcode}
+                            {user.address.city} {user.address.postcode}
                             {", "}
-                            {loggedUser.address.region}
+                            {user.address.region}
                             {", "}
-                            {loggedUser.address.country}{" "}
+                            {user.address.country}{" "}
                         </p>
                     </>
                 ) : (
