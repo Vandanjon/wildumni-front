@@ -26,9 +26,6 @@ import { UserContext } from "../contexts/UserContext";
 import { Menu, Visibility, VisibilityOff } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
-// const sessions = ["RemoteFR", "RemoteEN", "Biarritz"];
-// const languages = ["PHP", "JavaScript", "Python"];
-
 const UserCreate = () => {
     const { user } = useContext(UserContext);
 
@@ -41,9 +38,6 @@ const UserCreate = () => {
             });
         });
     };
-
-    // const sessions = ["RemoteFR", "RemoteEN", "Biarritz"];
-    // const languages = ["PHP", "JavaScript", "Python"];
 
     const [languagesList, setLanguagesList] = useState([]);
 
@@ -64,23 +58,7 @@ const UserCreate = () => {
         axios
             .get(`${import.meta.env.VITE_BACKEND_URL}/sessions`)
             .then((res) => {
-                setSessionsList(
-                    // res.data.map((el) => {
-                    //     const stringified = (
-                    //         el.location +
-                    //         new Date(el.startDate)
-                    //             .toString()
-                    //             .slice(7, 16)
-                    //             .reverseString()
-                    //     ).toString();
-                    //     // new Date(el.endDate)
-                    //     //     .toString()
-                    //     //     .slice(7, 16)
-                    //     //     .reverseString();
-                    //     return stringified;
-                    // })
-                    res.data
-                );
+                setSessionsList(res.data);
             })
             .catch((err) => {
                 console.log(err);
@@ -127,18 +105,13 @@ const UserCreate = () => {
     };
 
     const handleChangeSession = (e) => {
-        // setSession({ ...session, [e.target.name]: e.target.value });
         const {
             target: { value },
         } = e;
-        setSession(
-            // On autofill we get a stringified value.
-            typeof value === "string" ? value.split(",") : value
-        );
+        setSession(typeof value === "string" ? value.split(",") : value);
     };
 
     const handleChangeLanguage = (e) => {
-        // setLanguage({ ...language, [e.target.name]: e.target.value });
         const {
             target: { value },
         } = e;
@@ -191,22 +164,18 @@ const UserCreate = () => {
             contactLink: [{ ...contactLink }],
         });
 
-        // axios
-        //     .post(`${import.meta.env.VITE_BACKEND_URL}/users`, formDatas)
-        //     .then((res) => {
-        //         console.log("success");
-        //         console.log(res.data);
-        //     })
-        //     .catch((err) => {
-        //         console.log(res.data);
-        //         console.log(err.message);
-        //         console.log(err.response);
-        //     });
+        axios
+            .post(`${import.meta.env.VITE_BACKEND_URL}/users`, formDatas)
+            .then((res) => {
+                console.log("success");
+                console.log(res.data);
+            })
+            .catch((err) => {
+                console.log(res.data);
+                console.log(err.message);
+                console.log(err.response);
+            });
     };
-
-    console.log(formDatas);
-    console.log(sessionsList);
-    console.log(languagesList);
 
     return (
         <div id="UserCreatePage" className="pageContainer">
