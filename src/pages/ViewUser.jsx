@@ -7,9 +7,8 @@ import NavBar from "../components/NavBar";
 import { UserContext } from "../contexts/UserContext";
 
 const ViewUser = () => {
-    // const [loggedUser, setLoggedUser] = useState();
     const [users, setUsers] = useState();
-    const [selectedUser, setSelectedUser] = useState([]);
+    const [selectedUser, setSelectedUser] = useState();
     const [center, setCenter] = useState();
 
     const { user, setUser } = useContext(UserContext);
@@ -56,7 +55,6 @@ const ViewUser = () => {
         axios
             .get(`${import.meta.env.VITE_BACKEND_URL}/users/${userId}`)
             .then((res) => {
-                // setLoggedUser(res.data);
                 setCenter([
                     res.data.address.latitude,
                     res.data.address.longitude,
@@ -74,7 +72,16 @@ const ViewUser = () => {
             .catch((err) => console.log(err));
     }, []);
 
-    console.log(user);
+    const changeUser = (el) => {
+        axios
+            .get(`${import.meta.env.VITE_BACKEND_URL}/users/${el.id}`)
+            .then((res) => {
+                setSelectedUser(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
 
     return (
         <div id="UserPage" className="pageContainer">
@@ -108,7 +115,9 @@ const ViewUser = () => {
                                         parseFloat(userM.address.longitude),
                                     ]}
                                     icon={icon}
-                                    onClick={() => setProfile()}
+                                    eventHandlers={{
+                                        click: (e) => changeUser(userM),
+                                    }}
                                 >
                                     <Popup>
                                         {userM.firstName}
@@ -127,27 +136,29 @@ const ViewUser = () => {
                 )}
             </main>
             <footer>
-                {user ? (
+                {selectedUser ? (
                     <>
                         <p>
-                            {user.firstName} {user.lastName}
+                            {selectedUser.firstName} {selectedUser.lastName}
                         </p>
 
-                        <p>{user.userName}</p>
-                        <p>{user.session[0].location}</p>
-                        <p>{user.language[0].name}</p>
+                        <p>{selectedUser.selectedUserName}</p>
+                        <p>{selectedUser.session[0].location}</p>
+                        <p>{selectedUser.language[0].name}</p>
                         <p>
-                            {user.address.streetNumber} {user.address.street}
+                            {selectedUser.address.streetNumber}{" "}
+                            {selectedUser.address.street}
                             {", "}
-                            {user.address.city} {user.address.postcode}
+                            {selectedUser.address.city}{" "}
+                            {selectedUser.address.postcode}
                             {", "}
-                            {user.address.region}
+                            {selectedUser.address.region}
                             {", "}
-                            {user.address.country}{" "}
+                            {selectedUser.address.country}{" "}
                         </p>
                     </>
                 ) : (
-                    ""
+                    user ?? <p>{user.id}</p>
                 )}
             </footer>
         </div>
