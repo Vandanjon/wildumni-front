@@ -138,27 +138,71 @@ const ViewUser = () => {
             <footer>
                 {selectedUser ? (
                     <>
-                        <p>
+                        <div className="div1"></div>
+                        <div className="div2">ACCOUNT</div>
+                        <div className="div3">ADDRESS</div>
+                        <div className="div4">
                             {selectedUser.firstName} {selectedUser.lastName}
-                        </p>
-
-                        <p>{selectedUser.selectedUserName}</p>
-                        <p>{selectedUser.session[0].location}</p>
-                        <p>{selectedUser.language[0].name}</p>
-                        <p>
-                            {selectedUser.address.streetNumber}{" "}
+                        </div>
+                        <div className="div5">{selectedUser.userName}</div>
+                        <div className="div6">
+                            {selectedUser.roles[0]}
+                            <br />
+                            {selectedUser.roles[1]}
+                        </div>
+                        <div className="div8">
+                            {" "}
+                            {selectedUser.address.streetNumber}
+                            {", "}
                             {selectedUser.address.street}
                             {", "}
-                            {selectedUser.address.city}{" "}
+                            {selectedUser.address.city}
+                        </div>
+                        <div className="div9">
                             {selectedUser.address.postcode}
                             {", "}
-                            {selectedUser.address.region}
-                            {", "}
-                            {selectedUser.address.country}{" "}
-                        </p>
+                            {selectedUser.address.city}
+                        </div>
+                        <div className="div10">
+                            {selectedUser.address.country}
+                        </div>
+                        <div className="div11">SESSION</div>
+                        <div className="div12">
+                            {selectedUser.session.map((el, index) => (
+                                <span key={index}>
+                                    {el.location}
+                                    <br />
+                                    {new Date(el.startDate).toLocaleDateString(
+                                        "fr-FR",
+                                        {
+                                            year: "numeric",
+                                            month: "numeric",
+                                        }
+                                    )}
+                                    <br />
+                                    {new Date(el.endDate).toLocaleDateString(
+                                        "fr-FR",
+                                        {
+                                            year: "numeric",
+                                            month: "numeric",
+                                        }
+                                    )}
+                                </span>
+                            ))}
+                        </div>
+                        <div className="div13">LANGUAGE</div>
+                        <div className="div14">
+                            {selectedUser.language.map((el, index) => (
+                                <span key={index}>
+                                    {el.name}
+                                    <br />
+                                </span>
+                            ))}
+                        </div>
                     </>
                 ) : (
-                    user ?? <p>{user.id}</p>
+                    // user ?? <p>{user.id}</p>
+                    ""
                 )}
             </footer>
         </div>
