@@ -1,273 +1,538 @@
-import { Button, TextField } from "@mui/material";
-import { Box } from "@mui/system";
+import { useContext, useEffect, useState } from "react";
+import {
+    Box,
+    TextField,
+    Button,
+    FormControl,
+    InputLabel,
+    OutlinedInput,
+    InputAdornment,
+    IconButton,
+    FormHelperText,
+    FormLabel,
+    Input,
+    Select,
+    MenuItem,
+    Checkbox,
+    ListItemText,
+} from "@mui/material";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Typography from "@mui/material/Typography";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { ConnectedUserContext } from "../contexts/connectedUserContext";
+import { Menu, Visibility, VisibilityOff } from "@mui/icons-material";
+import { useTheme } from "@mui/material/styles";
 import { useParams } from "react-router-dom";
 
 const UserUpdate = () => {
-    const { id } = useParams();
-    const [user, setUser] = useState({});
-    const [formDatas, setFormDatas] = useState({});
+    const { connectedUser } = useContext(ConnectedUserContext);
 
-    const handleChange = (e) => {
-        setFormDatas({
-            ...formDatas,
-            [e.target.name]: e.target.value,
-            address: {
-                ...formDatas.address,
-                [e.target.name]: e.target.value,
-            },
+    const { id } = useParams();
+
+    const locateUser = () => {
+        navigator.geolocation.getCurrentPosition((position) => {
+            setAddress({
+                ...address,
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+            });
         });
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const [languagesList, setLanguagesList] = useState([]);
 
-        const sanitizeDatas = {
-            email: formDatas.email,
-            roles: [formDatas.roles],
-            password: formDatas.password,
-            firstName: formDatas.firstName,
-            lastName: formDatas.lastName,
-            username: formDatas.userName,
-            address: {
-                latitude: formDatas.latitude,
-                longitude: formDatas.longitude,
-                country: formDatas.country,
-                region: formDatas.region,
-                postcode: parseInt(formDatas.postcode),
-                city: formDatas.city,
-                street: formDatas.street,
-                streetNumber: parseInt(formDatas.streetNumber),
-            },
-            session: [
-                {
-                    location: formDatas.location,
-                    startDate: formDatas.startDate,
-                    endDate: formDatas.endDate,
-                },
-            ],
-            language: [
-                {
-                    name: formDatas.languageName,
-                },
-            ],
-            contactLink: [
-                {
-                    url: formDatas.contactLinkUrl,
-                    social: {
-                        name: formDatas.contactLinkName,
-                    },
-                },
-            ],
-        };
+    const [sessionsList, setSessionsList] = useState([]);
 
+    useEffect(() => {
         axios
-            .put(`${import.meta.env.VITE_BACKEND_URL}/users`, sanitizeDatas, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
+            .get(`${import.meta.env.VITE_BACKEND_URL}/languages`)
             .then((res) => {
-                console.log("success");
-                console.log(res.data);
+                setLanguagesList(res.data.map((el) => el.name));
             })
             .catch((err) => {
-                console.log(err.message);
-                console.log(err.response);
+                console.log(err);
             });
-    };
+    }, []);
+
+    useEffect(() => {
+        axios
+            .get(`${import.meta.env.VITE_BACKEND_URL}/sessions`)
+            .then((res) => {
+                setSessionsList(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
 
     useEffect(() => {
         axios
             .get(`${import.meta.env.VITE_BACKEND_URL}/users/${id}`)
             .then((res) => {
-                setUser(res.data);
-                setFormDatas({
-                    email: res.data.email || "",
-                    roles: [res.data.roles || ""],
-                    password: res.data.password || "",
-                    firstName: res.data.firstName || "",
-                    lastName: res.data.lastName || "",
-                    username: res.data.userName || "",
-                    address: {
-                        latitude: res.data.latitude || "",
-                        longitude: res.data.longitude || "",
-                        country: res.data.country || "",
-                        region: res.data.region || "",
-                        postcode: res.data.postcode || "",
-                        city: res.data.city || "",
-                        street: res.data.street || "",
-                        streetNumber: res.data.streetNumber || "",
-                    },
-                    session: [
-                        {
-                            location: res.data.location || "",
-                            startDate: res.data.startDate || "",
-                            endDate: res.data.endDate || "",
-                        },
-                    ],
-                    language: [
-                        {
-                            name: res.data.languageName || "",
-                        },
-                    ],
-                    contactLink: [
-                        {
-                            url: res.data.contactLinkUrl || "",
-                            social: {
-                                name: res.data.contactLinkName || "",
-                            },
-                        },
-                    ],
-                });
-            })
-            .catch((err) => console.log(err));
+                console.log(res.data);
+
+                if (res.data.account) {
+                    setAccount({
+                        email: res.data.email,
+                        firstName: res.data.firstName,
+                        lastName: res.data.lastName,
+                        userName: res.data.userName,
+                    });
+                }
+
+                if (res.data.address) {
+                    setAddress(res.data.address);
+                }
+
+                if (res.data.session) {
+                    setSession(
+                        res.data.session.map(
+                            (session) =>
+                                `${session.location} ${new Date(
+                                    session.startDate
+                                ).toLocaleDateString("fr-FR", {
+                                    month: "numeric",
+                                    year: "numeric",
+                                })} - ${new Date(
+                                    session.endDate
+                                ).toLocaleDateString("fr-FR", {
+                                    month: "numeric",
+                                    year: "numeric",
+                                })}`
+                        )
+                    );
+                }
+
+                if (res.data.language) {
+                    setLanguage(
+                        res.data.language.map((language) => language.name)
+                    );
+                }
+
+                if (res.data.contactLink) {
+                    setContactLink(res.data.contactLink[0]);
+                }
+            });
     }, []);
 
+    const [account, setAccount] = useState({
+        email: "",
+        password: "",
+        firstName: "-",
+        lastName: "-",
+        userName: "-",
+    });
+
+    const [address, setAddress] = useState({
+        latitude: "",
+        longitude: "",
+        streetNumber: 0,
+        street: "-",
+        city: "-",
+        postcode: 0,
+        region: "-",
+        country: "-",
+    });
+
+    const [session, setSession] = useState([
+        {
+            location: "",
+        },
+    ]);
+
+    const [language, setLanguage] = useState([
+        {
+            name: "",
+        },
+    ]);
+
+    const [contactLink, setContactLink] = useState([
+        {
+            github: "-",
+            gitlab: "-",
+            bitbucket: "-",
+            twitter: "-",
+            linkedin: "-",
+        },
+    ]);
+
+    const handleChangeAccount = (e) => {
+        setAccount({ ...account, [e.target.name]: e.target.value });
+    };
+
+    const handleChangeAddress = (e) => {
+        setAddress({ ...address, [e.target.name]: e.target.value });
+    };
+
+    const handleChangeSession = (e) => {
+        const {
+            target: { value },
+        } = e;
+        setSession(typeof value === "string" ? value.split(",") : value);
+    };
+
+    const handleChangeLanguage = (e) => {
+        const {
+            target: { value },
+        } = e;
+        setLanguage(
+            // On autofill we get a stringified value.
+            typeof value === "string" ? value.split(",") : value
+        );
+    };
+
+    const handleChangeContactLink = (e) => {
+        setContactLink({ ...contactLink, [e.target.name]: e.target.value });
+    };
+
+    const [formDatas, setFormDatas] = useState();
+
+    useEffect(() => {
+        setFormDatas({
+            ...account,
+            address: {
+                ...address,
+            },
+            session: session.map((loc) => {
+                return { location: loc };
+            }),
+            language: language.map((lang) => {
+                return { name: lang };
+            }),
+            contactLink: [{ ...contactLink }],
+        });
+    }, [account, address, session, language, contactLink]);
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+
+        setFormDatas({
+            ...account,
+            address: {
+                ...address,
+            },
+            session: session.map((loc) => {
+                return { location: loc };
+            }),
+            language: language.map((lang) => {
+                return { name: lang };
+            }),
+            contactLink: [{ ...contactLink }],
+        });
+
+        axios
+            .post(`${import.meta.env.VITE_BACKEND_URL}/users`, formDatas)
+            .then((res) => {
+                console.log("success");
+                console.log(res.data);
+            })
+            .catch((err) => {
+                console.log(res.data);
+                console.log(err.message);
+                console.log(err.response);
+            });
+    };
+
     return (
-        <div id="UserUpdatePage" className="PageContainer">
+        <div id="UserCreatePage" className="pageContainer">
             <header>
-                <h1>Update User {user?.firstName}</h1>
+                <h1>Update Account #{id}</h1>
             </header>
 
             <main>
-                <Box
-                    component="form"
-                    sx={{
-                        "& .MuiTextField-root": { m: 1, width: "25ch" },
-                    }}
-                    noValidate
-                    autoComplete="off"
-                >
-                    <TextField
-                        label="Firstname"
-                        variant="outlined"
-                        id="firstName"
-                        type="text"
-                        name="firstName"
-                        value={formDatas.firstName}
-                        onChange={handleChange}
-                    />
-                    <TextField
-                        InputLabelProps={{ shrink: true }}
-                        label="Lastname"
-                        variant="outlined"
-                        id="lastName"
-                        type="text"
-                        name="lastName"
-                        value={formDatas.lastName}
-                        onChange={handleChange}
-                    />
-                    <TextField
-                        label="Username"
-                        variant="outlined"
-                        id="userName"
-                        type="text"
-                        name="userName"
-                        value={formDatas.userName}
-                        onChange={handleChange}
-                    />
-                    <TextField
-                        InputLabelProps={{ shrink: true }}
-                        label="Email"
-                        variant="outlined"
-                        id="email"
-                        type="text"
-                        name="email"
-                        value={formDatas.email}
-                        onChange={handleChange}
-                    />
+                <Box component="form" onSubmit={handleSubmit} noValidate>
+                    <fieldset id="credentials">
+                        Credentials
+                        <TextField
+                            required
+                            variant="outlined"
+                            label="Email"
+                            type="email"
+                            name="email"
+                            value={account.email}
+                            onChange={handleChangeAccount}
+                        />
+                        <TextField
+                            required
+                            variant="outlined"
+                            label="Password"
+                            type="password"
+                            name="password"
+                            value={account.password}
+                            onChange={handleChangeAccount}
+                        />
+                    </fieldset>
 
-                    <TextField
-                        InputLabelProps={{ shrink: true }}
-                        label="Password"
-                        variant="outlined"
-                        id="password"
-                        type="text"
-                        name="password"
-                        value={formDatas.password}
-                        onChange={handleChange}
-                    />
+                    <fieldset id="location">
+                        <Button
+                            variant="outlined"
+                            onClick={() => {
+                                locateUser();
+                            }}
+                        >
+                            Locate Me
+                        </Button>
 
-                    <TextField
-                        label="
-                            Address - Country"
-                        variant="outlined"
-                        id="country"
-                        type="text"
-                        name="country"
-                        value={formDatas.address?.country}
-                        onChange={handleChange}
-                    />
-                    <TextField
-                        label="
-                            Address - Region"
-                        variant="outlined"
-                        id="region"
-                        type="text"
-                        name="region"
-                        value={formDatas.address?.region}
-                        onChange={handleChange}
-                    />
-                    <TextField
-                        label="
-                            Address - City"
-                        variant="outlined"
-                        id="city"
-                        type="text"
-                        name="city"
-                        value={formDatas.address?.city}
-                        onChange={handleChange}
-                    />
-                    <TextField
-                        label="
-                            Address - Postcode"
-                        variant="outlined"
-                        id="postcode"
-                        type="text"
-                        name="postcode"
-                        value={formDatas.address?.postcode}
-                        onChange={handleChange}
-                    />
-                    <TextField
-                        label="
-                            Address - Street"
-                        variant="outlined"
-                        id="street"
-                        type="text"
-                        name="street"
-                        value={formDatas.address?.street}
-                        onChange={handleChange}
-                    />
-                    <TextField
-                        label="
-                            Address - Latitude"
-                        variant="outlined"
-                        id="latitude"
-                        type="text"
-                        name="latitude"
-                        value={formDatas.address?.latitude}
-                        onChange={handleChange}
-                    />
-                    <TextField
-                        label="
-                            Address - Longitude"
-                        variant="outlined"
-                        id="longitude"
-                        type="text"
-                        name="longitude"
-                        value={formDatas.address?.longitude}
-                        onChange={handleChange}
-                    />
+                        <p>OR</p>
+
+                        <section id="latlong">
+                            <TextField
+                                required
+                                variant="outlined"
+                                label="Latitude"
+                                type="text"
+                                name="latitude"
+                                value={address.latitude}
+                                onChange={handleChangeAddress}
+                            />
+
+                            <TextField
+                                required
+                                variant="outlined"
+                                label="Longitude"
+                                type="text"
+                                name="longitude"
+                                value={address.longitude}
+                                onChange={handleChangeAddress}
+                            />
+                        </section>
+                    </fieldset>
+
+                    <Accordion TransitionProps={{ unmountOnExit: true }}>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="optional-content"
+                            id="optional-header"
+                        >
+                            <Typography>Optional Informations</Typography>
+                        </AccordionSummary>
+
+                        <AccordionDetails>
+                            <TextField
+                                label="Firstname"
+                                variant="outlined"
+                                id="firstname"
+                                type="text"
+                                name="firstName"
+                                value={account.firstName}
+                                onChange={handleChangeAccount}
+                            />
+
+                            <TextField
+                                label="Lastname"
+                                variant="outlined"
+                                id="lastname"
+                                type="text"
+                                name="lastName"
+                                value={account.lastName}
+                                onChange={handleChangeAccount}
+                            />
+
+                            <TextField
+                                label="Username"
+                                variant="outlined"
+                                id="username"
+                                type="text"
+                                name="userName"
+                                value={account.userName}
+                                onChange={handleChangeAccount}
+                            />
+
+                            <TextField
+                                label="StreetNumber"
+                                variant="outlined"
+                                id="streetNumber"
+                                type="number"
+                                name="streetNumber"
+                                value={address.streetNumber}
+                                onChange={handleChangeAddress}
+                            />
+
+                            <TextField
+                                label="Street"
+                                variant="outlined"
+                                id="street"
+                                type="text"
+                                name="street"
+                                value={address.street}
+                                onChange={handleChangeAddress}
+                            />
+
+                            <TextField
+                                label="City"
+                                variant="outlined"
+                                id="city"
+                                type="text"
+                                name="city"
+                                value={address.city}
+                                onChange={handleChangeAddress}
+                            />
+
+                            <TextField
+                                label="Postcode"
+                                variant="outlined"
+                                id="postcode"
+                                type="number"
+                                name="postcode"
+                                value={address.postcode}
+                                onChange={handleChangeAddress}
+                            />
+
+                            <TextField
+                                label="Region"
+                                variant="outlined"
+                                id="region"
+                                type="text"
+                                name="region"
+                                value={address.region}
+                                onChange={handleChangeAddress}
+                            />
+
+                            <TextField
+                                label="Country"
+                                variant="outlined"
+                                id="country"
+                                type="text"
+                                name="country"
+                                value={address.country}
+                                onChange={handleChangeAddress}
+                            />
+
+                            <FormControl>
+                                <InputLabel id="session-label">
+                                    Session
+                                </InputLabel>
+                                <Select
+                                    labelId="session-label"
+                                    id="session"
+                                    multiple
+                                    value={session}
+                                    onChange={handleChangeSession}
+                                    input={<OutlinedInput label="Tag" />}
+                                    renderValue={(selected) =>
+                                        selected.join(", ")
+                                    }
+                                >
+                                    {sessionsList.map((sessionItem) => (
+                                        <MenuItem
+                                            key={sessionItem.id}
+                                            value={sessionItem.location}
+                                        >
+                                            <Checkbox
+                                                checked={
+                                                    session.indexOf(
+                                                        sessionItem.id
+                                                    ) > -1
+                                                }
+                                            />
+                                            <ListItemText
+                                                primary={`${
+                                                    sessionItem.location
+                                                } ${new Date(
+                                                    sessionItem.startDate
+                                                ).toLocaleDateString("fr-FR", {
+                                                    month: "numeric",
+                                                    year: "numeric",
+                                                })} - ${new Date(
+                                                    sessionItem.endDate
+                                                ).toLocaleDateString("fr-FR", {
+                                                    month: "numeric",
+                                                    year: "numeric",
+                                                })}`}
+                                            />
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+
+                            <FormControl>
+                                <InputLabel id="language-label">
+                                    Language
+                                </InputLabel>
+                                <Select
+                                    labelId="language-label"
+                                    id="language"
+                                    multiple
+                                    value={language}
+                                    onChange={handleChangeLanguage}
+                                    input={<OutlinedInput label="Tag" />}
+                                    renderValue={(selected) =>
+                                        selected.join(", ")
+                                    }
+                                >
+                                    {languagesList.map((name, index) => (
+                                        <MenuItem key={index} value={name}>
+                                            <Checkbox
+                                                checked={
+                                                    language.indexOf(name) > -1
+                                                }
+                                            />
+                                            <ListItemText primary={name} />
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+
+                            <TextField
+                                label="GitHub Account"
+                                variant="outlined"
+                                id="github"
+                                type="text"
+                                name="github"
+                                value={contactLink.github}
+                                onChange={handleChangeContactLink}
+                            />
+
+                            <TextField
+                                label="GitLab Account"
+                                variant="outlined"
+                                id="gitlab"
+                                type="text"
+                                name="gitlab"
+                                value={contactLink.gitlab}
+                                onChange={handleChangeContactLink}
+                            />
+
+                            <TextField
+                                label="BitBucket Account"
+                                variant="outlined"
+                                id="bitbucket"
+                                type="text"
+                                name="bitbucket"
+                                value={contactLink.bitbucket}
+                                onChange={handleChangeContactLink}
+                            />
+
+                            <TextField
+                                label="Twitter Account"
+                                variant="outlined"
+                                id="twitter"
+                                type="text"
+                                name="twitter"
+                                value={contactLink.twitter}
+                                onChange={handleChangeContactLink}
+                            />
+
+                            <TextField
+                                label="LinkedIn Account"
+                                variant="outlined"
+                                id="linkedin"
+                                type="text"
+                                name="linkedin"
+                                value={contactLink.linkedin}
+                                onChange={handleChangeContactLink}
+                            />
+                        </AccordionDetails>
+                    </Accordion>
+
+                    <Button variant="contained" type="submit">
+                        Update account
+                    </Button>
                 </Box>
-
-                <Button variant="contained" onClick={handleSubmit}>
-                    Update User
-                </Button>
             </main>
-
-            <footer></footer>
         </div>
     );
 };

@@ -96,6 +96,25 @@ const UserDetails = () => {
                         <section className="socialInfos">
                             <h2>Social Infos</h2>
 
+                            {user?.contactLink[0] ? (
+                                <>
+                                    <p>GitHub : {user.contactLink[0].github}</p>
+                                    <p>GitLab : {user.contactLink[0].gitlab}</p>
+                                    <p>
+                                        BitBucket :{" "}
+                                        {user.contactLink[0].bitbucket}
+                                    </p>
+                                    <p>
+                                        Twitter : {user.contactLink[0].twitter}
+                                    </p>
+                                    <p>
+                                        LinkedIn :{" "}
+                                        {user.contactLink[0].linkedin}
+                                    </p>
+                                </>
+                            ) : (
+                                ""
+                            )}
                             {/* {user?.contactLink.map((link) => {
                                 const linkName = Object.keys(link);
                                 return linkName.map((socialName, id) => (
