@@ -197,13 +197,6 @@ const ViewAdmin = () => {
                                 </Button>
                             </Box>
                         </Modal>
-
-                        {/* <ModalDeleteUser
-                            user={selectedUser}
-                            open={isModalOpen}
-                            handleClose={handleClose}
-                            deleteUser={deleteUser(selectedUser)}
-                        /> */}
                     </>
                 ) : (
                     <>
