@@ -1,14 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import { ContextProvider } from "./contexts/UserContext";
+import { ConnectedUserContextProvider } from "./contexts/connectedUserContext";
 
 import "./main.scss";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
-        <ContextProvider>
+        <ConnectedUserContextProvider>
             <App />
-        </ContextProvider>
+        </ConnectedUserContextProvider>
     </React.StrictMode>
 );

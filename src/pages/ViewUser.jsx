@@ -4,15 +4,19 @@ import * as L from "leaflet";
 import axios from "axios";
 
 import NavBar from "../components/NavBar";
-import { UserContext } from "../contexts/UserContext";
+import { ConnectedUserContext } from "../contexts/connectedUserContext";
 
 const ViewUser = () => {
     const [users, setUsers] = useState();
+
     const [selectedUser, setSelectedUser] = useState();
+
     const [center, setCenter] = useState();
 
-    const { user, setUser } = useContext(UserContext);
-    const userId = useContext(UserContext)?.user?.id;
+    const { connectedUser, setConnectedUser } =
+        useContext(ConnectedUserContext);
+
+    // const userId = useContext(ConnectedUserContext)?.user?.id;
 
     const mapRef = useRef(null);
 
@@ -38,22 +42,26 @@ const ViewUser = () => {
         }
     };
 
-    useEffect(() => {
-        axios
-            .get(`${import.meta.env.VITE_BACKEND_URL}/users/${user.id}`)
-            .then((res) => {
-                setUser(res.data);
-            })
-            .catch((err) => {
-                if (err) {
-                    console.log(err);
-                }
-            });
-    }, []);
+    // useEffect(() => {
+    //     axios
+    //         .get(
+    //             `${import.meta.env.VITE_BACKEND_URL}/users/${connectedUser.id}`
+    //         )
+    //         .then((res) => {
+    //             setConnectedUser(res.data);
+    //         })
+    //         .catch((err) => {
+    //             if (err) {
+    //                 console.log(err);
+    //             }
+    //         });
+    // }, []);
 
     useEffect(() => {
         axios
-            .get(`${import.meta.env.VITE_BACKEND_URL}/users/${userId}`)
+            .get(
+                `${import.meta.env.VITE_BACKEND_URL}/users/${connectedUser.id}`
+            )
             .then((res) => {
                 setCenter([
                     res.data.address.latitude,
@@ -103,7 +111,7 @@ const ViewUser = () => {
 
                         {users.map((userM) => {
                             let icon = blueIcon;
-                            if (user.id === userM.id) {
+                            if (connectedUser.id === userM.id) {
                                 icon = redIcon;
                             }
 

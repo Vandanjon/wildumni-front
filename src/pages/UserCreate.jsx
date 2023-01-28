@@ -22,12 +22,12 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import axios from "axios";
-import { UserContext } from "../contexts/UserContext";
+import { ConnectedUserContext } from "../contexts/connectedUserContext";
 import { Menu, Visibility, VisibilityOff } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
 const UserCreate = () => {
-    const { user } = useContext(UserContext);
+    const { connectedUser } = useContext(ConnectedUserContext);
 
     const locateUser = () => {
         navigator.geolocation.getCurrentPosition((position) => {
@@ -127,23 +127,23 @@ const UserCreate = () => {
 
     const [formDatas, setFormDatas] = useState();
 
-    // useEffect(() => {
-    //     setFormDatas({
-    //         ...account,
-    //         address: {
-    //             ...address,
-    //             streetNumber: parseInt(address.streetNumber),
-    //             postcode: parseInt(address.postcode),
-    //         },
-    //         session: session.map((loc) => {
-    //             return { location: loc };
-    //         }),
-    //         language: language.map((lang) => {
-    //             return { name: lang };
-    //         }),
-    //         contactLink: [{ ...contactLink }],
-    //     });
-    // }, [account, address, session, language, contactLink]);
+    useEffect(() => {
+        setFormDatas({
+            ...account,
+            address: {
+                ...address,
+                streetNumber: parseInt(address.streetNumber),
+                postcode: parseInt(address.postcode),
+            },
+            session: session.map((loc) => {
+                return { location: loc };
+            }),
+            language: language.map((lang) => {
+                return { name: lang };
+            }),
+            contactLink: [{ ...contactLink }],
+        });
+    }, [account, address, session, language, contactLink]);
 
     const handleSubmit = (event) => {
         event.preventDefault();

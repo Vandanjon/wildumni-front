@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 
 import NavBar from "../components/NavBar";
-import { UserContext } from "../contexts/UserContext";
+import { ConnectedUserContext } from "../contexts/connectedUserContext";
 import {
     Avatar,
     Button,
@@ -35,9 +35,7 @@ const style = {
 };
 
 const ViewAdmin = () => {
-    const userId = useContext(UserContext)?.user?.id;
     const [users, setUsers] = useState([]);
-    const [connectedUser, setConnectedUser] = useState();
     const [selectedUser, setSelectedUser] = useState({
         firstName: "",
     });

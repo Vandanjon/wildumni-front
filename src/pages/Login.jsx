@@ -4,7 +4,7 @@ import axios from "axios";
 import { useState, forwardRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
-import { UserContext } from "../contexts/UserContext";
+import { ConnectedUserContext } from "../contexts/connectedUserContext";
 import { Link } from "react-router-dom";
 import LoginForm from "../components/LoginForm";
 import Logo from "../assets/logo_white.png";
@@ -19,7 +19,8 @@ const Login = () => {
         password: "password",
     });
 
-    const { user, setUser } = useContext(UserContext);
+    const { connectedUser, setConnectedUser } =
+        useContext(ConnectedUserContext);
 
     const navigate = useNavigate();
 
@@ -64,11 +65,11 @@ const Login = () => {
 
             const decodedJWT = jwt_decode(res.data.token);
 
-            const userData = await axios.get(
+            const connectingUser = await axios.get(
                 `${import.meta.env.VITE_BACKEND_URL}/users/${decodedJWT.id}`
             );
 
-            setUser(userData.data);
+            setConnectedUser(connectingUser.data);
 
             navigate("/user");
         } catch (err) {
