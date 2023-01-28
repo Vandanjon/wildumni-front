@@ -36,9 +36,14 @@ const style = {
 
 const ViewAdmin = () => {
     const [users, setUsers] = useState([]);
+
     const [selectedUser, setSelectedUser] = useState({
         firstName: "",
     });
+
+    const { connectedUser, setConnectedUser } =
+        useContext(ConnectedUserContext);
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     // const [open, setOpen] = useState(false);
 
@@ -53,15 +58,6 @@ const ViewAdmin = () => {
                     console.log(err);
                 }
             });
-    }, []);
-
-    useEffect(() => {
-        axios
-            .get(`${import.meta.env.VITE_BACKEND_URL}/users/${userId}`)
-            .then((res) => {
-                setConnectedUser(res.data);
-            })
-            .catch((err) => console.log(err));
     }, []);
 
     const [open, setOpen] = useState(false);
