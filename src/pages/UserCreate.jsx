@@ -132,6 +132,8 @@ const UserCreate = () => {
             ...account,
             address: {
                 ...address,
+                latitude: parseFloat(address.latitude),
+                longitude: parseFloat(address.longitude),
                 streetNumber: parseInt(address.streetNumber),
                 postcode: parseInt(address.postcode),
             },
