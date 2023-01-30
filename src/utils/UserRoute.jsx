@@ -1,15 +1,13 @@
 import { Navigate } from "react-router-dom";
-import { UserContext } from "../contexts/UserContext";
+import { ConnectedUserContext } from "../contexts/connectedUserContext";
 import { useContext } from "react";
 
 const UserRoute = ({ children }) => {
-    const { user } = useContext(UserContext);
+    const { connectedUser } = useContext(ConnectedUserContext);
 
-    console.log(user);
-
-    if (!user) {
+    if (!connectedUser) {
         return <Navigate to="/" replace />;
-    } else if (user.roles.includes("ROLE_USER")) {
+    } else if (connectedUser.roles.includes("ROLE_USER")) {
         return children;
     }
 };

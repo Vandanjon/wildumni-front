@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 
 import NavBar from "../components/NavBar";
-import { UserContext } from "../contexts/UserContext";
+import { ConnectedUserContext } from "../contexts/connectedUserContext";
 import {
     Avatar,
     Button,
@@ -35,12 +35,15 @@ const style = {
 };
 
 const ViewAdmin = () => {
-    const userId = useContext(UserContext)?.user?.id;
     const [users, setUsers] = useState([]);
-    const [connectedUser, setConnectedUser] = useState();
+
     const [selectedUser, setSelectedUser] = useState({
         firstName: "",
     });
+
+    const { connectedUser, setConnectedUser } =
+        useContext(ConnectedUserContext);
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     // const [open, setOpen] = useState(false);
 
@@ -55,15 +58,6 @@ const ViewAdmin = () => {
                     console.log(err);
                 }
             });
-    }, []);
-
-    useEffect(() => {
-        axios
-            .get(`${import.meta.env.VITE_BACKEND_URL}/users/${userId}`)
-            .then((res) => {
-                setConnectedUser(res.data);
-            })
-            .catch((err) => console.log(err));
     }, []);
 
     const [open, setOpen] = useState(false);
@@ -203,13 +197,6 @@ const ViewAdmin = () => {
                                 </Button>
                             </Box>
                         </Modal>
-
-                        {/* <ModalDeleteUser
-                            user={selectedUser}
-                            open={isModalOpen}
-                            handleClose={handleClose}
-                            deleteUser={deleteUser(selectedUser)}
-                        /> */}
                     </>
                 ) : (
                     <>

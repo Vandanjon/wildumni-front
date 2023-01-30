@@ -23,19 +23,6 @@ const AdminUsersAccordion = (users, setUsers) => {
 
     const deleteUser = (user) => {
         console.log(user.id);
-
-        // axios
-        //     .delete(`${import.meta.env.VITE_BACKEND_URL}/users/${user.id}`)
-        //     .then((res) => {
-        //         console.log(res.data);
-        //     })
-        //     .catch((err) => {
-        //         console.log(err);
-        //     });
-        // const updatedUsers = users.filter(
-        //     (deletedUser) => deletedUser.id !== user.id
-        // );
-        // setUsers(updatedUsers);
     };
 
     return (

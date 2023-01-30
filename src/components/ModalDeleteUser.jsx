@@ -13,8 +13,6 @@ const style = {
 };
 
 const ModalDeleteUser = ({ user, open, handleClose, deleteUser }) => {
-    console.log(user);
-
     return (
         <Modal
             open={open}

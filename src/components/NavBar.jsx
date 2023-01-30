@@ -1,15 +1,15 @@
 import { Link } from "react-router-dom";
-import { UserContext } from "../contexts/UserContext";
+import { ConnectedUserContext } from "../contexts/connectedUserContext";
 import { useContext } from "react";
 
 const NavBar = () => {
-    const { user } = useContext(UserContext);
+    const { connectedUser } = useContext(ConnectedUserContext);
 
     return (
         <nav>
             <Link to="/">LOGOUT</Link>
 
-            {user && user.roles.includes("ROLE_ADMIN") ? (
+            {connectedUser && connectedUser.roles.includes("ROLE_ADMIN") ? (
                 <Link to="/admin">Admin</Link>
             ) : (
                 ""

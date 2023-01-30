@@ -4,16 +4,19 @@ import * as L from "leaflet";
 import axios from "axios";
 
 import NavBar from "../components/NavBar";
-import { UserContext } from "../contexts/UserContext";
+import { ConnectedUserContext } from "../contexts/connectedUserContext";
 
 const ViewUser = () => {
     const [users, setUsers] = useState();
-    const [selectedUser, setSelectedUser] = useState([]);
-    const [loggedUser, setLoggedUser] = useState();
+
+    const [selectedUser, setSelectedUser] = useState();
+
     const [center, setCenter] = useState();
 
-    const { user } = useContext(UserContext);
-    const userId = useContext(UserContext)?.user?.id;
+    const { connectedUser, setConnectedUser } =
+        useContext(ConnectedUserContext);
+
+    // const userId = useContext(ConnectedUserContext)?.user?.id;
 
     const mapRef = useRef(null);
 
@@ -39,11 +42,27 @@ const ViewUser = () => {
         }
     };
 
+    // useEffect(() => {
+    //     axios
+    //         .get(
+    //             `${import.meta.env.VITE_BACKEND_URL}/users/${connectedUser.id}`
+    //         )
+    //         .then((res) => {
+    //             setConnectedUser(res.data);
+    //         })
+    //         .catch((err) => {
+    //             if (err) {
+    //                 console.log(err);
+    //             }
+    //         });
+    // }, []);
+
     useEffect(() => {
         axios
-            .get(`${import.meta.env.VITE_BACKEND_URL}/users/${userId}`)
+            .get(
+                `${import.meta.env.VITE_BACKEND_URL}/users/${connectedUser.id}`
+            )
             .then((res) => {
-                setLoggedUser(res.data);
                 setCenter([
                     res.data.address.latitude,
                     res.data.address.longitude,
@@ -61,7 +80,16 @@ const ViewUser = () => {
             .catch((err) => console.log(err));
     }, []);
 
-    console.log(loggedUser);
+    const changeUser = (el) => {
+        axios
+            .get(`${import.meta.env.VITE_BACKEND_URL}/users/${el.id}`)
+            .then((res) => {
+                setSelectedUser(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
 
     return (
         <div id="UserPage" className="pageContainer">
@@ -74,33 +102,35 @@ const ViewUser = () => {
             </header>
 
             <main>
-                {users && loggedUser && center ? (
+                {users && center ? (
                     <MapContainer center={center} zoom={zoom} ref={mapRef}>
                         <TileLayer
                             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         />
 
-                        {users.map((user) => {
+                        {users.map((userM) => {
                             let icon = blueIcon;
-                            if (loggedUser.id === user.id) {
+                            if (connectedUser.id === userM.id) {
                                 icon = redIcon;
                             }
 
                             return (
                                 <Marker
-                                    key={user.id}
+                                    key={userM.id}
                                     position={[
-                                        parseFloat(user.address.latitude),
-                                        parseFloat(user.address.longitude),
+                                        parseFloat(userM.address.latitude),
+                                        parseFloat(userM.address.longitude),
                                     ]}
                                     icon={icon}
-                                    onClick={() => setProfile()}
+                                    eventHandlers={{
+                                        click: (e) => changeUser(userM),
+                                    }}
                                 >
                                     <Popup>
-                                        {user.firstName}
+                                        {userM.firstName}
                                         <br />
-                                        {user.email}
+                                        {userM.email}
                                     </Popup>
                                 </Marker>
                             );
@@ -114,28 +144,72 @@ const ViewUser = () => {
                 )}
             </main>
             <footer>
-                {loggedUser ? (
+                {selectedUser ? (
                     <>
-                        <p>
-                            {loggedUser.firstName} {loggedUser.lastName}
-                        </p>
-
-                        <p>{loggedUser.userName}</p>
-                        <p>{loggedUser.session[0].location}</p>
-                        <p>{loggedUser.language[0].name}</p>
-                        <p>
-                            {loggedUser.address.streetNumber}{" "}
-                            {loggedUser.address.street}
+                        <div className="div1"></div>
+                        <div className="div2">ACCOUNT</div>
+                        <div className="div3">ADDRESS</div>
+                        <div className="div4">
+                            {selectedUser.firstName} {selectedUser.lastName}
+                        </div>
+                        <div className="div5">{selectedUser.userName}</div>
+                        <div className="div6">
+                            {selectedUser.roles[0]}
+                            <br />
+                            {selectedUser.roles[1]}
+                        </div>
+                        <div className="div8">
+                            {" "}
+                            {selectedUser.address.streetNumber}
                             {", "}
-                            {loggedUser.address.city}{" "}
-                            {loggedUser.address.postcode}
+                            {selectedUser.address.street}
                             {", "}
-                            {loggedUser.address.region}
+                            {selectedUser.address.city}
+                        </div>
+                        <div className="div9">
+                            {selectedUser.address.postcode}
                             {", "}
-                            {loggedUser.address.country}{" "}
-                        </p>
+                            {selectedUser.address.city}
+                        </div>
+                        <div className="div10">
+                            {selectedUser.address.country}
+                        </div>
+                        <div className="div11">SESSION</div>
+                        <div className="div12">
+                            {selectedUser.session.map((el, index) => (
+                                <span key={index}>
+                                    {el.location}
+                                    <br />
+                                    {new Date(el.startDate).toLocaleDateString(
+                                        "fr-FR",
+                                        {
+                                            year: "numeric",
+                                            month: "numeric",
+                                        }
+                                    )}
+                                    <br />
+                                    {new Date(el.endDate).toLocaleDateString(
+                                        "fr-FR",
+                                        {
+                                            year: "numeric",
+                                            month: "numeric",
+                                        }
+                                    )}
+                                </span>
+                            ))}
+                        </div>
+                        <div className="div13">LANGUAGE</div>
+                        <div className="div14">
+                            {selectedUser.language.map((el, index) => (
+                                <span key={index}>
+                                    {el.name}
+                                    <br />
+                                </span>
+                            ))}
+                        </div>
                     </>
                 ) : (
+                    // user ?? <p>{user.id}</p>
                     ""
                 )}
             </footer>
