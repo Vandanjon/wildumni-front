@@ -86,6 +86,8 @@ const ViewAdmin = () => {
             (deletedUser) => deletedUser.id !== user.id
         );
         setUsers(updatedUsers);
+
+        setOpen(false);
     };
 
     return (
