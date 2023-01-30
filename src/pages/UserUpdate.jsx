@@ -73,15 +73,12 @@ const UserUpdate = () => {
             .get(`${import.meta.env.VITE_BACKEND_URL}/users/${id}`)
             .then((res) => {
                 console.log(res.data);
-
-                if (res.data.account) {
-                    setAccount({
-                        email: res.data.email,
-                        firstName: res.data.firstName,
-                        lastName: res.data.lastName,
-                        userName: res.data.userName,
-                    });
-                }
+                setAccount({
+                    email: res.data.email,
+                    firstName: res.data.firstName,
+                    lastName: res.data.lastName,
+                    userName: res.data.userName,
+                });
 
                 if (res.data.address) {
                     setAddress(res.data.address);
@@ -224,7 +221,7 @@ const UserUpdate = () => {
         });
 
         axios
-            .post(`${import.meta.env.VITE_BACKEND_URL}/users`, formDatas)
+            .put(`${import.meta.env.VITE_BACKEND_URL}/users/${id}`, formDatas)
             .then((res) => {
                 console.log("success");
                 console.log(res.data);
@@ -247,7 +244,7 @@ const UserUpdate = () => {
                     <fieldset id="credentials">
                         Credentials
                         <TextField
-                            required
+                            disabled
                             variant="outlined"
                             label="Email"
                             type="email"
@@ -256,7 +253,6 @@ const UserUpdate = () => {
                             onChange={handleChangeAccount}
                         />
                         <TextField
-                            required
                             variant="outlined"
                             label="Password"
                             type="password"
