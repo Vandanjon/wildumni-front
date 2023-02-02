@@ -151,13 +151,6 @@ const ViewUser = () => {
                             <p>{selectedUser.address.country}</p>
                         </div>
 
-                        <div className="container roles">
-                            <h2>ROLE(S)</h2>
-                            {selectedUser.roles[0]}
-                            <br />
-                            {selectedUser.roles[1]}
-                        </div>
-
                         <div className="container sessions">
                             <h2>SESSION(S)</h2>
                             {selectedUser.session.map((el, index) => (
