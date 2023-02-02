@@ -6,15 +6,17 @@ const NavBar = () => {
     const { connectedUser } = useContext(ConnectedUserContext);
 
     return (
-        <nav>
+        <nav className="navBar">
             <Link to="/">LOGOUT</Link>
 
-            {connectedUser && connectedUser.roles.includes("ROLE_ADMIN") ? (
-                <Link to="/admin">Admin</Link>
-            ) : (
-                ""
-            )}
-            <Link to="/user">User</Link>
+            <div className="nav-routes">
+                {connectedUser && connectedUser.roles.includes("ROLE_ADMIN") ? (
+                    <Link to="/admin">Admin</Link>
+                ) : (
+                    ""
+                )}
+                <Link to="/user">User</Link>
+            </div>
         </nav>
     );
 };

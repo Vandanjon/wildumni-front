@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import NavBar from "../components/NavBar";
 
 const UserDetails = () => {
     const { id } = useParams();
@@ -20,6 +21,8 @@ const UserDetails = () => {
     return (
         <div id="UserDetailsPage" className="pageContainer">
             <header>
+                <NavBar />
+
                 <h1>User Details</h1>
             </header>
 

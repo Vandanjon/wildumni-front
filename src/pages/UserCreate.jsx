@@ -6,11 +6,6 @@ import {
     FormControl,
     InputLabel,
     OutlinedInput,
-    InputAdornment,
-    IconButton,
-    FormHelperText,
-    FormLabel,
-    Input,
     Select,
     MenuItem,
     Checkbox,
@@ -23,8 +18,7 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import axios from "axios";
 import { ConnectedUserContext } from "../contexts/connectedUserContext";
-import { Menu, Visibility, VisibilityOff } from "@mui/icons-material";
-import { useTheme } from "@mui/material/styles";
+import NavBar from "../components/NavBar";
 
 const UserCreate = () => {
     const { connectedUser } = useContext(ConnectedUserContext);
@@ -182,6 +176,8 @@ const UserCreate = () => {
     return (
         <div id="UserCreatePage" className="pageContainer">
             <header>
+                <NavBar />
+
                 <h1>Create Account</h1>
             </header>
 

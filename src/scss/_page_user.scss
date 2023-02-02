@@ -1,6 +1,17 @@
 #UserPage {
+    header {
+        position: relative;
+    }
+    header button {
+        position: absolute;
+        right: 0;
+        padding: 1%;
+        top: 50%;
+        transform: translate(0, -50%);
+    }
+
     .leaflet-container {
-        height: 100%;
+        height: 70vh;
         width: 100%;
     }
 
@@ -9,51 +20,11 @@
     }
 
     footer {
-        max-height: 30vh;
-        overflow: scroll;
-        margin: 0 5px;
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: repeat(5, 1fr);
+        display: block;
+        padding: 10px 5px;
 
-        .div4 {
-            grid-area: 2 / 1 / 3 / 2;
-        }
-        .div5 {
-            grid-area: 3 / 1 / 4 / 2;
-        }
-        .div6 {
-            grid-area: 4 / 1 / 5 / 2;
-        }
-        .div8 {
-            grid-area: 2 / 2 / 4 / 3;
-        }
-        .div9 {
-            grid-area: 4 / 2 / 5 / 3;
-        }
-        .div10 {
-            grid-area: 5 / 2 / 6 / 3;
-        }
-        .div1 {
-            grid-area: 1 / 1 / 2 / 3;
-        }
-        .div2 {
-            grid-area: 1 / 1 / 2 / 2;
-        }
-        .div3 {
-            grid-area: 1 / 2 / 2 / 3;
-        }
-        .div11 {
-            grid-area: 1 / 3 / 3 / 4;
-        }
-        .div13 {
-            grid-area: 4 / 3 / 6 / 4;
-        }
-        .div12 {
-            grid-area: 2 / 3 / 3 / 4;
-        }
-        .div14 {
-            grid-area: 5 / 3 / 6 / 4;
+        h2 {
+            text-align: center;
         }
     }
 }

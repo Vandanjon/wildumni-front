@@ -5,7 +5,7 @@
 
 * {
     box-sizing: border-box;
-    font-family: "Roboto";
+    font-family: "Roboto", sans-serif;
     line-height: 1.5;
 }
 
@@ -13,18 +13,21 @@ body {
     margin: 0;
 }
 
+a,
 a:visited {
     text-decoration: none;
     text-transform: none;
     color: black;
 }
 
+img {
+    max-width: 100%;
+}
+
 // TEMPLATE
 .pageContainer {
+    max-width: 100vw;
     min-height: 100vh;
-    max-height: 100vh;
-    display: grid;
-    grid-template-rows: 2fr 8fr 3fr;
 
     header,
     main,
@@ -33,5 +36,18 @@ a:visited {
         flex-direction: column;
         justify-content: center;
         align-items: center;
+    }
+
+    header {
+        height: 15vh;
+
+        nav {
+            height: 5vh;
+        }
+
+        h1 {
+            height: 10vh;
+            margin: 0;
+        }
     }
 }

@@ -26,6 +26,7 @@ import { ConnectedUserContext } from "../contexts/connectedUserContext";
 import { Menu, Visibility, VisibilityOff } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 import { useParams } from "react-router-dom";
+import NavBar from "../components/NavBar";
 
 const UserUpdate = () => {
     const { connectedUser } = useContext(ConnectedUserContext);
@@ -236,6 +237,8 @@ const UserUpdate = () => {
     return (
         <div id="UserCreatePage" className="pageContainer">
             <header>
+                <NavBar />
+
                 <h1>Update Account #{id}</h1>
             </header>
 

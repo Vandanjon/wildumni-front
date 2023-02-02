@@ -9,7 +9,6 @@ import {
     Box,
     Modal,
     Typography,
-    Divider,
     Fab,
     List,
     ListItem,
@@ -20,11 +19,10 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { green, blue } from "@mui/material/colors";
-import ModalDeleteUser from "../components/ModalDeleteUser";
 
 const style = {
     position: "absolute",
-    top: "50%",
+    top: "20%",
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: 400,
@@ -36,16 +34,11 @@ const style = {
 
 const ViewAdmin = () => {
     const [users, setUsers] = useState([]);
-
-    const [selectedUser, setSelectedUser] = useState({
-        firstName: "",
-    });
-
-    const { connectedUser, setConnectedUser } =
-        useContext(ConnectedUserContext);
-
+    const [selectedUser, setSelectedUser] = useState({});
     const [isModalOpen, setIsModalOpen] = useState(false);
-    // const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false);
+
+    const { connectedUser } = useContext(ConnectedUserContext);
 
     useEffect(() => {
         axios
@@ -60,16 +53,11 @@ const ViewAdmin = () => {
             });
     }, []);
 
-    const [open, setOpen] = useState(false);
     const handleClose = () => setOpen(false);
 
     const handleOpen = (user) => {
         setSelectedUser(user);
         setOpen(true);
-    };
-
-    const editUser = (user) => {
-        console.log("edit User");
     };
 
     const deleteUser = (user) => {
@@ -208,11 +196,11 @@ const ViewAdmin = () => {
                 )}
             </main>
 
-            <footer>
+            {/* <footer>
                 {connectedUser
                     ? `Welcome ${connectedUser.firstName}`
                     : "Welcome Admin"}
-            </footer>
+            </footer> */}
         </div>
     );
 };

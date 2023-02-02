@@ -8,15 +8,10 @@ import { ConnectedUserContext } from "../contexts/connectedUserContext";
 
 const ViewUser = () => {
     const [users, setUsers] = useState();
-
     const [selectedUser, setSelectedUser] = useState();
-
     const [center, setCenter] = useState();
 
-    const { connectedUser, setConnectedUser } =
-        useContext(ConnectedUserContext);
-
-    // const userId = useContext(ConnectedUserContext)?.user?.id;
+    const { connectedUser } = useContext(ConnectedUserContext);
 
     const mapRef = useRef(null);
 
@@ -41,21 +36,6 @@ const ViewUser = () => {
             mapRef.current.flyTo(center, zoom);
         }
     };
-
-    // useEffect(() => {
-    //     axios
-    //         .get(
-    //             `${import.meta.env.VITE_BACKEND_URL}/users/${connectedUser.id}`
-    //         )
-    //         .then((res) => {
-    //             setConnectedUser(res.data);
-    //         })
-    //         .catch((err) => {
-    //             if (err) {
-    //                 console.log(err);
-    //             }
-    //         });
-    // }, []);
 
     useEffect(() => {
         axios
@@ -96,9 +76,9 @@ const ViewUser = () => {
             <header>
                 <NavBar />
 
-                <div>
-                    <button onClick={recenterMap}>Recenter on me</button>
-                </div>
+                <h1>User View</h1>
+
+                <button onClick={recenterMap}>Recenter on me</button>
             </header>
 
             <main>
@@ -146,60 +126,64 @@ const ViewUser = () => {
             <footer>
                 {selectedUser ? (
                     <>
-                        <div className="div1"></div>
-                        <div className="div2">ACCOUNT</div>
-                        <div className="div3">ADDRESS</div>
-                        <div className="div4">
-                            {selectedUser.firstName} {selectedUser.lastName}
+                        <div className="container account">
+                            <h2>ACCOUNT</h2>
+                            <p>
+                                {selectedUser.firstName} {selectedUser.lastName}
+                            </p>
+                            <p>AKA {selectedUser.userName}</p>
                         </div>
-                        <div className="div5">{selectedUser.userName}</div>
-                        <div className="div6">
+
+                        <div className="container address">
+                            <h2>ADDRESS</h2>
+                            <p>
+                                {selectedUser.address.streetNumber}
+                                {", "}
+                                {selectedUser.address.street}
+                                {", "}
+                                {selectedUser.address.city}
+                            </p>
+                            <p>
+                                {selectedUser.address.postcode}
+                                {", "}
+                                {selectedUser.address.city}
+                            </p>
+                            <p>{selectedUser.address.country}</p>
+                        </div>
+
+                        <div className="container roles">
+                            <h2>ROLE(S)</h2>
                             {selectedUser.roles[0]}
                             <br />
                             {selectedUser.roles[1]}
                         </div>
-                        <div className="div8">
-                            {" "}
-                            {selectedUser.address.streetNumber}
-                            {", "}
-                            {selectedUser.address.street}
-                            {", "}
-                            {selectedUser.address.city}
-                        </div>
-                        <div className="div9">
-                            {selectedUser.address.postcode}
-                            {", "}
-                            {selectedUser.address.city}
-                        </div>
-                        <div className="div10">
-                            {selectedUser.address.country}
-                        </div>
-                        <div className="div11">SESSION</div>
-                        <div className="div12">
+
+                        <div className="container sessions">
+                            <h2>SESSION(S)</h2>
                             {selectedUser.session.map((el, index) => (
                                 <span key={index}>
                                     {el.location}
-                                    <br />
+                                    {" - "}
                                     {new Date(el.startDate).toLocaleDateString(
                                         "fr-FR",
                                         {
-                                            year: "numeric",
-                                            month: "numeric",
+                                            month: "long",
                                         }
                                     )}
-                                    <br />
+                                    {" à "}
                                     {new Date(el.endDate).toLocaleDateString(
                                         "fr-FR",
                                         {
+                                            month: "long",
                                             year: "numeric",
-                                            month: "numeric",
                                         }
                                     )}
                                 </span>
                             ))}
                         </div>
-                        <div className="div13">LANGUAGE</div>
-                        <div className="div14">
+
+                        <div className="container languages">
+                            <h2>LANGUAGE(S)</h2>
                             {selectedUser.language.map((el, index) => (
                                 <span key={index}>
                                     {el.name}
@@ -208,10 +192,7 @@ const ViewUser = () => {
                             ))}
                         </div>
                     </>
-                ) : (
-                    // user ?? <p>{user.id}</p>
-                    ""
-                )}
+                ) : null}
             </footer>
         </div>
     );

@@ -1,27 +1,22 @@
 #AdminPage {
     main {
-        background-color: $color-secondary;
         justify-content: flex-start;
         padding-top: 20px;
 
         #usersList {
             width: 100%;
-            max-width: 360px;
         }
 
         .userLine {
-            display: flex;
             justify-content: space-between;
 
             .userAvatarName {
                 display: flex;
                 align-items: center;
-                width: 80%;
             }
 
             .userInfos {
                 margin-left: 4vw;
-                width: 20%;
             }
         }
     }
