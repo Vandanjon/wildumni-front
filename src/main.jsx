@@ -6,9 +6,7 @@ import { ConnectedUserContextProvider } from "./contexts/connectedUserContext";
 import "./main.scss";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-    <React.StrictMode>
-        <ConnectedUserContextProvider>
-            <App />
-        </ConnectedUserContextProvider>
-    </React.StrictMode>
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
 );

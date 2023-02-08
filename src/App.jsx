@@ -1,45 +1,15 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-
-import AdminRoute from "./utils/AdminRoute";
-import UserRoute from "./utils/UserRoute";
-
-import Login from "./pages/Login";
-import ViewAdmin from "./pages/ViewAdmin";
-import ViewUser from "./pages/ViewUser";
-
-import UserCreate from "./pages/UserCreate";
-import UserUpdate from "./pages/UserUpdate";
-import UserDetails from "./pages/UserDetails";
+import { BrowserRouter, Routes } from "react-router-dom";
+import RouteRoleRenderer from "./components/Routes/RouteRoleRenderer";
+import { ConnectedUserContextProvider } from "./contexts/connectedUserContext";
 
 const App = () => {
-    return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<Login />} />
-                <Route path="/userCreate" element={<UserCreate />} />
-                <Route path="/users/:id" element={<UserDetails />} />
-                <Route path="/userUpdate/:id" element={<UserUpdate />} />
-
-                <Route
-                    path="/admin"
-                    element={
-                        <AdminRoute>
-                            <ViewAdmin />
-                        </AdminRoute>
-                    }
-                />
-
-                <Route
-                    path="/user"
-                    element={
-                        <UserRoute>
-                            <ViewUser />
-                        </UserRoute>
-                    }
-                />
-            </Routes>
-        </BrowserRouter>
-    );
+  return (
+    <BrowserRouter>
+      <ConnectedUserContextProvider>
+        <RouteRoleRenderer />
+      </ConnectedUserContextProvider>
+    </BrowserRouter>
+  );
 };
 
 export default App;

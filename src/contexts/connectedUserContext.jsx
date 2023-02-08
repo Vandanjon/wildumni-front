@@ -1,15 +1,15 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 export const ConnectedUserContext = createContext();
 
 export const ConnectedUserContextProvider = ({ children }) => {
-    const [connectedUser, setConnectedUser] = useState();
+  const [connectedUser, setConnectedUser] = useState();
 
-    return (
-        <ConnectedUserContext.Provider
-            value={{ connectedUser, setConnectedUser }}
-        >
-            {children}
-        </ConnectedUserContext.Provider>
-    );
+  useEffect(() => {}, [connectedUser]);
+
+  return (
+    <ConnectedUserContext.Provider value={{ connectedUser, setConnectedUser }}>
+      {children}
+    </ConnectedUserContext.Provider>
+  );
 };
